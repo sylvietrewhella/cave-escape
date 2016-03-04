@@ -19,9 +19,16 @@ type
 
 procedure LoadResources();
 begin
+	LoadBitmapNamed('turtle', 'turtle.png');
 	LoadBitmapNamed('bg_day', 'background.png');
 	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
+end;
+
+function GetNewPlayerData(): PlayerData;
+begin
+	result.turtleData.turtleSprite := CreateSprite(BitmapNamed('turtle'));
+	result.score := 0;
 end;
 
 function GetNewBackgroundData(): BackgroundData;
