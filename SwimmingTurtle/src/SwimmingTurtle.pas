@@ -20,7 +20,7 @@ begin
 	backgroundData.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
 	backgroundData.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
 	SpriteSetX(backgroundData.scrollingBackGround, 0);
- 	SpriteSetY(backgroundData.scrollingBackGround, BitmapHeight(BitmapNamed('bg_day')) - BitmapHeight(BitmapNamed('scrolling_bg')));
+ 	SpriteSetY(backgroundData.scrollingBackGround, SpriteHeight(backgroundData.fixedBackground) - SpriteHeight(backgroundData.scrollingBackGround));
  	SpriteSetX(backgroundData.fixedBackground, 0);
  	SpriteSetY(backgroundData.fixedBackground, 0);
 end;
