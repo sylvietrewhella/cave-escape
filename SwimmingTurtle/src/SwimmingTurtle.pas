@@ -61,6 +61,12 @@ begin
 	end;
 end;
 
+
+procedure DrawPlayer(const playerData: PlayerData);
+begin
+	DrawSprite(playerData.turtleData.turtleSprite);
+end;
+
 procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
 begin
 	DrawSprite(fixedBackground);
