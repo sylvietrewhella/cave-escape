@@ -39,10 +39,16 @@ begin
 	end;
 end;
 
-procedure DrawBackground(const backgroundData: BackgroundData);
+procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
 begin
-	DrawSprite(backgroundData.fixedBackground);
-	DrawSprite(backgroundData.scrollingBackground);
+	DrawSprite(fixedBackground);
+	DrawSprite(scrollingBackground);
+end;
+
+procedure DrawGame(const backgroundData: BackgroundData);
+begin
+	DrawBackground(backgroundData.fixedBackground, backgroundData.scrollingBackground);
+	DrawFramerate(0,0);
 end;
 
 procedure Main();
@@ -53,15 +59,15 @@ begin
   OpenGraphicsWindow('Flappy Bird', 368, 653);
   LoadResources();
   SetUpGame(bgData);
-  
+
   repeat // The game loop...
     ProcessEvents();
-    
+
     ClearScreen(ColorWhite);
     UpdateBackground(bgData);
-    DrawBackground(bgData);
-    DrawFramerate(0,0);
-    
+    DrawGame(bgData);
+
+
     RefreshScreen(60);
   until WindowCloseRequested();
 end;
