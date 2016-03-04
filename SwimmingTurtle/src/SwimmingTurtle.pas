@@ -3,11 +3,6 @@ uses SwinGame, sgTypes, sgSprites;
 
 type
 
-	GameData = record
-		bgData: BackgroundData;
-		playerData: PlayerData;
-	end;
-
 	BackgroundData = record
 		fixedBackground: Sprite;
 		scrollingBackground: Sprite;
@@ -20,6 +15,11 @@ type
 	PlayerData = record
 		turtleData: TurtleData;
 		score: Integer;
+	end;
+
+	GameData = record
+		bgData: BackgroundData;
+		playerData: PlayerData;
 	end;
 
 procedure LoadResources();
@@ -46,17 +46,17 @@ begin
  	SpriteSetY(result.fixedBackground, 0);
 end;
 
-procedure SetUpGame(var backgroundData: BackgroundData);
+procedure SetUpGame(var gData: GameData);
 begin
-	backgroundData := GetNewBackgroundData();
+	gData.bgData := GetNewBackgroundData();
 end;
 
-procedure UpdateBackground(var backgroundData: BackgroundData);
+procedure UpdateBackground(var gData: GameData);
 begin
-	SpriteSetX(backgroundData.scrollingBackground, SpriteX(backgroundData.scrollingBackground) - 1);
-	if (SpriteX(backgroundData.scrollingBackground) <= (SpriteWidth(backgroundData.scrollingBackground) / 2) * -1) then
+	SpriteSetX(gData.bgData.scrollingBackground, SpriteX(gData.bgData.scrollingBackground) - 1);
+	if (SpriteX(gData.bgData.scrollingBackground) <= (SpriteWidth(gData.bgData.scrollingBackground) / 2) * -1) then
 	begin
-		SpriteSetX(backgroundData.scrollingBackground, 0);
+		SpriteSetX(gData.bgData.scrollingBackground, 0);
 	end;
 end;
 
@@ -66,27 +66,27 @@ begin
 	DrawSprite(scrollingBackground);
 end;
 
-procedure DrawGame(const backgroundData: BackgroundData);
+procedure DrawGame(const gData: GameData);
 begin
-	DrawBackground(backgroundData.fixedBackground, backgroundData.scrollingBackground);
+	DrawBackground(gData.bgData.fixedBackground, gData.bgData.scrollingBackground);
 	DrawFramerate(0,0);
 end;
 
 procedure Main();
 var
-	bgData: BackgroundData;
+	gData: GameData;
 
 begin
   OpenGraphicsWindow('Flappy Bird', 368, 653);
   LoadResources();
-  SetUpGame(bgData);
+  SetUpGame(gData);
 
   repeat // The game loop...
     ProcessEvents();
 
     ClearScreen(ColorWhite);
-    UpdateBackground(bgData);
-    DrawGame(bgData);
+    UpdateBackground(gData);
+    DrawGame(gData);
 
 
     RefreshScreen(60);
