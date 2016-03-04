@@ -8,7 +8,12 @@ type
 		scrollingBackground: Sprite;
 	end;
 
+	TurtleData = record
+		turtleSprite: Sprite;
+	end;
+
 	PlayerData = record
+		turtleData: TurtleData;
 		score: Integer;
 	end;
 
