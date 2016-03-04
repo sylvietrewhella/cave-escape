@@ -48,6 +48,7 @@ end;
 
 procedure SetUpGame(var gData: GameData);
 begin
+	gData.playerData := GetNewPlayerData();
 	gData.bgData := GetNewBackgroundData();
 end;
 
