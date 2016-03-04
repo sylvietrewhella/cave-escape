@@ -33,6 +33,8 @@ end;
 function GetNewPlayerData(): PlayerData;
 begin
 	result.turtleData.turtleSprite := CreateSprite(BitmapNamed('turtle'));
+	SpriteSetX(result.turtleData.turtleSprite, (ScreenWidth() / 2 - SpriteWidth(result.turtleData.turtleSprite)));
+	SpriteSetY(result.turtleData.turtleSprite, (ScreenHeight() / 2));
 	result.score := 0;
 end;
 
@@ -60,7 +62,6 @@ begin
 		SpriteSetX(gData.bgData.scrollingBackground, 0);
 	end;
 end;
-
 
 procedure DrawPlayer(const playerData: PlayerData);
 begin
