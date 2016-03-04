@@ -3,6 +3,11 @@ uses SwinGame, sgTypes, sgSprites;
 
 type
 
+	GameData = record
+		bgData: BackgroundData;
+		playerData: PlayerData;
+	end;
+
 	BackgroundData = record
 		fixedBackground: Sprite;
 		scrollingBackground: Sprite;
