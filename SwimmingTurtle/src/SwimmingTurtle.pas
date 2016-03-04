@@ -2,6 +2,7 @@ program GameMain;
 uses SwinGame, sgTypes, sgSprites;
 
 type
+
 	BackgroundData = record
 		fixedBackground: Sprite;
 		scrollingBackground: Sprite;
@@ -16,7 +17,6 @@ end;
 
 procedure SetUpGame(var backgroundData: BackgroundData);
 begin
-	LoadResources();
 	backgroundData.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
 	backgroundData.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
 	SpriteSetX(backgroundData.scrollingBackGround, 0);
@@ -25,30 +25,36 @@ begin
  	SpriteSetY(backgroundData.fixedBackground, 0);
 end;
 
-procedure DrawScrollingBackground(var bgSprite: Sprite);
+procedure UpdateBackground(var backgroundData: BackgroundData);
 begin
-	SpriteSetX(bgSprite, SpriteX(bgSprite) - 1);
-	DrawSprite(bgSprite);
-	if (SpriteX(bgSprite) <= (SpriteWidth(bgSprite) / 2) * -1) then
+	SpriteSetX(backgroundData.scrollingBackground, SpriteX(backgroundData.scrollingBackground) - 1);
+	if (SpriteX(backgroundData.scrollingBackground) <= (SpriteWidth(backgroundData.scrollingBackground) / 2) * -1) then
 	begin
-		SpriteSetX(bgSprite, 0);
+		SpriteSetX(backgroundData.scrollingBackground, 0);
 	end;
+end;
+
+procedure DrawBackground(const backgroundData: BackgroundData);
+begin
+	DrawSprite(backgroundData.fixedBackground);
+	DrawSprite(backgroundData.scrollingBackground);
 end;
 
 procedure Main();
 var
 	bgData: BackgroundData;
+
 begin
   OpenGraphicsWindow('Flappy Bird', 368, 653);
+  LoadResources();
   SetUpGame(bgData);
+  
   repeat // The game loop...
     ProcessEvents();
     
     ClearScreen(ColorWhite);
-
-    DrawSprite(bgData.fixedBackground);
-
-    DrawScrollingBackground(bgData.scrollingBackGround );
+    UpdateBackground(bgData);
+    DrawBackground(bgData);
     DrawFramerate(0,0);
     
     RefreshScreen(60);
