@@ -15,14 +15,19 @@ begin
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
+function GetNewBackgroundData(): BackgroundData;
+begin
+	result.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
+	result.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
+	SpriteSetX(result.scrollingBackGround, 0);
+ 	SpriteSetY(result.scrollingBackGround, SpriteHeight(result.fixedBackground) - SpriteHeight(result.scrollingBackGround));
+ 	SpriteSetX(result.fixedBackground, 0);
+ 	SpriteSetY(result.fixedBackground, 0);
+end;
+
 procedure SetUpGame(var backgroundData: BackgroundData);
 begin
-	backgroundData.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
-	backgroundData.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
-	SpriteSetX(backgroundData.scrollingBackGround, 0);
- 	SpriteSetY(backgroundData.scrollingBackGround, SpriteHeight(backgroundData.fixedBackground) - SpriteHeight(backgroundData.scrollingBackGround));
- 	SpriteSetX(backgroundData.fixedBackground, 0);
- 	SpriteSetY(backgroundData.fixedBackground, 0);
+	backgroundData := GetNewBackgroundData();
 end;
 
 procedure UpdateBackground(var backgroundData: BackgroundData);
