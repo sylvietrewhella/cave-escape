@@ -2,7 +2,6 @@ program GameMain;
 uses SwinGame, sgTypes, sgSprites;
 
 type
-
 	BackgroundData = record
 		fixedBackground: Sprite;
 		scrollingBackground: Sprite;
@@ -13,6 +12,17 @@ begin
 	LoadBitmapNamed('bg_day', 'bg_day.png');
 	LoadBitmapNamed('scrolling_bg', 'scrolling_bg.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
+end;
+
+procedure SetUpGame(var backgroundData: BackgroundData);
+begin
+	LoadResources();
+	backgroundData.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
+	backgroundData.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
+	SpriteSetX(backgroundData.scrollingBackGround, 0);
+ 	SpriteSetY(backgroundData.scrollingBackGround, BitmapHeight(BitmapNamed('bg_day')) - BitmapHeight(BitmapNamed('scrolling_bg')));
+ 	SpriteSetX(backgroundData.fixedBackground, 0);
+ 	SpriteSetY(backgroundData.fixedBackground, 0);
 end;
 
 procedure DrawScrollingBackground(var bgSprite: Sprite);
@@ -30,13 +40,7 @@ var
 	bgData: BackgroundData;
 begin
   OpenGraphicsWindow('Flappy Bird', 368, 653);
-  LoadResources();
-  bgData.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
-  bgData.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
-  SpriteSetX(bgData.fixedBackground, 0);
-  SpriteSetY(bgData.fixedBackground, 0);
-  SpriteSetX(bgData.scrollingBackGround, 0);
-  SpriteSetY(bgData.scrollingBackGround, BitmapHeight(BitmapNamed('bg_day')) - BitmapHeight(BitmapNamed('scrolling_bg')));
+  SetUpGame(bgData);
   repeat // The game loop...
     ProcessEvents();
     
