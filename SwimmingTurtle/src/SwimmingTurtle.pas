@@ -8,6 +8,10 @@ type
 		scrollingBackground: Sprite;
 	end;
 
+	PlayerData = record
+		score: Integer;
+	end;
+
 procedure LoadResources();
 begin
 	LoadBitmapNamed('bg_day', 'background.png');
