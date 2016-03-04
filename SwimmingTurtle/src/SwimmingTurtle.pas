@@ -77,6 +77,7 @@ end;
 procedure DrawGame(const gData: GameData);
 begin
 	DrawBackground(gData.bgData.fixedBackground, gData.bgData.scrollingBackground);
+	DrawPlayer(gData.playerData);
 	DrawFramerate(0,0);
 end;
 
