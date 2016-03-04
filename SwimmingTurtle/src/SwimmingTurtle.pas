@@ -10,8 +10,8 @@ type
 
 procedure LoadResources();
 begin
-	LoadBitmapNamed('bg_day', 'bg_day.png');
-	LoadBitmapNamed('scrolling_bg', 'scrolling_bg.png');
+	LoadBitmapNamed('bg_day', 'background.png');
+	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
