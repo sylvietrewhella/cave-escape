@@ -2,7 +2,7 @@ program GameMain;
 uses SwinGame, sgTypes, sgSprites;
 
 const
-	GRAVITY = 10;
+	GRAVITY = 0.1;
 	TERMINAL_VELOCITY = 300;
 
 type
@@ -14,7 +14,7 @@ type
 
 	TurtleData = record
 		turtleSprite: Sprite;
-		verticalSpeed: Integer;
+		verticalSpeed: Double;
 	end;
 
 	PlayerData = record
@@ -27,16 +27,6 @@ type
 		playerData: PlayerData;
 	end;
 
-procedure Fall(var turtleData: TurtleData);
-begin
-	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
-	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
-	begin
-		turtleData.verticalSpeed := TERMINAL_VELOCITY;
-	end;
-	SpriteSetY(turtleData.turtleSprite, (SpriteY(turtleData.turtleSprite) - turtleData.verticalSpeed));
-end;
-
 procedure LoadResources();
 begin
 	LoadBitmapNamed('turtle', 'turtle.png');
@@ -48,6 +38,7 @@ end;
 function GetNewPlayerData(): PlayerData;
 begin
 	result.turtleData.turtleSprite := CreateSprite(BitmapNamed('turtle'));
+	result.turtleData.verticalSpeed := 0;
 	SpriteSetX(result.turtleData.turtleSprite, (ScreenWidth() / 2 - SpriteWidth(result.turtleData.turtleSprite)));
 	SpriteSetY(result.turtleData.turtleSprite, (ScreenHeight() / 2));
 	result.score := 0;
@@ -69,6 +60,17 @@ begin
 	gData.bgData := GetNewBackgroundData();
 end;
 
+procedure Fall(var turtleData: TurtleData);
+begin
+	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
+	WriteLn(turtleData.verticalSpeed:4:2);
+	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
+	begin
+		turtleData.verticalSpeed := TERMINAL_VELOCITY;
+	end;
+	SpriteSetY(turtleData.turtleSprite, (SpriteY(turtleData.turtleSprite) + turtleData.verticalSpeed));
+end;
+
 procedure UpdateBackground(var gData: GameData);
 begin
 	SpriteSetX(gData.bgData.scrollingBackground, SpriteX(gData.bgData.scrollingBackground) - 1);
@@ -76,6 +78,17 @@ begin
 	begin
 		SpriteSetX(gData.bgData.scrollingBackground, 0);
 	end;
+end;
+
+procedure UpdateBird(var turtle: TurtleData);
+begin
+	Fall(turtle);
+end;
+
+procedure UpdateGame(var gData: GameData);
+begin
+	UpdateBackground(gdata);
+	UpdateBird(gData.playerData.turtleData);
 end;
 
 procedure DrawPlayer(const playerData: PlayerData);
@@ -109,7 +122,7 @@ begin
     ProcessEvents();
 
     ClearScreen(ColorWhite);
-    UpdateBackground(gData);
+    UpdateGame(gData);
     DrawGame(gData);
 
 
