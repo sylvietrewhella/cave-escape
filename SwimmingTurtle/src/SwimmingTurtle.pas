@@ -14,12 +14,11 @@ type
 
 	TurtleData = record
 		turtleSprite: Sprite;
+		verticalSpeed: Integer;
 	end;
 
 	PlayerData = record
 		turtleData: TurtleData;
-		verticalSpeed: Integer;
-		verticalPosition: Integer;
 		score: Integer;
 	end;
 
@@ -27,6 +26,16 @@ type
 		bgData: BackgroundData;
 		playerData: PlayerData;
 	end;
+
+procedure Fall(var turtleData: TurtleData);
+begin
+	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
+	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
+	begin
+		turtleData.verticalSpeed := TERMINAL_VELOCITY;
+	end;
+	SpriteSetY(turtleData.turtleSprite, (SpriteY(turtleData.turtleSprite) - turtleData.verticalSpeed));
+end;
 
 procedure LoadResources();
 begin
