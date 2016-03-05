@@ -1,6 +1,10 @@
 program GameMain;
 uses SwinGame, sgTypes, sgSprites;
 
+const
+	GRAVITY = 10;
+	TERMINAL_VELOCITY = 300;
+
 type
 
 	BackgroundData = record
@@ -14,6 +18,8 @@ type
 
 	PlayerData = record
 		turtleData: TurtleData;
+		verticalSpeed: Integer;
+		verticalPosition: Integer;
 		score: Integer;
 	end;
 
