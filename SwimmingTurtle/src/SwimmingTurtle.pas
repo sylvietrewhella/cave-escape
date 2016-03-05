@@ -2,8 +2,10 @@ program GameMain;
 uses SwinGame, sgTypes, sgSprites;
 
 const
-	GRAVITY = 0.1;
-	TERMINAL_VELOCITY = 300;
+	GRAVITY = 0.08;
+	MAX_RECOVERY_SPEED = 2.5;
+	JUMP_RECOVERY_BOOST = 2;
+	TERMINAL_VELOCITY = 5;
 
 type
 
@@ -60,13 +62,17 @@ begin
 	gData.bgData := GetNewBackgroundData();
 end;
 
-procedure Fall(var turtleData: TurtleData);
+procedure UpdateBirdVelocity(var turtleData: TurtleData);
 begin
 	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
 	WriteLn(turtleData.verticalSpeed:4:2);
 	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
 	begin
 		turtleData.verticalSpeed := TERMINAL_VELOCITY;
+	end
+	else if (turtleData.verticalSpeed < MAX_RECOVERY_SPEED * -1) then
+	begin
+		turtleData.verticalSpeed := MAX_RECOVERY_SPEED * -1;
 	end;
 	SpriteSetY(turtleData.turtleSprite, (SpriteY(turtleData.turtleSprite) + turtleData.verticalSpeed));
 end;
@@ -82,11 +88,20 @@ end;
 
 procedure UpdateBird(var turtle: TurtleData);
 begin
-	Fall(turtle);
+	UpdateBirdVelocity(turtle);
+end;
+
+procedure HandleInput(var turtle: TurtleData);
+begin
+	if MouseClicked(LeftButton) then
+	begin
+		turtle.verticalSpeed += JUMP_RECOVERY_BOOST * -1;
+	end;
 end;
 
 procedure UpdateGame(var gData: GameData);
 begin
+	HandleInput(gData.playerData.turtleData);
 	UpdateBackground(gdata);
 	UpdateBird(gData.playerData.turtleData);
 end;
@@ -124,7 +139,6 @@ begin
     ClearScreen(ColorWhite);
     UpdateGame(gData);
     DrawGame(gData);
-
 
     RefreshScreen(60);
   until WindowCloseRequested();
