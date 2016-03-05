@@ -1,11 +1,12 @@
 program GameMain;
-uses SwinGame, sgTypes, sgSprites;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
 	GRAVITY = 0.08;
-	MAX_RECOVERY_SPEED = 2.5;
+	MAX_RECOVERY_SPEED = 3.5;
 	JUMP_RECOVERY_BOOST = 2;
 	TERMINAL_VELOCITY = 5;
+	SPRITE_FRAME_DURATION = 300;
 
 type
 
@@ -15,7 +16,9 @@ type
 	end;
 
 	TurtleData = record
-		turtleSprite: Sprite;
+		spriteFrameTimer: Timer;
+		currentSpriteFrame: Integer;
+		sprites: array [0..2] of Sprite;
 		verticalSpeed: Double;
 	end;
 
@@ -31,18 +34,28 @@ type
 
 procedure LoadResources();
 begin
-	LoadBitmapNamed('turtle', 'turtle.png');
+	LoadBitmapNamed('turtle_frame_1', 'turtleFrame1.png');
+	LoadBitmapNamed('turtle_frame_2', 'turtleFrame2.png');
+	LoadBitmapNamed('turtle_frame_3', 'turtleFrame3.png');
 	LoadBitmapNamed('bg_day', 'background.png');
 	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
 function GetNewPlayerData(): PlayerData;
+var
+	i: Integer;
 begin
-	result.turtleData.turtleSprite := CreateSprite(BitmapNamed('turtle'));
+	for i := Low(result.turtleData.sprites) to High(result.turtleData.sprites) do
+	begin
+		result.turtleData.sprites[i] := CreateSprite(BitmapNamed('turtle_frame_' + IntToStr(i + 1)));
+		SpriteSetX(result.turtleData.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.turtleData.sprites[i])));
+		SpriteSetY(result.turtleData.sprites[i], (ScreenHeight() / 2));
+	end;
+	result.turtleData.spriteFrameTimer := CreateTimer();
+	StartTimer(result.turtleData.spriteFrameTimer);
+	result.turtleData.currentSpriteFrame := 0;
 	result.turtleData.verticalSpeed := 0;
-	SpriteSetX(result.turtleData.turtleSprite, (ScreenWidth() / 2 - SpriteWidth(result.turtleData.turtleSprite)));
-	SpriteSetY(result.turtleData.turtleSprite, (ScreenHeight() / 2));
 	result.score := 0;
 end;
 
@@ -63,9 +76,10 @@ begin
 end;
 
 procedure UpdateBirdVelocity(var turtleData: TurtleData);
+var
+	i: Integer;
 begin
 	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
-	WriteLn(turtleData.verticalSpeed:4:2);
 	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
 	begin
 		turtleData.verticalSpeed := TERMINAL_VELOCITY;
@@ -74,7 +88,10 @@ begin
 	begin
 		turtleData.verticalSpeed := MAX_RECOVERY_SPEED * -1;
 	end;
-	SpriteSetY(turtleData.turtleSprite, (SpriteY(turtleData.turtleSprite) + turtleData.verticalSpeed));
+	for i := Low(turtleData.sprites) to High(turtleData.sprites) do
+	begin
+		SpriteSetY(turtleData.sprites[i], (SpriteY(turtleData.sprites[i]) + turtleData.verticalSpeed));
+	end;
 end;
 
 procedure UpdateBackground(var gData: GameData);
@@ -86,9 +103,26 @@ begin
 	end;
 end;
 
-procedure UpdateBird(var turtle: TurtleData);
+procedure UpdateBirdSprite(var turtleData: TurtleData);
 begin
-	UpdateBirdVelocity(turtle);
+	if (TimerTicks(turtleData.spriteFrameTimer) >= SPRITE_FRAME_DURATION) then
+	begin
+		if (turtleData.currentSpriteFrame = Length(turtleData.sprites) - 1) then
+		begin
+			turtleData.currentSpriteFrame := 0;
+		end
+		else
+		begin
+			turtleData.currentSpriteFrame += 1;
+		end;
+		ResetTimer(turtleData.spriteFrameTimer);
+	end;
+end;
+
+procedure UpdateBird(var turtleData: TurtleData);
+begin
+	UpdateBirdVelocity(turtleData);
+	UpdateBirdSprite(turtleData);
 end;
 
 procedure HandleInput(var turtle: TurtleData);
@@ -108,7 +142,7 @@ end;
 
 procedure DrawPlayer(const playerData: PlayerData);
 begin
-	DrawSprite(playerData.turtleData.turtleSprite);
+	DrawSprite(playerData.turtleData.sprites[playerData.turtleData.currentSpriteFrame]);
 end;
 
 procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
