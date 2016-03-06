@@ -82,26 +82,29 @@ begin
 			 0 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
+				 SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 				 result.Direction := true;
 			 end;
 			 1 :
 			 begin
 			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
+				SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 			 	result.Direction := true;
 			 end;
 			 2 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('downward_pole_1'));
+				 SpriteSetY(result.Pole, 0);
 				 result.Direction := false;
 			 end;
 			 3 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('downward_pole_2'));
+				 SpriteSetY(result.Pole, 0);
 				 result.Direction := false;
 			 end;
 		end;
-		SpriteSetX(result.Pole, ScreenWidth());
-		SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
+		SpriteSetX(result.Pole, ScreenWidth() + RND(800));
 		SpriteSetDx(result.Pole, -0.5);
 		SpriteSetDy(result.Pole, 0);
 end;
@@ -255,9 +258,12 @@ var
 begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
-		SpriteSetX((myPoles[i].Pole), SpriteX(myPoles[i].Pole) - 1);
-		MoveSprite((myPoles[i].Pole));
 		UpdateSprite(myPoles[i].Pole);
+
+		if SpriteOffscreen(myPoles[i].Pole) then
+		begin
+			myPoles[i] := GetRandomPole();
+		end;
 	end;
 end;
 
@@ -269,6 +275,7 @@ begin
 		HandleInput(gData.playerData);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.playerData);
+		UpdatePoles(gData.GamePoles);
 	end
 	else
 	begin
@@ -298,23 +305,24 @@ begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
 		DrawSprite(myPoles[i].Pole);
-		WriteLn('X: ', SpriteX(myPoles[i].Pole):0:2);
-		WriteLn('Y: ', SpriteY(myPoles[i].Pole):0:2);
 	end;
 end;
 
 procedure DrawGame(const gData: GameData);
 begin
-	DrawBackground(gData.bgData);
+	//Draw Background
+	DrawSprite(gData.bgData.sprites[0]);
+		DrawPoles(gData.GamePoles);
+	//DrawForeground
+	DrawSprite(gData.bgData.sprites[1]);
 	DrawPlayer(gData.playerData);
-	DrawPoles(gData.GamePoles);
+
 	DrawFramerate(0,0);
 end;
 
 procedure Main();
 var
 	gData: GameData;
-
 begin
   OpenGraphicsWindow('Flappy Bird', 288, 512);
   LoadResources();
