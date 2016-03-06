@@ -86,6 +86,26 @@ begin
 	gData.bgData := GetNewBackgroundData();
 end;
 
+procedure UpdateBirdRotation(var turtleData: TurtleData);
+var
+	i: Integer;
+	rateOfRotation: Double;
+begin
+	rateOfRotation := 0.0;
+	if (turtleData.verticalSpeed > 0) then
+	begin
+		rateOfRotation := (turtleData.verticalSpeed / TERMINAL_VELOCITY);
+	end
+	else
+	begin
+		rateOfRotation := (turtleData.verticalSpeed / MAX_RECOVERY_SPEED);
+	end;
+	for i := Low(turtleData.animatable.sprites) to High(turtleData.animatable.sprites) do
+	begin
+		SpriteSetRotation(turtleData.animatable.sprites[i], rateOfRotation * 90);
+	end;
+end;
+
 procedure UpdateBirdVelocity(var turtleData: TurtleData);
 var
 	i: Integer;
@@ -132,6 +152,7 @@ end;
 
 procedure UpdateBirdSprite(var turtleData: TurtleData);
 begin
+	UpdateBirdRotation(turtleData);
 	UpdateAnimatable(turtleData.animatable);
 end;
 
