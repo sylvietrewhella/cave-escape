@@ -36,10 +36,10 @@ type
 
 procedure LoadResources();
 begin
-	LoadBitmapNamed('turtle_frame_1', 'turtleFrame1.png');
-	LoadBitmapNamed('turtle_frame_2', 'turtleFrame2.png');
-	LoadBitmapNamed('turtle_frame_3', 'turtleFrame3.png');
-	LoadBitmapNamed('bg_day', 'background.png');
+	LoadBitmapNamed('player_frame_1', 'playerFrame1.png');
+	LoadBitmapNamed('player_frame_2', 'playerFrame2.png');
+	LoadBitmapNamed('player_frame_3', 'playerFrame3.png');
+	LoadBitmapNamed('fixed_bg', 'background.png');
 	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
@@ -61,7 +61,7 @@ end;
 
 function GetNewPlayer(): PlayerRepresentation;
 begin
-	result.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
+	result.animatable := GetNewAnimatable('player_frame_', 3, SPRITE_FRAME_DURATION);
 	StartTimer(result.animatable.spriteFrameTimer);
 	result.dead := false;
 	result.verticalSpeed := 0;
@@ -70,7 +70,7 @@ end;
 
 function GetNewBackgroundData(): BackgroundData;
 begin
-	result.fixedBackground := CreateSprite(BitmapNamed('bg_day'));
+	result.fixedBackground := CreateSprite(BitmapNamed('fixed_bg'));
 	result.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
 	SpriteSetX(result.scrollingBackGround, 0);
  	SpriteSetY(result.scrollingBackGround, SpriteHeight(result.fixedBackground) - SpriteHeight(result.scrollingBackGround));
