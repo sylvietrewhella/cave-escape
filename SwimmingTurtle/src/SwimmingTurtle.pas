@@ -153,13 +153,12 @@ var
 	i: Integer;
 begin
 	for i:= Low(gData.GamePoles) to High(gData.GamePoles) do
-		begin
-			gData.GamePoles[i] := GetRandomPole();
-		end;
+	begin
+		gData.GamePoles[i] := GetRandomPole();
+	end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
 	FadeMusicIn('MagicalNight.ogg', -1, 10000)
-
 end;
 
 procedure UpdateRotation(var toRotate: PlayerRepresentation);
@@ -303,7 +302,6 @@ begin
 	DrawSprite(playerData.animatable.sprites[playerData.animatable.currentSpriteFrame]);
 end;
 
-
 procedure DrawPoles(const myPoles: Poles);
 var
 	i: Integer;
@@ -316,7 +314,6 @@ end;
 
 procedure DrawGame(const gData: GameData);
 begin
-
 	DrawSprite(gData.bgData.Background);
 	DrawPoles(gData.GamePoles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
@@ -333,8 +330,6 @@ begin
 	OpenAudio();
   LoadResources();
   SetUpGame(gData);
-
-	FadeMusicIn('MagicalNight.ogg', -1, 10000);
 
   repeat // The game loop...
     ProcessEvents();
