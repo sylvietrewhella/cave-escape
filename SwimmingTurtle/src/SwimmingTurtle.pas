@@ -74,6 +74,7 @@ end;
 
 function GetRandomPole(): PoleData;
 var
+	v: Vector;
 	i: Integer;
 begin
 	i := Rnd(4);
@@ -99,11 +100,12 @@ begin
 				 result.Direction := false;
 			 end;
 		end;
-		SpriteSetX(result.Pole, ScreenWidth() - 50);
-		SpriteSetY(result.Pole, ScreenHeight());
-		SpriteSetSpeed(result.Pole, 5);
-
-		MoveSpriteTo(result.Pole, -200, SpriteHeight(result.pole));
+		SpriteSetX(result.Pole, ScreenWidth());
+		v.x:= -20;
+		v.y := 0;
+		SpriteSetSpeed(result.Pole, -20);
+		SpriteSetVelocity(result.Pole, v);
+		SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 end;
 
 function GetNewPlayer(): PlayerRepresentation;
@@ -249,13 +251,23 @@ begin
 	end;
 end;
 
+procedure UpdatePoles(var myPoles: Poles);
+var
+	i: Integer;
+begin
+	for i:= Low(myPoles) to High(myPoles) do
+	begin
+		MoveSprite((myPoles[i].Pole));
+		UpdateSprite(myPoles[i].Pole);
+	end;
+end;
+
 procedure UpdateGame(var gData: GameData);
 begin
 	if not (gData.playerData.dead) then
 	begin
 		CheckForCollisions(gData);
 		HandleInput(gData.playerData);
-		//UpdatePoles(gData.Poles);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.playerData);
 	end
@@ -288,6 +300,8 @@ begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
 		DrawSprite(myPoles[i].Pole);
+		WriteLn('X: ', SpriteX(myPoles[i].Pole):0:2);
+		WriteLn('Y: ', SpriteY(myPoles[i].Pole):0:2);
 	end;
 end;
 
