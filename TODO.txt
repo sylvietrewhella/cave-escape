@@ -1,0 +1,8 @@
+1. Refactor with correct case.
+2. Simplify
+3. Attributions
+  3.1. Music
+  3.2. Font??
+  3.3. Sprites
+4. Sound Effect
+5. split it up for Friday
