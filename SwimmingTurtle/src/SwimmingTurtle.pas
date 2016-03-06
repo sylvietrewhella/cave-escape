@@ -25,7 +25,7 @@ type
 		updateFequency: Integer;
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
-		sprites: array [0..3] of Sprite;
+		sprites: array [0..NUM_FRAMES - 1] of Sprite;
 	end;
 
 	PlayerRepresentation = record
