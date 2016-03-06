@@ -145,6 +145,7 @@ begin
 		end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
+	FadeMusicIn('MagicalNight.ogg', -1, 10000)
 
 end;
 
@@ -314,7 +315,7 @@ begin
   LoadResources();
   SetUpGame(gData);
 
-	PlayMusic('MagicalNight.ogg');
+	FadeMusicIn('MagicalNight.ogg', -1, 10000);
 
   repeat // The game loop...
     ProcessEvents();
