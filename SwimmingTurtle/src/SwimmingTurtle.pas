@@ -17,7 +17,8 @@ type
 	Poles = array [0..3] of PoleData;
 
 	BackgroundData = record
-		sprites: array [0..1] of Sprite;
+		ForeGround: Sprite;
+		Background: Sprite;
 	end;
 
 	Animatable = record
@@ -52,8 +53,8 @@ begin
 	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
 	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
 
-	LoadBitmapNamed('scrolling_bg_1', 'scrollingBackground1.png');
-	LoadBitmapNamed('scrolling_bg_2', 'scrollingBackground2.png');
+	LoadBitmapNamed('foreground', 'foreground.png');
+	LoadBitmapNamed('background', 'background.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
@@ -119,23 +120,17 @@ begin
 end;
 
 function GetNewBackgroundData(): BackgroundData;
-var
-	i: Integer;
 begin
-	for i := Low(result.sprites) to High(result.sprites) do
-	begin
-		result.sprites[i] := CreateSprite(BitmapNamed('scrolling_bg_' + IntToStr(i + 1)));
-		if (i = 0) then
-		begin
-			SpriteSetX(result.sprites[i], 0);
-			SpriteSetY(result.sprites[i], 0);
-		end
-		else
-		begin
-			SpriteSetX(result.sprites[i], 0);
-			SpriteSetY(result.sprites[i], SpriteHeight(result.sprites[i - 1]) - SpriteHeight(result.sprites[i]));
-		end;
-	end;
+	result.Background := CreateSprite(BitmapNamed('background'));
+	result.ForeGround := CreateSprite(BitmapNamed('foreground'));
+	SpriteSetX(result.Background, 0);
+	SpriteSetY(result.Background, 0);
+	SpriteSetDy(result.Background, 0);
+	SpriteSetDx(result.Background, -1);
+	SpriteSetX(result.ForeGround, 0);
+	SpriteSetY(result.ForeGround, SpriteHeight(result.Background) - SpriteHeight(result.ForeGround));
+	SpriteSetDy(result.ForeGround, 0);
+	SpriteSetDx(result.ForeGround, -2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -182,29 +177,17 @@ begin
 end;
 
 procedure UpdateBackground(var gData: GameData);
-var
-	i: Integer;
 begin
-	for i := Low(gData.bgData.sprites) to High(gData.bgData.sprites) do
+	if (SpriteX(gData.bgData.ForeGround) <= SpriteWidth(gData.bgData.ForeGround) / 2 * -1) then
 	begin
-		if (i = 0) then
-		begin
-			SpriteSetX(gData.bgData.sprites[i], SpriteX(gData.bgData.sprites[i]) - 1);
-			if (SpriteX(gData.bgData.sprites[i]) <= ScreenWidth() * - 1) then
-			begin
-				SpriteSetX(gData.bgData.sprites[i], 0);
-			end;
-		end
-		else
-		begin
-			SpriteSetX(gData.bgData.sprites[i], SpriteX(gData.bgData.sprites[i]) - 2);
-			if (SpriteX(gData.bgData.sprites[i]) <= ScreenWidth() * - 1) then
-			begin
-				SpriteSetX(gData.bgData.sprites[i], 0);
-			end;
-		end;
+		SpriteSetX(gData.bgData.ForeGround, 0);
 	end;
-
+	if (SpriteX(gData.bgData.Background) <= SpriteWidth(gData.bgData.Background) / 2 * -1) then
+	begin
+		SpriteSetX(gData.bgData.Background, 0);
+	end;
+	UpdateSprite(gData.bgData.ForeGround);
+	UpdateSprite(gData.bgData.Background);
 end;
 
 procedure UpdateAnimatable(var toUpdate: Animatable);
@@ -227,7 +210,7 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.sprites[1]))
+	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.ForeGround))
 		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
 	begin
 		toUpdate.playerData.dead := true;
@@ -297,15 +280,6 @@ begin
 	DrawSprite(playerData.animatable.sprites[playerData.animatable.currentSpriteFrame]);
 end;
 
-procedure DrawBackground(const bgData: BackgroundData);
-var
-	i: Integer;
-begin
-	for i := Low(bgData.sprites) to High(bgData.sprites) do
-	begin
-		DrawSprite(bgData.sprites[i]);
-	end;
-end;
 
 procedure DrawPoles(const myPoles: Poles);
 var
@@ -319,11 +293,10 @@ end;
 
 procedure DrawGame(const gData: GameData);
 begin
-	//Draw Background
-	DrawSprite(gData.bgData.sprites[0]);
-		DrawPoles(gData.GamePoles);
-	//DrawForeground
-	DrawSprite(gData.bgData.sprites[1]);
+
+	DrawSprite(gData.bgData.Background);
+	DrawPoles(gData.GamePoles);
+	DrawSprite(gData.bgData.ForeGround);
 	DrawPlayer(gData.playerData);
 
 	DrawFramerate(0,0);
