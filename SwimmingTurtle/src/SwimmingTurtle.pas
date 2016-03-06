@@ -49,6 +49,8 @@ begin
 
 	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
 	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
+	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
+	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
 
 	LoadBitmapNamed('scrolling_bg_1', 'scrollingBackground1.png');
 	LoadBitmapNamed('scrolling_bg_2', 'scrollingBackground2.png');
@@ -88,13 +90,13 @@ begin
 			 end;
 			 2 :
 			 begin
-				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 result.Direction := true;
+				 result.Pole := CreateSprite(BitmapNamed('downward_pole_1'));
+				 result.Direction := false;
 			 end;
 			 3 :
 			 begin
-				 result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
-				 result.Direction := true;
+				 result.Pole := CreateSprite(BitmapNamed('downward_pole_2'));
+				 result.Direction := false;
 			 end;
 		end;
 		SpriteSetX(result.Pole, ScreenWidth() - 50);
