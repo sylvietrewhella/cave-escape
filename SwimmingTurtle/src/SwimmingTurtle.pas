@@ -16,16 +16,16 @@ type
 	end;
 	Poles = array [0..3] of PoleData;
 
-	BackgroundData = record
-		ForeGround: Sprite;
-		Background: Sprite;
-	end;
-
 	Animatable = record
 		updateFequency: Integer;
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
-		sprites: array [0..NUM_FRAMES - 1] of Sprite;
+		sprites: array of Sprite;
+	end;
+
+	BackgroundData = record
+		ForeGround: Animatable;
+		Background: Sprite;
 	end;
 
 	PlayerRepresentation = record
@@ -53,22 +53,24 @@ begin
 	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
 	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
 
-	LoadBitmapNamed('foreground', 'foreground.png');
+	LoadBitmapNamed('foreground_1', 'foreground1.png');
+	LoadBitmapNamed('foreground_2', 'foreground2.png');
+	LoadBitmapNamed('foreground_3', 'foreground3.png');
 	LoadBitmapNamed('background', 'background.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 
 	LoadMusic('MagicalNight.ogg');
 end;
 
-function GetNewAnimatable(spriteName: String; numFrames, updateFequency: Integer): Animatable;
+function GetNewAnimatable(spriteName: String; numFrames, updateFequency: Integer; position: Point2D): Animatable;
 var
 	i: Integer;
 begin
+	SetLength(result.sprites, numFrames);
 	for i := 0 to numFrames - 1 do
 	begin
 		result.sprites[i] := CreateSprite(BitmapNamed(spriteName + IntToStr(i + 1)));
-		SpriteSetX(result.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.sprites[i])));
-		SpriteSetY(result.sprites[i], (ScreenHeight() / 2));
+		SpriteSetPosition(result.sprites[i], position)
 	end;
 	result.updateFequency := updateFequency;
 	result.spriteFrameTimer := CreateTimer();
@@ -113,8 +115,12 @@ begin
 end;
 
 function GetNewPlayer(): PlayerRepresentation;
+var
+	playerStartPostion: Point2D;
 begin
-	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION);
+	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
+	playerStartPostion.y := ScreenHeight() / 2;
+	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
 	StartTimer(result.animatable.spriteFrameTimer);
 	result.dead := false;
 	result.verticalSpeed := 0;
@@ -122,17 +128,24 @@ begin
 end;
 
 function GetNewBackgroundData(): BackgroundData;
+var
+	i: Integer;
+	foregroundPostion: Point2D;
 begin
 	result.Background := CreateSprite(BitmapNamed('background'));
-	result.ForeGround := CreateSprite(BitmapNamed('foreground'));
 	SpriteSetX(result.Background, 0);
 	SpriteSetY(result.Background, 0);
 	SpriteSetDy(result.Background, 0);
 	SpriteSetDx(result.Background, -1);
-	SpriteSetX(result.ForeGround, 0);
-	SpriteSetY(result.ForeGround, SpriteHeight(result.Background) - SpriteHeight(result.ForeGround));
-	SpriteSetDy(result.ForeGround, 0);
-	SpriteSetDx(result.ForeGround, -2);
+	foregroundPostion.x := 0;
+	foregroundPostion.y := SpriteHeight(result.Background) - BitmapHeight(BitmapNamed('foreground_1'));
+	result.ForeGround := GetNewAnimatable('foreground_', 3, 200, foregroundPostion);
+	for i := Low(result.ForeGround.sprites) to High(result.ForeGround.sprites) do
+	begin
+		SpriteSetDy(result.ForeGround.sprites[i], 0);
+		SpriteSetDx(result.ForeGround.sprites[i], -2);
+	end;
+	StartTimer(result.ForeGround.spriteFrameTimer);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -180,20 +193,6 @@ begin
 	end;
 end;
 
-procedure UpdateBackground(var gData: GameData);
-begin
-	if (SpriteX(gData.bgData.ForeGround) <= SpriteWidth(gData.bgData.ForeGround) / 2 * -1) then
-	begin
-		SpriteSetX(gData.bgData.ForeGround, 0);
-	end;
-	if (SpriteX(gData.bgData.Background) <= SpriteWidth(gData.bgData.Background) / 2 * -1) then
-	begin
-		SpriteSetX(gData.bgData.Background, 0);
-	end;
-	UpdateSprite(gData.bgData.ForeGround);
-	UpdateSprite(gData.bgData.Background);
-end;
-
 procedure UpdateAnimatable(var toUpdate: Animatable);
 begin
 	if (TimerTicks(toUpdate.spriteFrameTimer) >= toUpdate.updateFequency) then
@@ -210,11 +209,31 @@ begin
 	end;
 end;
 
+procedure UpdateBackground(var gData: GameData);
+var
+	i: Integer;
+begin
+	UpdateAnimatable(gdata.bgData.ForeGround);
+	for i := Low(gdata.bgData.ForeGround.sprites) to High(gdata.bgData.ForeGround.sprites) do
+	begin
+		UpdateSprite(gData.bgData.ForeGround.sprites[i]);
+		if (SpriteX(gData.bgData.ForeGround.sprites[i]) <= SpriteWidth(gData.bgData.ForeGround.sprites[i]) / 2 * -1) then
+		begin
+			SpriteSetX(gData.bgData.ForeGround.sprites[i], 0);
+		end;
+	end;
+	if (SpriteX(gData.bgData.Background) <= SpriteWidth(gData.bgData.Background) / 2 * -1) then
+	begin
+		SpriteSetX(gData.bgData.Background, 0);
+	end;
+	UpdateSprite(gData.bgData.Background);
+end;
+
 procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.ForeGround))
+	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.ForeGround.sprites[toUpdate.bgData.ForeGround.currentSpriteFrame]))
 		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
 	begin
 		toUpdate.playerData.dead := true;
@@ -300,7 +319,7 @@ begin
 
 	DrawSprite(gData.bgData.Background);
 	DrawPoles(gData.GamePoles);
-	DrawSprite(gData.bgData.ForeGround);
+	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
 
 	DrawFramerate(0,0);
