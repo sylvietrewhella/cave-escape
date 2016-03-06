@@ -101,8 +101,9 @@ begin
 			 end;
 		end;
 		SpriteSetX(result.Pole, ScreenWidth());
-		SpriteSetDy(result.Pole, -0.5);
 		SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
+		SpriteSetDx(result.Pole, -0.5);
+		SpriteSetDy(result.Pole, 0);
 end;
 
 function GetNewPlayer(): PlayerRepresentation;
@@ -254,6 +255,7 @@ var
 begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
+		SpriteSetX((myPoles[i].Pole), SpriteX(myPoles[i].Pole) - 1);
 		MoveSprite((myPoles[i].Pole));
 		UpdateSprite(myPoles[i].Pole);
 	end;
