@@ -56,6 +56,8 @@ begin
 	LoadBitmapNamed('foreground', 'foreground.png');
 	LoadBitmapNamed('background', 'background.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
+
+	LoadMusic('MagicalNight.ogg');
 end;
 
 function GetNewAnimatable(spriteName: String; numFrames, updateFequency: Integer): Animatable;
@@ -143,6 +145,7 @@ begin
 		end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
+
 end;
 
 procedure UpdateRotation(var toRotate: PlayerRepresentation);
@@ -307,8 +310,11 @@ var
 	gData: GameData;
 begin
   OpenGraphicsWindow('Flappy Bird', 288, 512);
+	OpenAudio();
   LoadResources();
   SetUpGame(gData);
+
+	PlayMusic('MagicalNight.ogg');
 
   repeat // The game loop...
     ProcessEvents();
