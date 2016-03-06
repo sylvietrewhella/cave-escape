@@ -327,7 +327,7 @@ begin
 	DrawPoles(gData.GamePoles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
-	DrawText(IntToStr(gData.score), ColorWhite, 'game font', (ScreenWidth() - TextWidth(FontNamed('game font'), IntToStr(gData.playerData.score))), 0);
+	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
 end;
 
 procedure Main();
