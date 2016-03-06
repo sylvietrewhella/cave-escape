@@ -171,7 +171,7 @@ end;
 procedure UpdateBackground(var gData: GameData);
 begin
 	SpriteSetX(gData.bgData.scrollingBackground, SpriteX(gData.bgData.scrollingBackground) - 1);
-	if (SpriteX(gData.bgData.scrollingBackground) <= (SpriteWidth(gData.bgData.fixedBackground) - SpriteWidth(gData.bgData.scrollingBackground))) then
+	if (SpriteX(gData.bgData.scrollingBackground) <= ScreenWidth() * -1) then
 	begin
 		SpriteSetX(gData.bgData.scrollingBackground, 0);
 	end;
