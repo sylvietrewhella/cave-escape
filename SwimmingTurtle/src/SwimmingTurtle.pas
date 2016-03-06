@@ -105,7 +105,7 @@ begin
 			 end;
 		end;
 		SpriteSetX(result.Pole, ScreenWidth() + RND(800));
-		SpriteSetDx(result.Pole, -0.5);
+		SpriteSetDx(result.Pole, -2);
 		SpriteSetDy(result.Pole, 0);
 end;
 
@@ -224,11 +224,20 @@ begin
 end;
 
 procedure CheckForCollisions(var toUpdate: GameData);
+var
+	i: Integer;
 begin
 	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.sprites[1]))
 		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
 	begin
 		toUpdate.playerData.dead := true;
+	end;
+	for i := Low(toUpdate.GamePoles) to High(toUpdate.GamePoles) do
+	begin
+		if SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.GamePoles[i].Pole) then
+		begin
+			toUpdate.playerData.dead := true;
+		end;
 	end;
 end;
 
