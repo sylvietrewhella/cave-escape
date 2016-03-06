@@ -57,7 +57,7 @@ begin
 	LoadBitmapNamed('foreground_2', 'foreground2.png');
 	LoadBitmapNamed('foreground_3', 'foreground3.png');
 	LoadBitmapNamed('background', 'background.png');
-	LoadFontNamed('game font', 'arial.ttf', 48);
+	LoadFontNamed('game font', 'GoodDog.otf', 48);
 
 	LoadMusic('MagicalNight.ogg');
 end;
@@ -317,6 +317,7 @@ begin
 	DrawPoles(gData.GamePoles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
+	DrawText(IntToStr(gData.playerData.score), ColorWhite, 'game font', (ScreenWidth() - TextWidth(FontNamed('game font'), IntToStr(gData.playerData.score))), 0);
 end;
 
 procedure Main();
