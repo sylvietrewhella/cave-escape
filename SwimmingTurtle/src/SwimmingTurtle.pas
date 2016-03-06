@@ -101,10 +101,7 @@ begin
 			 end;
 		end;
 		SpriteSetX(result.Pole, ScreenWidth());
-		v.x:= -20;
-		v.y := 0;
-		SpriteSetSpeed(result.Pole, -20);
-		SpriteSetVelocity(result.Pole, v);
+		SpriteSetDy(result.Pole, -0.5);
 		SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 end;
 
@@ -290,7 +287,6 @@ begin
 	begin
 		DrawSprite(bgData.sprites[i]);
 	end;
-
 end;
 
 procedure DrawPoles(const myPoles: Poles);
