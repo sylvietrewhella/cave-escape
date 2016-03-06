@@ -24,6 +24,7 @@ type
 
 	PlayerRepresentation = record
 		animatable: Animatable;
+		dead: Boolean;
 		verticalSpeed: Double;
 	end;
 
@@ -66,6 +67,7 @@ function GetNewPlayerData(): PlayerData;
 begin
 	result.playerRep.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
 	StartTimer(result.playerRep.animatable.spriteFrameTimer);
+	result.playerRep.dead := false;
 	result.playerRep.verticalSpeed := 0;
 	result.score := 0;
 end;
@@ -142,6 +144,15 @@ begin
 	end;
 end;
 
+procedure CheckForCollisions(var toUpdate: GameData);
+begin
+	if (SpriteCollision(toUpdate.playerData.playerRep.animatable.sprites[toUpdate.playerData.playerRep.animatable.currentSpriteFrame], toUpdate.bgData.scrollingBackground))
+		or (SpriteY(toUpdate.playerData.playerRep.animatable.sprites[toUpdate.playerData.playerRep.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
+	begin
+		toUpdate.playerData.playerRep.dead := true;
+	end;
+end;
+
 procedure UpdatePlayerSprite(var toUpdate: PlayerRepresentation);
 begin
 	UpdateRotation(toUpdate);
@@ -164,9 +175,17 @@ end;
 
 procedure UpdateGame(var gData: GameData);
 begin
-	HandleInput(gData.playerData.playerRep);
-	UpdateBackground(gdata);
-	UpdatePlayer(gData.playerData.playerRep);
+	if not (gData.playerData.playerRep.dead) then
+	begin
+		CheckForCollisions(gData);
+		HandleInput(gData.playerData.playerRep);
+		UpdateBackground(gdata);
+		UpdatePlayer(gData.playerData.playerRep);
+	end
+	else
+	begin
+		SetUpGame(gData);
+	end;
 end;
 
 procedure DrawPlayer(const playerData: PlayerData);
