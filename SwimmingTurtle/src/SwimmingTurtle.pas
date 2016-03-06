@@ -17,8 +17,7 @@ type
 	Poles = array [0..3] of PoleData;
 
 	BackgroundData = record
-		fixedBackground: Sprite;
-		scrollingBackground: Sprite;
+		sprites: array [0..1] of Sprite;
 	end;
 
 	Animatable = record
@@ -51,8 +50,8 @@ begin
 	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
 	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
 
-	LoadBitmapNamed('fixed_bg', 'background.png');
-	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
+	LoadBitmapNamed('scrolling_bg_1', 'scrollingBackground1.png');
+	LoadBitmapNamed('scrolling_bg_2', 'scrollingBackground2.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
@@ -115,14 +114,23 @@ begin
 end;
 
 function GetNewBackgroundData(): BackgroundData;
+var
+	i: Integer;
 begin
-	result.fixedBackground := CreateSprite(BitmapNamed('fixed_bg'));
-	result.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
-
-	SpriteSetX(result.scrollingBackGround, 0);
- 	SpriteSetY(result.scrollingBackGround, SpriteHeight(result.fixedBackground) - SpriteHeight(result.scrollingBackGround));
- 	SpriteSetX(result.fixedBackground, 0);
- 	SpriteSetY(result.fixedBackground, 0);
+	for i := Low(result.sprites) to High(result.sprites) do
+	begin
+		result.sprites[i] := CreateSprite(BitmapNamed('scrolling_bg_' + IntToStr(i + 1)));
+		if (i = 0) then
+		begin
+			SpriteSetX(result.sprites[i], 0);
+			SpriteSetY(result.sprites[i], 0);
+		end
+		else
+		begin
+			SpriteSetX(result.sprites[i], 0);
+			SpriteSetY(result.sprites[i], SpriteHeight(result.sprites[i - 1]) - SpriteHeight(result.sprites[i]));
+		end;
+	end;
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -169,12 +177,29 @@ begin
 end;
 
 procedure UpdateBackground(var gData: GameData);
+var
+	i: Integer;
 begin
-	SpriteSetX(gData.bgData.scrollingBackground, SpriteX(gData.bgData.scrollingBackground) - 1);
-	if (SpriteX(gData.bgData.scrollingBackground) <= ScreenWidth() * -1) then
+	for i := Low(gData.bgData.sprites) to High(gData.bgData.sprites) do
 	begin
-		SpriteSetX(gData.bgData.scrollingBackground, 0);
+		if (i = 0) then
+		begin
+			SpriteSetX(gData.bgData.sprites[i], SpriteX(gData.bgData.sprites[i]) - 1);
+			if (SpriteX(gData.bgData.sprites[i]) <= ScreenWidth() * - 1) then
+			begin
+				SpriteSetX(gData.bgData.sprites[i], 0);
+			end;
+		end
+		else
+		begin
+			SpriteSetX(gData.bgData.sprites[i], SpriteX(gData.bgData.sprites[i]) - 2);
+			if (SpriteX(gData.bgData.sprites[i]) <= ScreenWidth() * - 1) then
+			begin
+				SpriteSetX(gData.bgData.sprites[i], 0);
+			end;
+		end;
 	end;
+
 end;
 
 procedure UpdateAnimatable(var toUpdate: Animatable);
@@ -195,7 +220,7 @@ end;
 
 procedure CheckForCollisions(var toUpdate: GameData);
 begin
-	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.scrollingBackground))
+	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.sprites[1]))
 		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
 	begin
 		toUpdate.playerData.dead := true;
@@ -243,10 +268,15 @@ begin
 	DrawSprite(playerData.animatable.sprites[playerData.animatable.currentSpriteFrame]);
 end;
 
-procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
+procedure DrawBackground(const bgData: BackgroundData);
+var
+	i: Integer;
 begin
-	DrawSprite(fixedBackground);
-	DrawSprite(scrollingBackground);
+	for i := Low(bgData.sprites) to High(bgData.sprites) do
+	begin
+		DrawSprite(bgData.sprites[i]);
+	end;
+
 end;
 
 procedure DrawPoles(const myPoles: Poles);
@@ -261,7 +291,7 @@ end;
 
 procedure DrawGame(const gData: GameData);
 begin
-	DrawBackground(gData.bgData.fixedBackground, gData.bgData.scrollingBackground);
+	DrawBackground(gData.bgData);
 	DrawPlayer(gData.playerData);
 	DrawPoles(gData.GamePoles);
 	DrawFramerate(0,0);
