@@ -15,10 +15,14 @@ type
 		scrollingBackground: Sprite;
 	end;
 
-	TurtleData = record
+	Animatable = record
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
 		sprites: array [0..2] of Sprite;
+	end;
+
+	TurtleData = record
+		animatable: Animatable;
 		verticalSpeed: Double;
 	end;
 
@@ -42,19 +46,24 @@ begin
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
-function GetNewPlayerData(): PlayerData;
+function GetNewAnimatable(spriteName: String; numFrames: Integer): Animatable;
 var
 	i: Integer;
 begin
-	for i := Low(result.turtleData.sprites) to High(result.turtleData.sprites) do
+	for i := 0 to numFrames - 1 do
 	begin
-		result.turtleData.sprites[i] := CreateSprite(BitmapNamed('turtle_frame_' + IntToStr(i + 1)));
-		SpriteSetX(result.turtleData.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.turtleData.sprites[i])));
-		SpriteSetY(result.turtleData.sprites[i], (ScreenHeight() / 2));
+		result.sprites[i] := CreateSprite(BitmapNamed('turtle_frame_' + IntToStr(i + 1)));
+		SpriteSetX(result.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.sprites[i])));
+		SpriteSetY(result.sprites[i], (ScreenHeight() / 2));
 	end;
-	result.turtleData.spriteFrameTimer := CreateTimer();
-	StartTimer(result.turtleData.spriteFrameTimer);
-	result.turtleData.currentSpriteFrame := 0;
+	result.spriteFrameTimer := CreateTimer();
+	result.currentSpriteFrame := 0;
+end;
+
+function GetNewPlayerData(): PlayerData;
+begin
+	result.turtleData.animatable := GetNewAnimatable('turtle_frame_', 3);
+	StartTimer(result.turtleData.animatable.spriteFrameTimer);
 	result.turtleData.verticalSpeed := 0;
 	result.score := 0;
 end;
@@ -88,9 +97,9 @@ begin
 	begin
 		turtleData.verticalSpeed := MAX_RECOVERY_SPEED * -1;
 	end;
-	for i := Low(turtleData.sprites) to High(turtleData.sprites) do
+	for i := Low(turtleData.animatable.sprites) to High(turtleData.animatable.sprites) do
 	begin
-		SpriteSetY(turtleData.sprites[i], (SpriteY(turtleData.sprites[i]) + turtleData.verticalSpeed));
+		SpriteSetY(turtleData.animatable.sprites[i], (SpriteY(turtleData.animatable.sprites[i]) + turtleData.verticalSpeed));
 	end;
 end;
 
@@ -103,20 +112,25 @@ begin
 	end;
 end;
 
-procedure UpdateBirdSprite(var turtleData: TurtleData);
+procedure UpdateAnimatable(var toUpdate: Animatable);
 begin
-	if (TimerTicks(turtleData.spriteFrameTimer) >= SPRITE_FRAME_DURATION) then
+	if (TimerTicks(toUpdate.spriteFrameTimer) >= SPRITE_FRAME_DURATION) then
 	begin
-		if (turtleData.currentSpriteFrame = Length(turtleData.sprites) - 1) then
+		if (toUpdate.currentSpriteFrame = Length(toUpdate.sprites) - 1) then
 		begin
-			turtleData.currentSpriteFrame := 0;
+			toUpdate.currentSpriteFrame := 0;
 		end
 		else
 		begin
-			turtleData.currentSpriteFrame += 1;
+			toUpdate.currentSpriteFrame += 1;
 		end;
-		ResetTimer(turtleData.spriteFrameTimer);
+		ResetTimer(toUpdate.spriteFrameTimer);
 	end;
+end;
+
+procedure UpdateBirdSprite(var turtleData: TurtleData);
+begin
+	UpdateAnimatable(turtleData.animatable);
 end;
 
 procedure UpdateBird(var turtleData: TurtleData);
@@ -142,7 +156,7 @@ end;
 
 procedure DrawPlayer(const playerData: PlayerData);
 begin
-	DrawSprite(playerData.turtleData.sprites[playerData.turtleData.currentSpriteFrame]);
+	DrawSprite(playerData.turtleData.animatable.sprites[playerData.turtleData.animatable.currentSpriteFrame]);
 end;
 
 procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
