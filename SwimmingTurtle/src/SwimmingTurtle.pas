@@ -13,7 +13,7 @@ type
 
 	PoleData = record
 		Direction: Boolean;
-		Pole: Bitmap;
+		Pole: Sprite;
 	end;
 
 	BackgroundData = record
@@ -79,22 +79,22 @@ begin
 	case i  of
 			 0 :
 			 begin
-				 result.Pole := BitmapNamed(upward_pole_1);
+				 result.Pole := BitmapNamed('upward_pole_1');
 				 result.Direction := true;
 			 end;
 			 1 :
 			 begin
-			 	result.Pole := upward_pole_1;
+			 	result.Pole := BitmapNamed('upward_pole_1');
 			 	result.Direction := true;
 			 end;
 			 2 :
 			 begin
-				 result.Pole := upward_pole_1;
+				 result.Pole := BitmapNamed('upward_pole_1');
 				 result.Direction := true;
 			 end;
 			 3 :
 			 begin
-				 result.Pole := upward_pole_1;
+				 result.Pole := BitmapNamed('upward_pole_1');
 				 result.Direction := true;
 			 end;
 		end;
