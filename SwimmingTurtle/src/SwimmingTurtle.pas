@@ -11,7 +11,7 @@ const
 
 type
 	PoleData = record
-		Direction: Boolean;
+		ScoreLimiter: Boolean;
 		Pole: Sprite;
 	end;
 	Poles = array [0..3] of PoleData;
@@ -36,6 +36,7 @@ type
 	end;
 
 	GameData = record
+		Score: Integer;
 		GamePoles: Poles;
 		bgData: BackgroundData;
 		playerData: PlayerRepresentation;
@@ -79,7 +80,6 @@ end;
 
 function GetRandomPole(): PoleData;
 var
-	v: Vector;
 	i: Integer;
 begin
 	i := Rnd(4);
@@ -88,25 +88,25 @@ begin
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
-				 result.Direction := true;
+				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
 			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
 				SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
-			 	result.Direction := true;
+			 	result.ScoreLimiter := true;
 			 end;
 			 2 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('downward_pole_1'));
 				 SpriteSetY(result.Pole, 0);
-				 result.Direction := false;
+				 result.ScoreLimiter := true;
 			 end;
 			 3 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('downward_pole_2'));
 				 SpriteSetY(result.Pole, 0);
-				 result.Direction := false;
+				 result.ScoreLimiter := true;
 			 end;
 		end;
 		SpriteSetX(result.Pole, ScreenWidth() + RND(800));
@@ -158,6 +158,7 @@ begin
 	end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
+	gData.Score := 0;
 end;
 
 procedure UpdateRotation(var toRotate: PlayerRepresentation);
@@ -265,17 +266,26 @@ begin
 	end;
 end;
 
-procedure UpdatePoles(var myPoles: Poles);
+procedure UpdatePoles(var myGame: GameData);
 var
 	i: Integer;
 begin
-	for i:= Low(myPoles) to High(myPoles) do
+	for i:= Low(myGame.gamePoles) to High(myGame.gamePoles) do
 	begin
-		UpdateSprite(myPoles[i].Pole);
+		UpdateSprite(myGame.GamePoles[i].Pole);
 
-		if SpriteOffscreen(myPoles[i].Pole) then
+		if SpriteX (myGame.GamePoles[i].Pole) < (SpriteX(myGame.playerData.animatable.sprites[myGame.playerData.animatable.currentSpriteFrame])) then
 		begin
-			myPoles[i] := GetRandomPole();
+			if (myGame.GamePoles[i].ScoreLimiter) then
+			begin
+				myGame.GamePoles[i].ScoreLimiter := false;
+				myGame.Score += 1;
+			end;
+		end;
+
+		if (SpriteOffscreen(myGame.gamePoles[i].Pole)) then
+		begin
+			myGame.gamePoles[i] := GetRandomPole();
 		end;
 	end;
 end;
@@ -288,7 +298,7 @@ begin
 		HandleInput(gData.playerData);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.playerData);
-		UpdatePoles(gData.GamePoles);
+		UpdatePoles(gData);
 	end
 	else
 	begin
@@ -317,7 +327,7 @@ begin
 	DrawPoles(gData.GamePoles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
-	DrawText(IntToStr(gData.playerData.score), ColorWhite, 'game font', (ScreenWidth() - TextWidth(FontNamed('game font'), IntToStr(gData.playerData.score))), 0);
+	DrawText(IntToStr(gData.score), ColorWhite, 'game font', (ScreenWidth() - TextWidth(FontNamed('game font'), IntToStr(gData.playerData.score))), 0);
 end;
 
 procedure Main();
