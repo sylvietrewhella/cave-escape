@@ -6,7 +6,8 @@ const
 	JUMP_RECOVERY_BOOST = 2;
 	MAX_SPEED = 5;
 	MAX_ROTATION_ANGLE = 90;
-	SPRITE_FRAME_DURATION = 300;
+	SPRITE_FRAME_DURATION = 150;
+	NUM_FRAMES = 4;
 
 type
 
@@ -19,7 +20,7 @@ type
 		updateFequency: Integer;
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
-		sprites: array [0..2] of Sprite;
+		sprites: array [0..3] of Sprite;
 	end;
 
 	PlayerRepresentation = record
@@ -39,6 +40,7 @@ begin
 	LoadBitmapNamed('player_frame_1', 'playerFrame1.png');
 	LoadBitmapNamed('player_frame_2', 'playerFrame2.png');
 	LoadBitmapNamed('player_frame_3', 'playerFrame3.png');
+	LoadBitmapNamed('player_frame_4', 'playerFrame4.png');
 	LoadBitmapNamed('fixed_bg', 'background.png');
 	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
@@ -61,7 +63,7 @@ end;
 
 function GetNewPlayer(): PlayerRepresentation;
 begin
-	result.animatable := GetNewAnimatable('player_frame_', 3, SPRITE_FRAME_DURATION);
+	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION);
 	StartTimer(result.animatable.spriteFrameTimer);
 	result.dead := false;
 	result.verticalSpeed := 0;
