@@ -31,7 +31,6 @@ type
 	PlayerRepresentation = record
 		animatable: Animatable;
 		dead: Boolean;
-		verticalSpeed: Double;
 		score: Integer;
 	end;
 
@@ -116,14 +115,19 @@ end;
 
 function GetNewPlayer(): PlayerRepresentation;
 var
+	i: Integer;
 	playerStartPostion: Point2D;
 begin
 	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
 	playerStartPostion.y := ScreenHeight() / 2;
 	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
+	for i := Low(result.animatable.sprites) to High(result.animatable.sprites) do
+	begin
+		SpriteSetDy(result.animatable.sprites[i], 0);
+		SpriteSetDx(result.animatable.sprites[i], 0.5);
+	end;
 	StartTimer(result.animatable.spriteFrameTimer);
 	result.dead := false;
-	result.verticalSpeed := 0;
 	result.score := 0;
 end;
 
@@ -166,9 +170,9 @@ var
 	i: Integer;
 	rotationPercentage: Double;
 begin
-	rotationPercentage := (toRotate.verticalSpeed / MAX_SPEED);
 	for i := Low(toRotate.animatable.sprites) to High(toRotate.animatable.sprites) do
 	begin
+		rotationPercentage := (SpriteDy(toRotate.animatable.sprites[i]) / MAX_SPEED);
 		SpriteSetRotation(toRotate.animatable.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
 	end;
 end;
@@ -177,18 +181,17 @@ procedure UpdateVelocity(var toUpdate: PlayerRepresentation);
 var
 	i: Integer;
 begin
-	toUpdate.verticalSpeed := toUpdate.verticalSpeed + GRAVITY;
-	if toUpdate.verticalSpeed > MAX_SPEED then
-	begin
-		toUpdate.verticalSpeed := MAX_SPEED;
-	end
-	else if (toUpdate.verticalSpeed < MAX_SPEED * -1) then
-	begin
-		toUpdate.verticalSpeed := MAX_SPEED * -1;
-	end;
 	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
 	begin
-		SpriteSetY(toUpdate.animatable.sprites[i], (SpriteY(toUpdate.animatable.sprites[i]) + toUpdate.verticalSpeed));
+		SpriteSetDy(toUpdate.animatable.sprites[i], SpriteDy(toUpdate.animatable.sprites[i]) + GRAVITY);
+		if (SpriteDy(toUpdate.animatable.sprites[i]) > MAX_SPEED) then
+		begin
+			SpriteSetDy(toUpdate.animatable.sprites[i], MAX_SPEED);
+		end
+		else if (SpriteDy(toUpdate.animatable.sprites[i]) < MAX_SPEED * -1) then
+		begin
+			SpriteSetDy(toUpdate.animatable.sprites[i], MAX_SPEED * -1);
+		end;
 	end;
 end;
 
@@ -198,7 +201,7 @@ begin
 	begin
 		if (toUpdate.currentSpriteFrame = Length(toUpdate.sprites) - 1) then
 		begin
-			toUpdate.currentSpriteFrame := 0;
+			toUpdate.currentSpriteFrame := Low(toUpdate.sprites);
 		end
 		else
 		begin
@@ -247,9 +250,15 @@ begin
 end;
 
 procedure UpdatePlayerSprite(var toUpdate: PlayerRepresentation);
+var
+	i: Integer;
 begin
 	UpdateRotation(toUpdate);
 	UpdateAnimatable(toUpdate.animatable);
+	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+	begin
+		UpdateSprite(toUpdate.animatable.sprites[i]);
+	end;
 end;
 
 procedure UpdatePlayer(var toUpdate: PlayerRepresentation);
@@ -259,10 +268,15 @@ begin
 end;
 
 procedure HandleInput(var toUpdate: PlayerRepresentation);
+var
+	i: Integer;
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		toUpdate.verticalSpeed += JUMP_RECOVERY_BOOST * -1;
+		for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+		begin
+			SpriteSetDy(toUpdate.animatable.sprites[i], SpriteDy(toUpdate.animatable.sprites[i]) + JUMP_RECOVERY_BOOST * -1)
+		end;
 	end;
 end;
 
