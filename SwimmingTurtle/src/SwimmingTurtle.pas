@@ -120,7 +120,7 @@ end;
 procedure UpdateBackground(var gData: GameData);
 begin
 	SpriteSetX(gData.bgData.scrollingBackground, SpriteX(gData.bgData.scrollingBackground) - 1);
-	if (SpriteX(gData.bgData.scrollingBackground) <= (SpriteWidth(gData.bgData.scrollingBackground) / 2) * -1) then
+	if (SpriteX(gData.bgData.scrollingBackground) <= (SpriteWidth(gData.bgData.fixedBackground) - SpriteWidth(gData.bgData.scrollingBackground))) then
 	begin
 		SpriteSetX(gData.bgData.scrollingBackground, 0);
 	end;
@@ -192,7 +192,7 @@ var
 	gData: GameData;
 
 begin
-  OpenGraphicsWindow('Flappy Bird', 368, 653);
+  OpenGraphicsWindow('Flappy Bird', 288, 512);
   LoadResources();
   SetUpGame(gData);
 
