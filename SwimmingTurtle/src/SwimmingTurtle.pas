@@ -10,11 +10,11 @@ const
 	NUM_FRAMES = 4;
 
 type
-
 	PoleData = record
 		Direction: Boolean;
 		Pole: Sprite;
 	end;
+	Poles = array [0..3] of PoleData;
 
 	BackgroundData = record
 		fixedBackground: Sprite;
@@ -36,7 +36,7 @@ type
 	end;
 
 	GameData = record
-		poles: array [0..4] of PoleData;
+		GamePoles: Poles;
 		bgData: BackgroundData;
 		playerData: PlayerRepresentation;
 	end;
@@ -79,25 +79,30 @@ begin
 	case i  of
 			 0 :
 			 begin
-				 result.Pole := BitmapNamed('upward_pole_1');
+				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 result.Direction := true;
 			 end;
 			 1 :
 			 begin
-			 	result.Pole := BitmapNamed('upward_pole_1');
+			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
 			 	result.Direction := true;
 			 end;
 			 2 :
 			 begin
-				 result.Pole := BitmapNamed('upward_pole_1');
+				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 result.Direction := true;
 			 end;
 			 3 :
 			 begin
-				 result.Pole := BitmapNamed('upward_pole_1');
+				 result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
 				 result.Direction := true;
 			 end;
 		end;
+		SpriteSetX(result.Pole, ScreenWidth() - 50);
+		SpriteSetY(result.Pole, ScreenHeight());
+		SpriteSetSpeed(result.Pole, 5);
+
+		MoveSpriteTo(result.Pole, -200, SpriteHeight(result.pole));
 end;
 
 function GetNewPlayer(): PlayerRepresentation;
@@ -124,9 +129,9 @@ procedure SetUpGame(var gData: GameData);
 var
 	i: Integer;
 begin
-	for i:= Low(gData.poles) to High(gData.poles) do
+	for i:= Low(gData.GamePoles) to High(gData.GamePoles) do
 		begin
-			gData.poles[i] := GetRandomPole();
+			gData.GamePoles[i] := GetRandomPole();
 		end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
@@ -223,6 +228,7 @@ begin
 	begin
 		CheckForCollisions(gData);
 		HandleInput(gData.playerData);
+		//UpdatePoles(gData.Poles);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.playerData);
 	end
@@ -243,10 +249,21 @@ begin
 	DrawSprite(scrollingBackground);
 end;
 
+procedure DrawPoles(const myPoles: Poles);
+var
+	i: Integer;
+begin
+	for i:= Low(myPoles) to High(myPoles) do
+	begin
+		DrawSprite(myPoles[i].Pole);
+	end;
+end;
+
 procedure DrawGame(const gData: GameData);
 begin
 	DrawBackground(gData.bgData.fixedBackground, gData.bgData.scrollingBackground);
 	DrawPlayer(gData.playerData);
+	DrawPoles(gData.GamePoles);
 	DrawFramerate(0,0);
 end;
 
