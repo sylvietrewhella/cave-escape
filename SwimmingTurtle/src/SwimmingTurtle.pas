@@ -16,6 +16,7 @@ type
 	end;
 
 	Animatable = record
+		updateFequency: Integer;
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
 		sprites: array [0..2] of Sprite;
@@ -46,7 +47,7 @@ begin
 	LoadFontNamed('game font', 'arial.ttf', 48);
 end;
 
-function GetNewAnimatable(spriteName: String; numFrames: Integer): Animatable;
+function GetNewAnimatable(spriteName: String; numFrames, updateFequency: Integer): Animatable;
 var
 	i: Integer;
 begin
@@ -56,13 +57,14 @@ begin
 		SpriteSetX(result.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.sprites[i])));
 		SpriteSetY(result.sprites[i], (ScreenHeight() / 2));
 	end;
+	result.updateFequency := updateFequency;
 	result.spriteFrameTimer := CreateTimer();
 	result.currentSpriteFrame := 0;
 end;
 
 function GetNewPlayerData(): PlayerData;
 begin
-	result.turtleData.animatable := GetNewAnimatable('turtle_frame_', 3);
+	result.turtleData.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
 	StartTimer(result.turtleData.animatable.spriteFrameTimer);
 	result.turtleData.verticalSpeed := 0;
 	result.score := 0;
@@ -114,7 +116,7 @@ end;
 
 procedure UpdateAnimatable(var toUpdate: Animatable);
 begin
-	if (TimerTicks(toUpdate.spriteFrameTimer) >= SPRITE_FRAME_DURATION) then
+	if (TimerTicks(toUpdate.spriteFrameTimer) >= toUpdate.updateFequency) then
 	begin
 		if (toUpdate.currentSpriteFrame = Length(toUpdate.sprites) - 1) then
 		begin
