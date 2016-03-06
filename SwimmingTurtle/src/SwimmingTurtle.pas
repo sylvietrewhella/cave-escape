@@ -3,9 +3,9 @@ uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
 	GRAVITY = 0.08;
-	MAX_RECOVERY_SPEED = 3.5;
 	JUMP_RECOVERY_BOOST = 2;
-	TERMINAL_VELOCITY = 5;
+	MAX_SPEED = 5;
+	MAX_ROTATION_ANGLE = 90;
 	SPRITE_FRAME_DURATION = 300;
 
 type
@@ -22,13 +22,13 @@ type
 		sprites: array [0..2] of Sprite;
 	end;
 
-	TurtleData = record
+	PlayerRepresentation = record
 		animatable: Animatable;
 		verticalSpeed: Double;
 	end;
 
 	PlayerData = record
-		turtleData: TurtleData;
+		playerRep: PlayerRepresentation;
 		score: Integer;
 	end;
 
@@ -53,7 +53,7 @@ var
 begin
 	for i := 0 to numFrames - 1 do
 	begin
-		result.sprites[i] := CreateSprite(BitmapNamed('turtle_frame_' + IntToStr(i + 1)));
+		result.sprites[i] := CreateSprite(BitmapNamed(spriteName + IntToStr(i + 1)));
 		SpriteSetX(result.sprites[i], (ScreenWidth() / 2 - SpriteWidth(result.sprites[i])));
 		SpriteSetY(result.sprites[i], (ScreenHeight() / 2));
 	end;
@@ -64,9 +64,9 @@ end;
 
 function GetNewPlayerData(): PlayerData;
 begin
-	result.turtleData.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
-	StartTimer(result.turtleData.animatable.spriteFrameTimer);
-	result.turtleData.verticalSpeed := 0;
+	result.playerRep.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
+	StartTimer(result.playerRep.animatable.spriteFrameTimer);
+	result.playerRep.verticalSpeed := 0;
 	result.score := 0;
 end;
 
@@ -86,42 +86,34 @@ begin
 	gData.bgData := GetNewBackgroundData();
 end;
 
-procedure UpdateBirdRotation(var turtleData: TurtleData);
+procedure UpdateRotation(var toRotate: PlayerRepresentation);
 var
 	i: Integer;
-	rateOfRotation: Double;
+	rotationPercentage: Double;
 begin
-	rateOfRotation := 0.0;
-	if (turtleData.verticalSpeed > 0) then
+	rotationPercentage := (toRotate.verticalSpeed / MAX_SPEED);
+	for i := Low(toRotate.animatable.sprites) to High(toRotate.animatable.sprites) do
 	begin
-		rateOfRotation := (turtleData.verticalSpeed / TERMINAL_VELOCITY);
-	end
-	else
-	begin
-		rateOfRotation := (turtleData.verticalSpeed / MAX_RECOVERY_SPEED);
-	end;
-	for i := Low(turtleData.animatable.sprites) to High(turtleData.animatable.sprites) do
-	begin
-		SpriteSetRotation(turtleData.animatable.sprites[i], rateOfRotation * 90);
+		SpriteSetRotation(toRotate.animatable.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
 	end;
 end;
 
-procedure UpdateBirdVelocity(var turtleData: TurtleData);
+procedure UpdateVelocity(var toUpdate: PlayerRepresentation);
 var
 	i: Integer;
 begin
-	turtleData.verticalSpeed := turtleData.verticalSpeed + GRAVITY;
-	if turtleData.verticalSpeed > TERMINAL_VELOCITY then
+	toUpdate.verticalSpeed := toUpdate.verticalSpeed + GRAVITY;
+	if toUpdate.verticalSpeed > MAX_SPEED then
 	begin
-		turtleData.verticalSpeed := TERMINAL_VELOCITY;
+		toUpdate.verticalSpeed := MAX_SPEED;
 	end
-	else if (turtleData.verticalSpeed < MAX_RECOVERY_SPEED * -1) then
+	else if (toUpdate.verticalSpeed < MAX_SPEED * -1) then
 	begin
-		turtleData.verticalSpeed := MAX_RECOVERY_SPEED * -1;
+		toUpdate.verticalSpeed := MAX_SPEED * -1;
 	end;
-	for i := Low(turtleData.animatable.sprites) to High(turtleData.animatable.sprites) do
+	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
 	begin
-		SpriteSetY(turtleData.animatable.sprites[i], (SpriteY(turtleData.animatable.sprites[i]) + turtleData.verticalSpeed));
+		SpriteSetY(toUpdate.animatable.sprites[i], (SpriteY(toUpdate.animatable.sprites[i]) + toUpdate.verticalSpeed));
 	end;
 end;
 
@@ -150,36 +142,36 @@ begin
 	end;
 end;
 
-procedure UpdateBirdSprite(var turtleData: TurtleData);
+procedure UpdatePlayerSprite(var toUpdate: PlayerRepresentation);
 begin
-	UpdateBirdRotation(turtleData);
-	UpdateAnimatable(turtleData.animatable);
+	UpdateRotation(toUpdate);
+	UpdateAnimatable(toUpdate.animatable);
 end;
 
-procedure UpdateBird(var turtleData: TurtleData);
+procedure UpdatePlayer(var toUpdate: PlayerRepresentation);
 begin
-	UpdateBirdVelocity(turtleData);
-	UpdateBirdSprite(turtleData);
+	UpdateVelocity(toUpdate);
+	UpdatePlayerSprite(toUpdate);
 end;
 
-procedure HandleInput(var turtle: TurtleData);
+procedure HandleInput(var toUpdate: PlayerRepresentation);
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		turtle.verticalSpeed += JUMP_RECOVERY_BOOST * -1;
+		toUpdate.verticalSpeed += JUMP_RECOVERY_BOOST * -1;
 	end;
 end;
 
 procedure UpdateGame(var gData: GameData);
 begin
-	HandleInput(gData.playerData.turtleData);
+	HandleInput(gData.playerData.playerRep);
 	UpdateBackground(gdata);
-	UpdateBird(gData.playerData.turtleData);
+	UpdatePlayer(gData.playerData.playerRep);
 end;
 
 procedure DrawPlayer(const playerData: PlayerData);
 begin
-	DrawSprite(playerData.turtleData.animatable.sprites[playerData.turtleData.animatable.currentSpriteFrame]);
+	DrawSprite(playerData.playerRep.animatable.sprites[playerData.playerRep.animatable.currentSpriteFrame]);
 end;
 
 procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
