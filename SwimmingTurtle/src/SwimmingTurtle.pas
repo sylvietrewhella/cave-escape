@@ -26,16 +26,12 @@ type
 		animatable: Animatable;
 		dead: Boolean;
 		verticalSpeed: Double;
-	end;
-
-	PlayerData = record
-		playerRep: PlayerRepresentation;
 		score: Integer;
 	end;
 
 	GameData = record
 		bgData: BackgroundData;
-		playerData: PlayerData;
+		playerData: PlayerRepresentation;
 	end;
 
 procedure LoadResources();
@@ -63,12 +59,12 @@ begin
 	result.currentSpriteFrame := 0;
 end;
 
-function GetNewPlayerData(): PlayerData;
+function GetNewPlayer(): PlayerRepresentation;
 begin
-	result.playerRep.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
-	StartTimer(result.playerRep.animatable.spriteFrameTimer);
-	result.playerRep.dead := false;
-	result.playerRep.verticalSpeed := 0;
+	result.animatable := GetNewAnimatable('turtle_frame_', 3, SPRITE_FRAME_DURATION);
+	StartTimer(result.animatable.spriteFrameTimer);
+	result.dead := false;
+	result.verticalSpeed := 0;
 	result.score := 0;
 end;
 
@@ -84,7 +80,7 @@ end;
 
 procedure SetUpGame(var gData: GameData);
 begin
-	gData.playerData := GetNewPlayerData();
+	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
 end;
 
@@ -146,10 +142,10 @@ end;
 
 procedure CheckForCollisions(var toUpdate: GameData);
 begin
-	if (SpriteCollision(toUpdate.playerData.playerRep.animatable.sprites[toUpdate.playerData.playerRep.animatable.currentSpriteFrame], toUpdate.bgData.scrollingBackground))
-		or (SpriteY(toUpdate.playerData.playerRep.animatable.sprites[toUpdate.playerData.playerRep.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
+	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.scrollingBackground))
+		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
 	begin
-		toUpdate.playerData.playerRep.dead := true;
+		toUpdate.playerData.dead := true;
 	end;
 end;
 
@@ -175,12 +171,12 @@ end;
 
 procedure UpdateGame(var gData: GameData);
 begin
-	if not (gData.playerData.playerRep.dead) then
+	if not (gData.playerData.dead) then
 	begin
 		CheckForCollisions(gData);
-		HandleInput(gData.playerData.playerRep);
+		HandleInput(gData.playerData);
 		UpdateBackground(gdata);
-		UpdatePlayer(gData.playerData.playerRep);
+		UpdatePlayer(gData.playerData);
 	end
 	else
 	begin
@@ -188,9 +184,9 @@ begin
 	end;
 end;
 
-procedure DrawPlayer(const playerData: PlayerData);
+procedure DrawPlayer(const playerData: PlayerRepresentation);
 begin
-	DrawSprite(playerData.playerRep.animatable.sprites[playerData.playerRep.animatable.currentSpriteFrame]);
+	DrawSprite(playerData.animatable.sprites[playerData.animatable.currentSpriteFrame]);
 end;
 
 procedure DrawBackground(const fixedBackground, scrollingBackground: Sprite);
