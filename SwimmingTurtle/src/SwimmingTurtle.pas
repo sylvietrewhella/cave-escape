@@ -324,7 +324,7 @@ procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Cave Escape', 288, 512);
+  OpenGraphicsWindow('Cave Escape', 432, 768);
 	ClearScreen();
 	OpenAudio();
   LoadResources();
