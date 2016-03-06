@@ -158,7 +158,6 @@ begin
 	end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
-	FadeMusicIn('MagicalNight.ogg', -1, 10000)
 end;
 
 procedure UpdateRotation(var toRotate: PlayerRepresentation);
@@ -318,18 +317,19 @@ begin
 	DrawPoles(gData.GamePoles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
-
-	DrawFramerate(0,0);
 end;
 
 procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Flappy Bird', 288, 512);
+  OpenGraphicsWindow('Cave Escape', 288, 512);
+	ClearScreen();
 	OpenAudio();
   LoadResources();
   SetUpGame(gData);
+
+	FadeMusicIn('MagicalNight.ogg', -1, 10000);
 
   repeat // The game loop...
     ProcessEvents();
