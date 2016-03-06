@@ -11,6 +11,11 @@ const
 
 type
 
+	PoleData = record
+		Direction: Boolean;
+		Pole: Bitmap;
+	end;
+
 	BackgroundData = record
 		fixedBackground: Sprite;
 		scrollingBackground: Sprite;
@@ -31,6 +36,7 @@ type
 	end;
 
 	GameData = record
+		poles: array [0..4] of PoleData;
 		bgData: BackgroundData;
 		playerData: PlayerRepresentation;
 	end;
@@ -41,6 +47,10 @@ begin
 	LoadBitmapNamed('player_frame_2', 'playerFrame2.png');
 	LoadBitmapNamed('player_frame_3', 'playerFrame3.png');
 	LoadBitmapNamed('player_frame_4', 'playerFrame4.png');
+
+	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
+	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
+
 	LoadBitmapNamed('fixed_bg', 'background.png');
 	LoadBitmapNamed('scrolling_bg', 'scrollingBackground.png');
 	LoadFontNamed('game font', 'arial.ttf', 48);
@@ -61,6 +71,35 @@ begin
 	result.currentSpriteFrame := 0;
 end;
 
+function GetRandomPole(): PoleData;
+var
+	i: Integer;
+begin
+	i := Rnd(4);
+	case i  of
+			 0 :
+			 begin
+				 result.Pole := BitmapNamed(upward_pole_1);
+				 result.Direction := true;
+			 end;
+			 1 :
+			 begin
+			 	result.Pole := upward_pole_1;
+			 	result.Direction := true;
+			 end;
+			 2 :
+			 begin
+				 result.Pole := upward_pole_1;
+				 result.Direction := true;
+			 end;
+			 3 :
+			 begin
+				 result.Pole := upward_pole_1;
+				 result.Direction := true;
+			 end;
+		end;
+end;
+
 function GetNewPlayer(): PlayerRepresentation;
 begin
 	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION);
@@ -74,6 +113,7 @@ function GetNewBackgroundData(): BackgroundData;
 begin
 	result.fixedBackground := CreateSprite(BitmapNamed('fixed_bg'));
 	result.scrollingBackGround := CreateSprite(BitmapNamed('scrolling_bg'));
+
 	SpriteSetX(result.scrollingBackGround, 0);
  	SpriteSetY(result.scrollingBackGround, SpriteHeight(result.fixedBackground) - SpriteHeight(result.scrollingBackGround));
  	SpriteSetX(result.fixedBackground, 0);
@@ -81,7 +121,13 @@ begin
 end;
 
 procedure SetUpGame(var gData: GameData);
+var
+	i: Integer;
 begin
+	for i:= Low(gData.poles) to High(gData.poles) do
+		begin
+			gData.poles[i] := GetRandomPole();
+		end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
 end;
