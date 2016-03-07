@@ -3,3 +3,5 @@ SwinGame Animation #v1
 f: 0, 0, 40, 1
 f: 1, 0, 40, 2
 f: 2, 0, 40,
+
+i:fire,0

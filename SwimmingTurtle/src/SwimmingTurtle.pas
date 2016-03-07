@@ -110,6 +110,8 @@ begin
 	gData.Score := 0;
 	gData.isDead := false;
 	SetUpParallaxBackground(gData.background, gData.foreground);
+
+	SpriteStartAnimation(gData.foreground, 'fire');
 end;
 
 procedure UpdateRotation(var toRotate: Sprite);
