@@ -83,6 +83,7 @@ begin
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
+	SpriteStartAnimation(result, 'fly');
 end;
 
 procedure SetUpParallaxBackground(var background, foreground: Sprite);
