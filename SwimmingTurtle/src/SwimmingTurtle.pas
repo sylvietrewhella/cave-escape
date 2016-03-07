@@ -34,7 +34,6 @@ type
 	PlayerRepresentation = record
 		Animation: Animation;
 		dead: Boolean;
-
 	end;
 
 	GameData = record
@@ -123,15 +122,14 @@ var
 begin
 	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
 	playerStartPostion.y := ScreenHeight() / 2;
-	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
-	for i := Low(result.animatable.sprites) to High(result.animatable.sprites) do
+	result.Animation := GetNewAnimation('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
+	for i := Low(result.Animation.sprites) to High(result.Animation.sprites) do
 	begin
-		SpriteSetDy(result.animatable.sprites[i], 0);
-		SpriteSetDx(result.animatable.sprites[i], 0.5);
+		SpriteSetDy(result.Animation.sprites[i], 0);
+		SpriteSetDx(result.Animation.sprites[i], 0.5);
 	end;
-	StartTimer(result.animatable.spriteFrameTimer);
+	StartTimer(result.Animation.spriteFrameTimer);
 	result.dead := false;
-	result.score := 0;
 end;
 
 function GetNewBackgroundData(): BackgroundData;
@@ -173,10 +171,10 @@ var
 	i: Integer;
 	rotationPercentage: Double;
 begin
-	for i := Low(toRotate.animatable.sprites) to High(toRotate.animatable.sprites) do
+	for i := Low(toRotate.Animation.sprites) to High(toRotate.Animation.sprites) do
 	begin
-		rotationPercentage := (SpriteDy(toRotate.animatable.sprites[i]) / MAX_SPEED);
-		SpriteSetRotation(toRotate.animatable.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
+		rotationPercentage := (SpriteDy(toRotate.Animation.sprites[i]) / MAX_SPEED);
+		SpriteSetRotation(toRotate.Animation.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
 	end;
 end;
 
@@ -184,16 +182,16 @@ procedure UpdateVelocity(var toUpdate: PlayerRepresentation);
 var
 	i: Integer;
 begin
-	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+	for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
 	begin
-		SpriteSetDy(toUpdate.animatable.sprites[i], SpriteDy(toUpdate.animatable.sprites[i]) + GRAVITY);
-		if (SpriteDy(toUpdate.animatable.sprites[i]) > MAX_SPEED) then
+		SpriteSetDy(toUpdate.Animation.sprites[i], SpriteDy(toUpdate.Animation.sprites[i]) + GRAVITY);
+		if (SpriteDy(toUpdate.Animation.sprites[i]) > MAX_SPEED) then
 		begin
-			SpriteSetDy(toUpdate.animatable.sprites[i], MAX_SPEED);
+			SpriteSetDy(toUpdate.Animation.sprites[i], MAX_SPEED);
 		end
-		else if (SpriteDy(toUpdate.animatable.sprites[i]) < MAX_SPEED * -1) then
+		else if (SpriteDy(toUpdate.Animation.sprites[i]) < MAX_SPEED * -1) then
 		begin
-			SpriteSetDy(toUpdate.animatable.sprites[i], MAX_SPEED * -1);
+			SpriteSetDy(toUpdate.Animation.sprites[i], MAX_SPEED * -1);
 		end;
 	end;
 end;
@@ -260,10 +258,10 @@ var
 	i: Integer;
 begin
 	UpdateRotation(toUpdate);
-	UpdateAnimatable(toUpdate.animatable);
-	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+	UpdateAnimation(toUpdate.Animation);
+	for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
 	begin
-		UpdateSprite(toUpdate.animatable.sprites[i]);
+		UpdateSprite(toUpdate.Animation.sprites[i]);
 	end;
 end;
 
@@ -279,9 +277,9 @@ var
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+		for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
 		begin
-			SpriteSetDy(toUpdate.animatable.sprites[i], SpriteDy(toUpdate.animatable.sprites[i]) + JUMP_RECOVERY_BOOST * -1)
+			SpriteSetDy(toUpdate.Animation.sprites[i], SpriteDy(toUpdate.Animation.sprites[i]) + JUMP_RECOVERY_BOOST * -1)
 		end;
 	end;
 end;
@@ -354,7 +352,7 @@ procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Cave Escape', SCREEN_WIDTH, SCNREEN_HEIGHT);
+  OpenGraphicsWindow('Cave Escape', SCREEN_WIDTH, SCREEN_HEIGHT);
 	OpenAudio();
   LoadResources();
   SetUpGame(gData);
