@@ -9,6 +9,9 @@ const
 	SPRITE_FRAME_DURATION = 150;
 	NUM_FRAMES = 4;
 
+	SCREEN_WIDTH = 432;
+	SCREEN_HEIGHT = 768;
+
 type
 	PoleData = record
 		ScoreLimiter: Boolean;
@@ -16,7 +19,7 @@ type
 	end;
 	Poles = array [0..3] of PoleData;
 
-	Animatable = record
+	Animation = record
 		updateFequency: Integer;
 		spriteFrameTimer: Timer;
 		currentSpriteFrame: Integer;
@@ -24,20 +27,19 @@ type
 	end;
 
 	BackgroundData = record
-		ForeGround: Animatable;
+		ForeGround: Animation;
 		Background: Sprite;
 	end;
 
 	PlayerRepresentation = record
-		animatable: Animatable;
+		Animation: Animation;
 		dead: Boolean;
 		verticalSpeed: Double;
-		score: Integer;
 	end;
 
 	GameData = record
 		Score: Integer;
-		GamePoles: Poles;
+		Poles: Poles;
 		bgData: BackgroundData;
 		playerData: PlayerRepresentation;
 	end;
@@ -63,7 +65,7 @@ begin
 	LoadMusic('MagicalNight.ogg');
 end;
 
-function GetNewAnimatable(spriteName: String; numFrames, updateFequency: Integer; position: Point2D): Animatable;
+function GetNewAnimation(spriteName: String; numFrames, updateFequency: Integer; position: Point2D): Animation;
 var
 	i: Integer;
 begin
@@ -87,13 +89,13 @@ begin
 			 0 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
+				 SpriteSetY(result.Pole, SCREEN_HEIGHT - SpriteHeight(result.pole));
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
 			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
-				SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
+				SpriteSetY(result.Pole, SCREEN_HEIGHT - SpriteHeight(result.pole));
 			 	result.ScoreLimiter := true;
 			 end;
 			 2 :
@@ -109,7 +111,7 @@ begin
 				 result.ScoreLimiter := true;
 			 end;
 		end;
-		SpriteSetX(result.Pole, ScreenWidth() + RND(800));
+		SpriteSetX(result.Pole, SCREEN_WIDTH + RND(1200));
 		SpriteSetDx(result.Pole, -2);
 		SpriteSetDy(result.Pole, 0);
 end;
@@ -118,13 +120,12 @@ function GetNewPlayer(): PlayerRepresentation;
 var
 	playerStartPostion: Point2D;
 begin
-	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
-	playerStartPostion.y := ScreenHeight() / 2;
-	result.animatable := GetNewAnimatable('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
-	StartTimer(result.animatable.spriteFrameTimer);
+	playerStartPostion.x := SCREEN_WIDTH / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
+	playerStartPostion.y := SCREEN_HEIGHT / 2;
+	result.Animation := GetNewAnimation('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
+	StartTimer(result.Animation.spriteFrameTimer);
 	result.dead := false;
 	result.verticalSpeed := 0;
-	result.score := 0;
 end;
 
 function GetNewBackgroundData(): BackgroundData;
@@ -139,7 +140,7 @@ begin
 	SpriteSetDx(result.Background, -1);
 	foregroundPostion.x := 0;
 	foregroundPostion.y := SpriteHeight(result.Background) - BitmapHeight(BitmapNamed('foreground_1'));
-	result.ForeGround := GetNewAnimatable('foreground_', 3, 200, foregroundPostion);
+	result.ForeGround := GetNewAnimation('foreground_', 3, 200, foregroundPostion);
 	for i := Low(result.ForeGround.sprites) to High(result.ForeGround.sprites) do
 	begin
 		SpriteSetDy(result.ForeGround.sprites[i], 0);
@@ -152,9 +153,9 @@ procedure SetUpGame(var gData: GameData);
 var
 	i: Integer;
 begin
-	for i:= Low(gData.GamePoles) to High(gData.GamePoles) do
+	for i:= Low(gData.Poles) to High(gData.Poles) do
 	begin
-		gData.GamePoles[i] := GetRandomPole();
+		gData.Poles[i] := GetRandomPole();
 	end;
 	gData.playerData := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
@@ -167,9 +168,9 @@ var
 	rotationPercentage: Double;
 begin
 	rotationPercentage := (toRotate.verticalSpeed / MAX_SPEED);
-	for i := Low(toRotate.animatable.sprites) to High(toRotate.animatable.sprites) do
+	for i := Low(toRotate.Animation.sprites) to High(toRotate.Animation.sprites) do
 	begin
-		SpriteSetRotation(toRotate.animatable.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
+		SpriteSetRotation(toRotate.Animation.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
 	end;
 end;
 
@@ -186,13 +187,13 @@ begin
 	begin
 		toUpdate.verticalSpeed := MAX_SPEED * -1;
 	end;
-	for i := Low(toUpdate.animatable.sprites) to High(toUpdate.animatable.sprites) do
+	for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
 	begin
-		SpriteSetY(toUpdate.animatable.sprites[i], (SpriteY(toUpdate.animatable.sprites[i]) + toUpdate.verticalSpeed));
+		SpriteSetY(toUpdate.Animation.sprites[i], (SpriteY(toUpdate.Animation.sprites[i]) + toUpdate.verticalSpeed));
 	end;
 end;
 
-procedure UpdateAnimatable(var toUpdate: Animatable);
+procedure UpdateAnimation(var toUpdate: Animation);
 begin
 	if (TimerTicks(toUpdate.spriteFrameTimer) >= toUpdate.updateFequency) then
 	begin
@@ -212,7 +213,7 @@ procedure UpdateBackground(var gData: GameData);
 var
 	i: Integer;
 begin
-	UpdateAnimatable(gdata.bgData.ForeGround);
+	UpdateAnimation(gdata.bgData.ForeGround);
 	for i := Low(gdata.bgData.ForeGround.sprites) to High(gdata.bgData.ForeGround.sprites) do
 	begin
 		UpdateSprite(gData.bgData.ForeGround.sprites[i]);
@@ -232,14 +233,17 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.bgData.ForeGround.sprites[toUpdate.bgData.ForeGround.currentSpriteFrame]))
-		or (SpriteY(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame]) < ScreenHeight() - ScreenHeight()) then
+	if (SpriteCollision
+				(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame],
+				toUpdate.bgData.ForeGround.sprites[toUpdate.bgData.ForeGround.currentSpriteFrame]))
+
+		or (SpriteY(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame]) < 0) then
 	begin
 		toUpdate.playerData.dead := true;
 	end;
-	for i := Low(toUpdate.GamePoles) to High(toUpdate.GamePoles) do
+	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
 	begin
-		if SpriteCollision(toUpdate.playerData.animatable.sprites[toUpdate.playerData.animatable.currentSpriteFrame], toUpdate.GamePoles[i].Pole) then
+		if SpriteCollision(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame], toUpdate.Poles[i].Pole) then
 		begin
 			toUpdate.playerData.dead := true;
 		end;
@@ -249,7 +253,7 @@ end;
 procedure UpdatePlayerSprite(var toUpdate: PlayerRepresentation);
 begin
 	UpdateRotation(toUpdate);
-	UpdateAnimatable(toUpdate.animatable);
+	UpdateAnimation(toUpdate.Animation);
 end;
 
 procedure UpdatePlayer(var toUpdate: PlayerRepresentation);
@@ -270,22 +274,22 @@ procedure UpdatePoles(var myGame: GameData);
 var
 	i: Integer;
 begin
-	for i:= Low(myGame.gamePoles) to High(myGame.gamePoles) do
+	for i:= Low(myGame.Poles) to High(myGame.Poles) do
 	begin
-		UpdateSprite(myGame.GamePoles[i].Pole);
+		UpdateSprite(myGame.Poles[i].Pole);
 
-		if SpriteX (myGame.GamePoles[i].Pole) < (SpriteX(myGame.playerData.animatable.sprites[myGame.playerData.animatable.currentSpriteFrame])) then
+		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.playerData.Animation.sprites[myGame.playerData.Animation.currentSpriteFrame])) then
 		begin
-			if (myGame.GamePoles[i].ScoreLimiter) then
+			if (myGame.Poles[i].ScoreLimiter) then
 			begin
-				myGame.GamePoles[i].ScoreLimiter := false;
+				myGame.Poles[i].ScoreLimiter := false;
 				myGame.Score += 1;
 			end;
 		end;
 
-		if (SpriteOffscreen(myGame.gamePoles[i].Pole)) then
+		if (SpriteOffscreen(myGame.Poles[i].Pole)) then
 		begin
-			myGame.gamePoles[i] := GetRandomPole();
+			myGame.Poles[i] := GetRandomPole();
 		end;
 	end;
 end;
@@ -300,7 +304,7 @@ begin
 		UpdatePlayer(gData.playerData);
 		UpdatePoles(gData);
 	end
-	else
+	else //The player has died :(
 	begin
 		SetUpGame(gData);
 	end;
@@ -308,7 +312,7 @@ end;
 
 procedure DrawPlayer(const playerData: PlayerRepresentation);
 begin
-	DrawSprite(playerData.animatable.sprites[playerData.animatable.currentSpriteFrame]);
+	DrawSprite(playerData.Animation.sprites[playerData.Animation.currentSpriteFrame]);
 end;
 
 procedure DrawPoles(const myPoles: Poles);
@@ -324,7 +328,7 @@ end;
 procedure DrawGame(const gData: GameData);
 begin
 	DrawSprite(gData.bgData.Background);
-	DrawPoles(gData.GamePoles);
+	DrawPoles(gData.Poles);
 	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
 	DrawPlayer(gData.playerData);
 	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
@@ -334,13 +338,12 @@ procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
-	ClearScreen();
+  OpenGraphicsWindow('Cave Escape', SCREEN_WIDTH, SCNREEN_HEIGHT);
 	OpenAudio();
   LoadResources();
   SetUpGame(gData);
 
-	FadeMusicIn('MagicalNight.ogg', -1, 10000);
+	FadeMusicIn('MagicalNight.ogg', -1, 15000);
 
   repeat // The game loop...
     ProcessEvents();
@@ -349,7 +352,7 @@ begin
     UpdateGame(gData);
     DrawGame(gData);
 
-    RefreshScreen(60);
+    RefreshScreen();
   until WindowCloseRequested();
 end;
 
