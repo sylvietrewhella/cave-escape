@@ -38,10 +38,6 @@ begin
 	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
 	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
 	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
-
-	LoadBitmapNamed('foreground_1', 'foreground1.png');
-	LoadBitmapNamed('foreground_2', 'foreground2.png');
-	LoadBitmapNamed('foreground_3', 'foreground3.png');
 	LoadBitmapNamed('background', 'background.png');
 	LoadFontNamed('game font', 'GoodDog.otf', 48);
 
@@ -86,7 +82,7 @@ end;
 
 function GetNewPlayer(): Sprite;
 begin
-	result := CreateSprite(BitmapNamed('player'), AnimationScriptNamed('playeranimations'));
+	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
@@ -94,17 +90,14 @@ end;
 
 procedure SetUpParallaxBackground(foreground, background: Sprite);
 begin
-	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('playeranimations'));
-	foregroundPostion.x := 0;
-	foregroundPostion.y := BitmapHeight(BitmapNamed('background')) - BitmapHeight(BitmapNamed('foreground_1'));
-	backgroundPosition.x := 0;
-	backgroundPosition.y := 0;
-	foregroundSpeed.x := FOREGROUND_SCROLL_SPEED;
-	foregroundSpeed.y := 0;
-	backgroundSpeed.x := BACKGROUND_SCROLL_SPEED;
-	backgroundSpeed.y := 0;
-	result.Background := GetNewAnimation('background', 1, 0, backgroundPosition, backgroundSpeed);
-	result.ForeGround := GetNewAnimation('foreground_', 3, 200, foregroundPostion, foregroundSpeed);
+	background := CreateSprite(BitmapNamed('background'));
+	SpriteSetX(background, 0);
+	SpriteSetY(background, 0);
+	SpriteSetSpeed(result, 1);
+	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
+	SpriteSetX(background, 0);
+	SpriteSetY(background, ScreenHeight() - SpriteHeight(foreground));
+	SpriteSetSpeed(result, 2);
 end;
 
 procedure SetUpGame(var gData: GameData);
