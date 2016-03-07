@@ -1,1 +1,2 @@
 BITMAP,Player,player.png,75,75,4,1,4
+BITMAP,Foreground,foreground.png,864,130,3,1,3
