@@ -43,8 +43,7 @@ type
 
 procedure LoadResources();
 begin
-
-	LoadResourceBundleNamed('player, playeranimations.txt', false);
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
 	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
 	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
@@ -58,35 +57,6 @@ begin
 	LoadFontNamed('game font', 'GoodDog.otf', 48);
 
 	LoadMusic('MagicalNight.ogg');
-end;
-
-function GetNewAnimation(bitmapName: String; numFrames, updateFequency: Integer; position: Point2D; speed: Vector): Animation;
-var
-	i: Integer;
-begin
-	SetLength(result.Bitmaps, numFrames);
-	for i := Low(result.Bitmaps) to High(result.Bitmaps) do
-	begin
-		if not (numFrames = 1) then
-		begin
-			result.Bitmaps[i] := CreateSprite(BitmapNamed(bitmapName + IntToStr(i + 1)));
-		end
-		else
-		begin
-			result.Bitmaps[i] := CreateSprite(BitmapNamed(bitmapName));
-		end;
-		result.XPos := position.x;
-		result.YPos := position.y;
-	end;
-	if not (numFrames = 1) then
-	begin
-		result.BitmapFrameTimer := CreateTimer();
-		StartTimer(result.BitmapFrameTimer);
-	end;
-	result.HorizontalSpeed := speed.x;
-	result.VerticalSpeed := speed.y;
-	result.UpdateFequency := updateFequency;
-	result.CurrentBitmapFrame := 0;
 end;
 
 function GetRandomPole(): PoleData;
@@ -126,13 +96,9 @@ begin
 end;
 
 function GetNewPlayer(): Sprite;
-var
-	i: Integer;
-	playerStartPostion: Point2D;
-	playerSpeed: Vector;
 begin
-	result := CreateSprite(BitmapNamed('player'), AnimationScriptNamed('playeranimations'))
-	SpriteSetX(result, ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1')));
+	result := CreateSprite(BitmapNamed('player'), AnimationScriptNamed('playeranimations'));
+	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
 end;
@@ -166,14 +132,14 @@ begin
 	gData.player := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
 	gData.Score := 0;
-	gDate.isDead := false;
+	gData.isDead := false;
 end;
 
 procedure UpdateRotation(var toRotate: Sprite);
 var
 	rotationPercentage: Double;
 begin
-	rotationPercentage := toRotate.Animation.VerticalSpeed / MAX_SPEED;
+	rotationPercentage := SpriteSpeed(toRotate)/MAX_SPEED;
 	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
 end;
 
@@ -181,7 +147,7 @@ procedure UpdateVelocity(var toUpdate: Sprite);
 var
 	i: Integer;
 begin
-	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY ;
+	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
 
 	if SpriteDy(toUpdate) > MAX_SPEED then
 	begin
@@ -190,25 +156,6 @@ begin
 	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
 	begin
 	SpriteSetDy(toUpdate,  MAX_SPEED * -1);
-	end;
-end;
-
-procedure UpdateAnimation(var toUpdate: Animation);
-begin
-	if not (Length(toUpdate.Bitmaps) = 1) then
-	begin
-		if (TimerTicks(toUpdate.BitmapFrameTimer) >= toUpdate.UpdateFequency) then
-		begin
-			if (toUpdate.CurrentBitmapFrame = Length(toUpdate.Bitmaps) - 1) then
-			begin
-				toUpdate.CurrentBitmapFrame := Low(toUpdate.Bitmaps);
-			end
-			else
-			begin
-				toUpdate.CurrentBitmapFrame += 1;
-			end;
-			ResetTimer(toUpdate.BitmapFrameTimer);
-		end;
 	end;
 end;
 
@@ -303,11 +250,6 @@ begin
 	end;
 end;
 
-procedure DrawPlayer(const playerData: PlayerRepresentation);
-begin
-	DrawSprite(playerData.Animation.Bitmaps[playerData.Animation.CurrentBitmapFrame], Round(playerData.Animation.XPos), Round(playerData.Animation.YPos));
-end;
-
 procedure DrawPoles(const myPoles: Poles);
 var
 	i: Integer;
@@ -323,7 +265,7 @@ begin
 	DrawSprite(gData.bgData.Background.Bitmaps[gData.bgData.Background.CurrentBitmapFrame], Round(gData.bgData.Background.XPos), Round(gData.bgData.Background.YPos));
 	DrawPoles(gData.Poles);
 	DrawSprite(gData.bgData.ForeGround.Bitmaps[gData.bgData.ForeGround.CurrentBitmapFrame], Round(gData.bgData.ForeGround.XPos), Round(gData.bgData.ForeGround.YPos));
-	DrawPlayer(gData.playerData);
+	DrawSprite(gData.player);
 	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
 end;
 
