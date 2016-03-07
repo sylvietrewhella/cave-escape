@@ -90,12 +90,12 @@ begin
 	background := CreateSprite(BitmapNamed('background'));
 	SpriteSetX(background, 0);
 	SpriteSetY(background, 0);
-	SpriteSetSpeed(background, -1);
+	SpriteSetDx(background, -1);
 
 	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
 	SpriteSetX(foreground, 0);
 	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
-	SpriteSetSpeed(foreground, -2);
+	SpriteSetDx(foreground, -2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -109,6 +109,7 @@ begin
 	gData.player := GetNewPlayer();
 	gData.Score := 0;
 	gData.isDead := false;
+	SetUpParallaxBackground(gData.background, gData.foreground);
 end;
 
 procedure UpdateRotation(var toRotate: Sprite);
@@ -137,11 +138,11 @@ procedure UpdateBackground(var gData: GameData);
 begin
 	UpdateSprite(gData.foreGround);
 	updateSprite(gData.background);
-
 	if (SpriteX(gdata.foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
 	begin
 		SpriteSetX(gData.foreground, 0);
 	end;
+
 
 	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
 	begin
@@ -211,17 +212,11 @@ procedure UpdateGame(var gData: GameData);
 begin
 	if not (gData.isDead) then
 	begin
-			WriteLn('Here0');
 		CheckForCollisions(gData);
-			WriteLn('Here1');
 		HandleInput(gData.player);
-			WriteLn('Here2');
 		UpdateBackground(gdata);
-			WriteLn('Here3');
 		UpdatePlayer(gData.player);
-			WriteLn('Here4');
 		UpdatePoles(gData);
-			WriteLn('Here5');
 	end
 	else //The player has died :(
 	begin
