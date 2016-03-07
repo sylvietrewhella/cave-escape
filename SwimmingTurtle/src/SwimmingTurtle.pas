@@ -21,40 +21,30 @@ type
 
 	Poles = array [0..3] of PoleData;
 
-	Animation = record
-		XPos: Double;
-		YPos: Double;
-		VerticalSpeed: Double;
-		HorizontalSpeed: Double;
-		UpdateFequency: Integer;
-		BitmapFrameTimer: Timer;
-		CurrentBitmapFrame: Integer;
-		Bitmaps: array of Bitmap;
-	end;
-
-	BackgroundData = record
-		ForeGround: Animation;
-		Background: Animation;
-	end;
-
-	PlayerRepresentation = record
-		Animation: Animation;
-		dead: Boolean;
-	end;
+	// Animation = record
+	// 	XPos: Double;
+	// 	YPos: Double;
+	// 	VerticalSpeed: Double;
+	// 	HorizontalSpeed: Double;
+	// 	UpdateFequency: Integer;
+	// 	BitmapFrameTimer: Timer;
+	// 	CurrentBitmapFrame: Integer;
+	// 	Bitmaps: array of Bitmap;
+	// end;
 
 	GameData = record
+		Player: Sprite;
+		foreground: Sprite;
+		background: Sprite;
+		isDead: Boolean;
 		Score: Integer;
 		Poles: Poles;
-		bgData: BackgroundData;
-		playerData: PlayerRepresentation;
 	end;
 
 procedure LoadResources();
 begin
-	LoadBitmapNamed('player_frame_1', 'playerFrame1.png');
-	LoadBitmapNamed('player_frame_2', 'playerFrame2.png');
-	LoadBitmapNamed('player_frame_3', 'playerFrame3.png');
-	LoadBitmapNamed('player_frame_4', 'playerFrame4.png');
+
+	LoadResourceBundleNamed('player, playeranimations.txt', false);
 
 	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
 	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
@@ -135,18 +125,16 @@ begin
 		SpriteSetDy(result.Pole, 0);
 end;
 
-function GetNewPlayer(): PlayerRepresentation;
+function GetNewPlayer(): Sprite;
 var
 	i: Integer;
 	playerStartPostion: Point2D;
 	playerSpeed: Vector;
 begin
-	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
-	playerStartPostion.y := ScreenHeight() / 2;
-	playerSpeed.x := 0;
-	playerSpeed.y := 0;
-	result.Animation := GetNewAnimation('player_frame_', 4, SPRITE_FRAME_DURATION, playerStartPostion, playerSpeed);
-	result.dead := false;
+	result := CreateSprite(BitmapNamed('player'), AnimationScriptNamed('playeranimations'))
+	SpriteSetX(result, ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1')));
+	SpriteSetY(result, ScreenHeight() / 2);
+	SpriteSetSpeed(result, 0.5);
 end;
 
 function GetNewBackgroundData(): BackgroundData;
@@ -175,37 +163,34 @@ begin
 	begin
 		gData.Poles[i] := GetRandomPole();
 	end;
-	gData.playerData := GetNewPlayer();
+	gData.player := GetNewPlayer();
 	gData.bgData := GetNewBackgroundData();
 	gData.Score := 0;
+	gDate.isDead := false;
 end;
 
-procedure UpdateRotation(var toRotate: PlayerRepresentation);
+procedure UpdateRotation(var toRotate: Sprite);
 var
-	i: Integer;
 	rotationPercentage: Double;
 begin
 	rotationPercentage := toRotate.Animation.VerticalSpeed / MAX_SPEED;
-	for i := Low(toRotate.Animation.Bitmaps) to High(toRotate.Animation.Bitmaps) do
-	begin
-		SpriteSetRotation(toRotate.Animation.Bitmaps[i], rotationPercentage * MAX_ROTATION_ANGLE);
-	end;
+	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
 end;
 
-procedure UpdateVelocity(var toUpdate: PlayerRepresentation);
+procedure UpdateVelocity(var toUpdate: Sprite);
 var
 	i: Integer;
 begin
-	toUpdate.Animation.VerticalSpeed := toUpdate.Animation.VerticalSpeed + GRAVITY;
-	if toUpdate.Animation.VerticalSpeed > MAX_SPEED then
+	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY ;
+
+	if SpriteDy(toUpdate) > MAX_SPEED then
 	begin
-		toUpdate.Animation.VerticalSpeed := MAX_SPEED;
+		SpriteSetDy(toUpdate, MAX_SPEED);
 	end
-	else if (toUpdate.Animation.VerticalSpeed < MAX_SPEED * -1) then
+	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
 	begin
-		toUpdate.Animation.VerticalSpeed := MAX_SPEED * -1;
+	SpriteSetDy(toUpdate,  MAX_SPEED * -1);
 	end;
-	toUpdate.Animation.YPos += toUpdate.Animation.VerticalSpeed;
 end;
 
 procedure UpdateAnimation(var toUpdate: Animation);
@@ -245,28 +230,25 @@ begin
 	end;
 end;
 
-// procedure CheckForCollisions(var toUpdate: GameData);
-// var
-// 	i: Integer;
-// begin
-// 	// if (SpriteCollision
-// 	// 			(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame],
-// 	// 			toUpdate.bgData.ForeGround.Bitmaps[toUpdate.bgData.ForeGround.CurrentBitmapFrame]))
-// 	//
-// 	// 	or (SpriteY(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame]) < 0) then
-// 	// begin
-// 	// 	toUpdate.playerData.dead := true;
-// 	// end;
-// 	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
-// 	begin
-// 		if SpriteCollision(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.Poles[i].Pole) then
-// 		begin
-// 			toUpdate.playerData.dead := true;
-// 		end;
-// 	end;
-// end;
+procedure CheckForCollisions(var toUpdate: GameData);
+var
+	i: Integer;
+begin
+	if (SpriteCollision (toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.bgData.ForeGround.Bitmaps[toUpdate.bgData.ForeGround.CurrentBitmapFrame]))
+		or (SpriteY(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame]) < 0) then
+	begin
+		toUpdate.playerData.dead := true;
+	end;
+	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
+	begin
+		if SpriteCollision(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.Poles[i].Pole) then
+		begin
+			toUpdate.playerData.dead := true;
+		end;
+	end;
+end;
 
-procedure UpdatePlayer(var toUpdate: PlayerRepresentation);
+procedure UpdatePlayer(var toUpdate: Sprite);
 begin
 	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
@@ -309,10 +291,10 @@ procedure UpdateGame(var gData: GameData);
 begin
 	if not (gData.playerData.dead) then
 	begin
-		// CheckForCollisions(gData);
+		CheckForCollisions(gData);
 		HandleInput(gData.playerData);
 		UpdateBackground(gdata);
-		UpdatePlayer(gData.playerData);
+		UpdatePlayer(gData.player);
 		UpdatePoles(gData);
 	end
 	else //The player has died :(
