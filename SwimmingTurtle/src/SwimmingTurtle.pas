@@ -92,7 +92,7 @@ begin
 	SpriteSetY(background, 0);
 	SpriteSetDx(background, -1);
 
-	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
+	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
 	SpriteSetX(foreground, 0);
 	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
 	SpriteSetDx(foreground, -2);

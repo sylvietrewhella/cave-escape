@@ -1,4 +1,4 @@
 BITMAP,Player,player.png,75,75,4,1,4
 ANIM,PlayerAnimations,PlayerAnimations.txt
 BITMAP,Foreground,foreground.png,864,130,3,1,3
-ANIM,ForegroundAminations,PlayerAnimations.txt
+ANIM,ForegroundAminations,ForegroundAnimations.txt
