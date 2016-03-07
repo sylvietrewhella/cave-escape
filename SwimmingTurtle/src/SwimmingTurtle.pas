@@ -6,8 +6,9 @@ const
 	JUMP_RECOVERY_BOOST = 2;
 	MAX_SPEED = 5;
 	MAX_ROTATION_ANGLE = 90;
+	FOREGROUND_SCROLL_SPEED = 2;
+	BACKGROUND_SCROLL_SPEED = 1;
 	SPRITE_FRAME_DURATION = 150;
-	NUM_FRAMES = 4;
 
 	SCREEN_WIDTH = 432;
 	SCREEN_HEIGHT = 768;
@@ -17,18 +18,23 @@ type
 		ScoreLimiter: Boolean;
 		Pole: Sprite;
 	end;
+
 	Poles = array [0..3] of PoleData;
 
 	Animation = record
-		updateFequency: Integer;
-		spriteFrameTimer: Timer;
-		currentSpriteFrame: Integer;
-		sprites: array of Sprite;
+		XPos: Double;
+		YPos: Double;
+		VerticalSpeed: Double;
+		HorizontalSpeed: Double;
+		UpdateFequency: Integer;
+		BitmapFrameTimer: Timer;
+		CurrentBitmapFrame: Integer;
+		Bitmaps: array of Bitmap;
 	end;
 
 	BackgroundData = record
 		ForeGround: Animation;
-		Background: Sprite;
+		Background: Animation;
 	end;
 
 	PlayerRepresentation = record
@@ -64,19 +70,33 @@ begin
 	LoadMusic('MagicalNight.ogg');
 end;
 
-function GetNewAnimation(spriteName: String; numFrames, updateFequency: Integer; position: Point2D): Animation;
+function GetNewAnimation(bitmapName: String; numFrames, updateFequency: Integer; position: Point2D; speed: Vector): Animation;
 var
 	i: Integer;
 begin
-	SetLength(result.sprites, numFrames);
-	for i := 0 to numFrames - 1 do
+	SetLength(result.Bitmaps, numFrames);
+	for i := Low(result.Bitmaps) to High(result.Bitmaps) do
 	begin
-		result.sprites[i] := CreateSprite(BitmapNamed(spriteName + IntToStr(i + 1)));
-		SpriteSetPosition(result.sprites[i], position)
+		if not (numFrames = 1) then
+		begin
+			result.Bitmaps[i] := CreateSprite(BitmapNamed(bitmapName + IntToStr(i + 1)));
+		end
+		else
+		begin
+			result.Bitmaps[i] := CreateSprite(BitmapNamed(bitmapName));
+		end;
+		result.XPos := position.x;
+		result.YPos := position.y;
 	end;
-	result.updateFequency := updateFequency;
-	result.spriteFrameTimer := CreateTimer();
-	result.currentSpriteFrame := 0;
+	if not (numFrames = 1) then
+	begin
+		result.BitmapFrameTimer := CreateTimer();
+		StartTimer(result.BitmapFrameTimer);
+	end;
+	result.HorizontalSpeed := speed.x;
+	result.VerticalSpeed := speed.y;
+	result.UpdateFequency := updateFequency;
+	result.CurrentBitmapFrame := 0;
 end;
 
 function GetRandomPole(): PoleData;
@@ -119,38 +139,32 @@ function GetNewPlayer(): PlayerRepresentation;
 var
 	i: Integer;
 	playerStartPostion: Point2D;
+	playerSpeed: Vector;
 begin
 	playerStartPostion.x := ScreenWidth() / 2 - BitmapWidth(BitmapNamed('player_frame_1'));
 	playerStartPostion.y := ScreenHeight() / 2;
-	result.Animation := GetNewAnimation('player_frame_', NUM_FRAMES, SPRITE_FRAME_DURATION, playerStartPostion);
-	for i := Low(result.Animation.sprites) to High(result.Animation.sprites) do
-	begin
-		SpriteSetDy(result.Animation.sprites[i], 0);
-		SpriteSetDx(result.Animation.sprites[i], 0.5);
-	end;
-	StartTimer(result.Animation.spriteFrameTimer);
+	playerSpeed.x := 0;
+	playerSpeed.y := 0;
+	result.Animation := GetNewAnimation('player_frame_', 4, SPRITE_FRAME_DURATION, playerStartPostion, playerSpeed);
 	result.dead := false;
 end;
 
 function GetNewBackgroundData(): BackgroundData;
 var
 	i: Integer;
-	foregroundPostion: Point2D;
+	foregroundPostion, backgroundPosition: Point2D;
+	foregroundSpeed, backgroundSpeed: Vector;
 begin
-	result.Background := CreateSprite(BitmapNamed('background'));
-	SpriteSetX(result.Background, 0);
-	SpriteSetY(result.Background, 0);
-	SpriteSetDy(result.Background, 0);
-	SpriteSetDx(result.Background, -1);
 	foregroundPostion.x := 0;
-	foregroundPostion.y := SpriteHeight(result.Background) - BitmapHeight(BitmapNamed('foreground_1'));
-	result.ForeGround := GetNewAnimation('foreground_', 3, 200, foregroundPostion);
-	for i := Low(result.ForeGround.sprites) to High(result.ForeGround.sprites) do
-	begin
-		SpriteSetDy(result.ForeGround.sprites[i], 0);
-		SpriteSetDx(result.ForeGround.sprites[i], -2);
-	end;
-	StartTimer(result.ForeGround.spriteFrameTimer);
+	foregroundPostion.y := BitmapHeight(BitmapNamed('background')) - BitmapHeight(BitmapNamed('foreground_1'));
+	backgroundPosition.x := 0;
+	backgroundPosition.y := 0;
+	foregroundSpeed.x := FOREGROUND_SCROLL_SPEED;
+	foregroundSpeed.y := 0;
+	backgroundSpeed.x := BACKGROUND_SCROLL_SPEED;
+	backgroundSpeed.y := 0;
+	result.Background := GetNewAnimation('background', 1, 0, backgroundPosition, backgroundSpeed);
+	result.ForeGround := GetNewAnimation('foreground_', 3, 200, foregroundPostion, foregroundSpeed);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -171,10 +185,10 @@ var
 	i: Integer;
 	rotationPercentage: Double;
 begin
-	for i := Low(toRotate.Animation.sprites) to High(toRotate.Animation.sprites) do
+	rotationPercentage := toRotate.Animation.VerticalSpeed / MAX_SPEED;
+	for i := Low(toRotate.Animation.Bitmaps) to High(toRotate.Animation.Bitmaps) do
 	begin
-		rotationPercentage := (SpriteDy(toRotate.Animation.sprites[i]) / MAX_SPEED);
-		SpriteSetRotation(toRotate.Animation.sprites[i], rotationPercentage * MAX_ROTATION_ANGLE);
+		SpriteSetRotation(toRotate.Animation.Bitmaps[i], rotationPercentage * MAX_ROTATION_ANGLE);
 	end;
 end;
 
@@ -182,33 +196,34 @@ procedure UpdateVelocity(var toUpdate: PlayerRepresentation);
 var
 	i: Integer;
 begin
-	for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
+	toUpdate.Animation.VerticalSpeed := toUpdate.Animation.VerticalSpeed + GRAVITY;
+	if toUpdate.Animation.VerticalSpeed > MAX_SPEED then
 	begin
-		SpriteSetDy(toUpdate.Animation.sprites[i], SpriteDy(toUpdate.Animation.sprites[i]) + GRAVITY);
-		if (SpriteDy(toUpdate.Animation.sprites[i]) > MAX_SPEED) then
-		begin
-			SpriteSetDy(toUpdate.Animation.sprites[i], MAX_SPEED);
-		end
-		else if (SpriteDy(toUpdate.Animation.sprites[i]) < MAX_SPEED * -1) then
-		begin
-			SpriteSetDy(toUpdate.Animation.sprites[i], MAX_SPEED * -1);
-		end;
+		toUpdate.Animation.VerticalSpeed := MAX_SPEED;
+	end
+	else if (toUpdate.Animation.VerticalSpeed < MAX_SPEED * -1) then
+	begin
+		toUpdate.Animation.VerticalSpeed := MAX_SPEED * -1;
 	end;
+	toUpdate.Animation.YPos += toUpdate.Animation.VerticalSpeed;
 end;
 
 procedure UpdateAnimation(var toUpdate: Animation);
 begin
-	if (TimerTicks(toUpdate.spriteFrameTimer) >= toUpdate.updateFequency) then
+	if not (Length(toUpdate.Bitmaps) = 1) then
 	begin
-		if (toUpdate.currentSpriteFrame = Length(toUpdate.sprites) - 1) then
+		if (TimerTicks(toUpdate.BitmapFrameTimer) >= toUpdate.UpdateFequency) then
 		begin
-			toUpdate.currentSpriteFrame := Low(toUpdate.sprites);
-		end
-		else
-		begin
-			toUpdate.currentSpriteFrame += 1;
+			if (toUpdate.CurrentBitmapFrame = Length(toUpdate.Bitmaps) - 1) then
+			begin
+				toUpdate.CurrentBitmapFrame := Low(toUpdate.Bitmaps);
+			end
+			else
+			begin
+				toUpdate.CurrentBitmapFrame += 1;
+			end;
+			ResetTimer(toUpdate.BitmapFrameTimer);
 		end;
-		ResetTimer(toUpdate.spriteFrameTimer);
 	end;
 end;
 
@@ -217,70 +232,52 @@ var
 	i: Integer;
 begin
 	UpdateAnimation(gdata.bgData.ForeGround);
-	for i := Low(gdata.bgData.ForeGround.sprites) to High(gdata.bgData.ForeGround.sprites) do
-	begin
-		UpdateSprite(gData.bgData.ForeGround.sprites[i]);
-		if (SpriteX(gData.bgData.ForeGround.sprites[i]) <= SpriteWidth(gData.bgData.ForeGround.sprites[i]) / 2 * -1) then
-		begin
-			SpriteSetX(gData.bgData.ForeGround.sprites[i], 0);
-		end;
-	end;
-	if (SpriteX(gData.bgData.Background) <= SpriteWidth(gData.bgData.Background) / 2 * -1) then
-	begin
-		SpriteSetX(gData.bgData.Background, 0);
-	end;
-	UpdateSprite(gData.bgData.Background);
-end;
+	gdata.bgData.ForeGround.XPos := gdata.bgData.ForeGround.XPos - FOREGROUND_SCROLL_SPEED;
+	gdata.bgData.Background.XPos := gdata.bgData.Background.XPos - BACKGROUND_SCROLL_SPEED;
 
-procedure CheckForCollisions(var toUpdate: GameData);
-var
-	i: Integer;
-begin
-	if (SpriteCollision
-				(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame],
-				toUpdate.bgData.ForeGround.sprites[toUpdate.bgData.ForeGround.currentSpriteFrame]))
-
-		or (SpriteY(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame]) < 0) then
+	if (gdata.bgData.ForeGround.XPos <= SpriteWidth(gData.bgData.ForeGround.Bitmaps[gData.bgData.ForeGround.CurrentBitmapFrame]) / 2 * -1) then
 	begin
-		toUpdate.playerData.dead := true;
+		gdata.bgData.ForeGround.XPos := 0;
 	end;
-	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
+	if (gdata.bgData.Background.XPos <= SpriteWidth(gData.bgData.Background.Bitmaps[gData.bgData.Background.CurrentBitmapFrame]) / 2 * -1) then
 	begin
-		if SpriteCollision(toUpdate.playerData.Animation.sprites[toUpdate.playerData.Animation.currentSpriteFrame], toUpdate.Poles[i].Pole) then
-		begin
-			toUpdate.playerData.dead := true;
-		end;
+		gdata.bgData.Background.XPos := 0;
 	end;
 end;
 
-procedure UpdatePlayerSprite(var toUpdate: PlayerRepresentation);
-var
-	i: Integer;
-begin
-	UpdateRotation(toUpdate);
-	UpdateAnimation(toUpdate.Animation);
-	for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
-	begin
-		UpdateSprite(toUpdate.Animation.sprites[i]);
-	end;
-end;
+// procedure CheckForCollisions(var toUpdate: GameData);
+// var
+// 	i: Integer;
+// begin
+// 	// if (SpriteCollision
+// 	// 			(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame],
+// 	// 			toUpdate.bgData.ForeGround.Bitmaps[toUpdate.bgData.ForeGround.CurrentBitmapFrame]))
+// 	//
+// 	// 	or (SpriteY(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame]) < 0) then
+// 	// begin
+// 	// 	toUpdate.playerData.dead := true;
+// 	// end;
+// 	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
+// 	begin
+// 		if SpriteCollision(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.Poles[i].Pole) then
+// 		begin
+// 			toUpdate.playerData.dead := true;
+// 		end;
+// 	end;
+// end;
 
 procedure UpdatePlayer(var toUpdate: PlayerRepresentation);
 begin
+	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
-	UpdatePlayerSprite(toUpdate);
+	UpdateAnimation(toUpdate.Animation);
 end;
 
 procedure HandleInput(var toUpdate: PlayerRepresentation);
-var
-	i: Integer;
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		for i := Low(toUpdate.Animation.sprites) to High(toUpdate.Animation.sprites) do
-		begin
-			SpriteSetDy(toUpdate.Animation.sprites[i], SpriteDy(toUpdate.Animation.sprites[i]) + JUMP_RECOVERY_BOOST * -1)
-		end;
+		toUpdate.Animation.VerticalSpeed += JUMP_RECOVERY_BOOST * -1;
 	end;
 end;
 
@@ -292,7 +289,7 @@ begin
 	begin
 		UpdateSprite(myGame.Poles[i].Pole);
 
-		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.playerData.Animation.sprites[myGame.playerData.Animation.currentSpriteFrame])) then
+		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.playerData.Animation.Bitmaps[myGame.playerData.Animation.CurrentBitmapFrame])) then
 		begin
 			if (myGame.Poles[i].ScoreLimiter) then
 			begin
@@ -312,7 +309,7 @@ procedure UpdateGame(var gData: GameData);
 begin
 	if not (gData.playerData.dead) then
 	begin
-		CheckForCollisions(gData);
+		// CheckForCollisions(gData);
 		HandleInput(gData.playerData);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.playerData);
@@ -326,7 +323,7 @@ end;
 
 procedure DrawPlayer(const playerData: PlayerRepresentation);
 begin
-	DrawSprite(playerData.Animation.sprites[playerData.Animation.currentSpriteFrame]);
+	DrawSprite(playerData.Animation.Bitmaps[playerData.Animation.CurrentBitmapFrame], Round(playerData.Animation.XPos), Round(playerData.Animation.YPos));
 end;
 
 procedure DrawPoles(const myPoles: Poles);
@@ -341,9 +338,9 @@ end;
 
 procedure DrawGame(const gData: GameData);
 begin
-	DrawSprite(gData.bgData.Background);
+	DrawSprite(gData.bgData.Background.Bitmaps[gData.bgData.Background.CurrentBitmapFrame], Round(gData.bgData.Background.XPos), Round(gData.bgData.Background.YPos));
 	DrawPoles(gData.Poles);
-	DrawSprite(gData.bgData.ForeGround.sprites[gData.bgData.ForeGround.currentSpriteFrame]);
+	DrawSprite(gData.bgData.ForeGround.Bitmaps[gData.bgData.ForeGround.CurrentBitmapFrame], Round(gData.bgData.ForeGround.XPos), Round(gData.bgData.ForeGround.YPos));
 	DrawPlayer(gData.playerData);
 	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
 end;
