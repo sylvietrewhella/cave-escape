@@ -88,16 +88,16 @@ begin
 	SpriteSetSpeed(result, 0.5);
 end;
 
-procedure SetUpParallaxBackground(foreground, background: Sprite);
+procedure SetUpParallaxBackground(var background, foreground: Sprite);
 begin
 	background := CreateSprite(BitmapNamed('background'));
 	SpriteSetX(background, 0);
 	SpriteSetY(background, 0);
-	SpriteSetSpeed(result, 1);
+	SpriteSetSpeed(background, 1);
 	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
-	SpriteSetX(background, 0);
-	SpriteSetY(background, ScreenHeight() - SpriteHeight(foreground));
-	SpriteSetSpeed(result, 2);
+	SpriteSetX(foreground, 0);
+	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
+	SpriteSetSpeed(foreground, 2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -160,16 +160,18 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision (toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.bgData.ForeGround.Bitmaps[toUpdate.bgData.ForeGround.CurrentBitmapFrame]))
-		or (SpriteY(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame]) < 0) then
+	if (SpriteCollision(toUpdate.player, toUpdate.foreground)) or (SpriteY(toUpdate.player) < 0) then
 	begin
-		toUpdate.playerData.dead := true;
+		toUpdate.isDead := true;
+		exit;
 	end;
+
 	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
 	begin
-		if SpriteCollision(toUpdate.playerData.Animation.Bitmaps[toUpdate.playerData.Animation.CurrentBitmapFrame], toUpdate.Poles[i].Pole) then
+		if SpriteCollision(toUpdate.player, toUpdate.Poles[i].Pole) then
 		begin
-			toUpdate.playerData.dead := true;
+			toUpdate.isDead := true;
+			exit;
 		end;
 	end;
 end;
@@ -178,14 +180,13 @@ procedure UpdatePlayer(var toUpdate: Sprite);
 begin
 	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
-	UpdateAnimation(toUpdate.Animation);
 end;
 
-procedure HandleInput(var toUpdate: PlayerRepresentation);
+procedure HandleInput(var toUpdate: Sprite);
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		toUpdate.Animation.VerticalSpeed += JUMP_RECOVERY_BOOST * -1;
+		SetSpriteDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1);
 	end;
 end;
 
