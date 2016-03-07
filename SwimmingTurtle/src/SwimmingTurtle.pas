@@ -21,17 +21,6 @@ type
 
 	Poles = array [0..3] of PoleData;
 
-	// Animation = record
-	// 	XPos: Double;
-	// 	YPos: Double;
-	// 	VerticalSpeed: Double;
-	// 	HorizontalSpeed: Double;
-	// 	UpdateFequency: Integer;
-	// 	BitmapFrameTimer: Timer;
-	// 	CurrentBitmapFrame: Integer;
-	// 	Bitmaps: array of Bitmap;
-	// end;
-
 	GameData = record
 		Player: Sprite;
 		foreground: Sprite;
@@ -103,12 +92,9 @@ begin
 	SpriteSetSpeed(result, 0.5);
 end;
 
-function GetNewBackgroundData(): BackgroundData;
-var
-	i: Integer;
-	foregroundPostion, backgroundPosition: Point2D;
-	foregroundSpeed, backgroundSpeed: Vector;
+procedure SetUpParallaxBackground(foreground, background: Sprite);
 begin
+	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('playeranimations'));
 	foregroundPostion.x := 0;
 	foregroundPostion.y := BitmapHeight(BitmapNamed('background')) - BitmapHeight(BitmapNamed('foreground_1'));
 	backgroundPosition.x := 0;
