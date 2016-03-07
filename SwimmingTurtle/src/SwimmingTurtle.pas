@@ -10,9 +10,6 @@ const
 	BACKGROUND_SCROLL_SPEED = 1;
 	SPRITE_FRAME_DURATION = 150;
 
-	SCREEN_WIDTH = 432;
-	SCREEN_HEIGHT = 768;
-
 type
 	PoleData = record
 		ScoreLimiter: Boolean;
@@ -53,13 +50,13 @@ begin
 			 0 :
 			 begin
 				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.Pole, SCREEN_HEIGHT - SpriteHeight(result.pole));
+				 SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
 			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
-				SpriteSetY(result.Pole, SCREEN_HEIGHT - SpriteHeight(result.pole));
+				SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
 			 	result.ScoreLimiter := true;
 			 end;
 			 2 :
@@ -75,7 +72,7 @@ begin
 				 result.ScoreLimiter := true;
 			 end;
 		end;
-		SpriteSetX(result.Pole, SCREEN_WIDTH + RND(1200));
+		SpriteSetX(result.Pole, ScreenWidth() + RND(1200));
 		SpriteSetDx(result.Pole, -2);
 		SpriteSetDy(result.Pole, 0);
 end;
@@ -94,6 +91,7 @@ begin
 	SpriteSetX(background, 0);
 	SpriteSetY(background, 0);
 	SpriteSetSpeed(background, -1);
+
 	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
 	SpriteSetX(foreground, 0);
 	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
@@ -213,11 +211,17 @@ procedure UpdateGame(var gData: GameData);
 begin
 	if not (gData.isDead) then
 	begin
+			WriteLn('Here0');
 		CheckForCollisions(gData);
+			WriteLn('Here1');
 		HandleInput(gData.player);
+			WriteLn('Here2');
 		UpdateBackground(gdata);
+			WriteLn('Here3');
 		UpdatePlayer(gData.player);
+			WriteLn('Here4');
 		UpdatePoles(gData);
+			WriteLn('Here5');
 	end
 	else //The player has died :(
 	begin
@@ -248,7 +252,7 @@ procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Cave Escape', SCREEN_WIDTH, SCREEN_HEIGHT);
+  OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
   LoadResources();
   SetUpGame(gData);
@@ -258,10 +262,10 @@ begin
   repeat // The game loop...
     ProcessEvents();
 
+
     ClearScreen(ColorWhite);
     UpdateGame(gData);
     DrawGame(gData);
-
     RefreshScreen();
   until WindowCloseRequested();
 end;
