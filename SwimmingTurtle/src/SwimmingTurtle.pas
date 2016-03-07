@@ -83,6 +83,7 @@ begin
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
+	SpriteStartAnimation(result, 'Fly');
 end;
 
 procedure SetUpParallaxBackground(var background, foreground: Sprite);
@@ -111,14 +112,14 @@ begin
 	gData.isDead := false;
 	SetUpParallaxBackground(gData.background, gData.foreground);
 
-	SpriteStartAnimation(gData.foreground, 'fire');
+	SpriteStartAnimation(gData.foreground, 'Fire');
 end;
 
 procedure UpdateRotation(var toRotate: Sprite);
 var
 	rotationPercentage: Double;
 begin
-	rotationPercentage := SpriteSpeed(toRotate)/MAX_SPEED;
+	rotationPercentage := SpriteDy(toRotate)/MAX_SPEED;
 	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
 end;
 
@@ -132,7 +133,7 @@ begin
 	end
 	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
 	begin
-	SpriteSetDy(toUpdate,  MAX_SPEED * -1);
+		SpriteSetDy(toUpdate,  MAX_SPEED * -1);
 	end;
 end;
 
@@ -144,8 +145,6 @@ begin
 	begin
 		SpriteSetX(gData.foreground, 0);
 	end;
-
-
 	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
 	begin
 		SpriteSetX(gData.background, 0);
@@ -176,6 +175,7 @@ procedure UpdatePlayer(var toUpdate: Sprite);
 begin
 	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
+	UpdateSprite(toUpdate);
 end;
 
 procedure HandleInput(var toUpdate: Sprite);
