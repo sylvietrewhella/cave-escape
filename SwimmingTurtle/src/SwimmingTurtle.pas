@@ -93,11 +93,11 @@ begin
 	background := CreateSprite(BitmapNamed('background'));
 	SpriteSetX(background, 0);
 	SpriteSetY(background, 0);
-	SpriteSetSpeed(background, 1);
+	SpriteSetSpeed(background, -1);
 	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAnimations'));
 	SpriteSetX(foreground, 0);
 	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
-	SpriteSetSpeed(foreground, 2);
+	SpriteSetSpeed(foreground, -2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -109,7 +109,6 @@ begin
 		gData.Poles[i] := GetRandomPole();
 	end;
 	gData.player := GetNewPlayer();
-	gData.bgData := GetNewBackgroundData();
 	gData.Score := 0;
 	gData.isDead := false;
 end;
@@ -123,8 +122,6 @@ begin
 end;
 
 procedure UpdateVelocity(var toUpdate: Sprite);
-var
-	i: Integer;
 begin
 	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
 
@@ -139,20 +136,18 @@ begin
 end;
 
 procedure UpdateBackground(var gData: GameData);
-var
-	i: Integer;
 begin
-	UpdateAnimation(gdata.bgData.ForeGround);
-	gdata.bgData.ForeGround.XPos := gdata.bgData.ForeGround.XPos - FOREGROUND_SCROLL_SPEED;
-	gdata.bgData.Background.XPos := gdata.bgData.Background.XPos - BACKGROUND_SCROLL_SPEED;
+	UpdateSprite(gData.foreGround);
+	updateSprite(gData.background);
 
-	if (gdata.bgData.ForeGround.XPos <= SpriteWidth(gData.bgData.ForeGround.Bitmaps[gData.bgData.ForeGround.CurrentBitmapFrame]) / 2 * -1) then
+	if (SpriteX(gdata.foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
 	begin
-		gdata.bgData.ForeGround.XPos := 0;
+		SpriteSetX(gData.foreground, 0);
 	end;
-	if (gdata.bgData.Background.XPos <= SpriteWidth(gData.bgData.Background.Bitmaps[gData.bgData.Background.CurrentBitmapFrame]) / 2 * -1) then
+
+	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
 	begin
-		gdata.bgData.Background.XPos := 0;
+		SpriteSetX(gData.background, 0);
 	end;
 end;
 
@@ -186,7 +181,7 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		SetSpriteDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1);
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1));
 	end;
 end;
 
@@ -198,9 +193,9 @@ begin
 	begin
 		UpdateSprite(myGame.Poles[i].Pole);
 
-		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.playerData.Animation.Bitmaps[myGame.playerData.Animation.CurrentBitmapFrame])) then
+		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.player)) then
 		begin
-			if (myGame.Poles[i].ScoreLimiter) then
+			if (myGame.Poles[i].ScoreLimiter = true) then
 			begin
 				myGame.Poles[i].ScoreLimiter := false;
 				myGame.Score += 1;
@@ -216,10 +211,10 @@ end;
 
 procedure UpdateGame(var gData: GameData);
 begin
-	if not (gData.playerData.dead) then
+	if not (gData.isDead) then
 	begin
 		CheckForCollisions(gData);
-		HandleInput(gData.playerData);
+		HandleInput(gData.player);
 		UpdateBackground(gdata);
 		UpdatePlayer(gData.player);
 		UpdatePoles(gData);
@@ -242,9 +237,9 @@ end;
 
 procedure DrawGame(const gData: GameData);
 begin
-	DrawSprite(gData.bgData.Background.Bitmaps[gData.bgData.Background.CurrentBitmapFrame], Round(gData.bgData.Background.XPos), Round(gData.bgData.Background.YPos));
+	DrawSprite(gData.Background);
 	DrawPoles(gData.Poles);
-	DrawSprite(gData.bgData.ForeGround.Bitmaps[gData.bgData.ForeGround.CurrentBitmapFrame], Round(gData.bgData.ForeGround.XPos), Round(gData.bgData.ForeGround.YPos));
+	DrawSprite(gData.ForeGround);
 	DrawSprite(gData.player);
 	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
 end;
