@@ -53,7 +53,7 @@ begin
 			 0 :
 			 begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
 				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 				 result.ScoreLimiter := true;
@@ -205,7 +205,6 @@ begin
 	if MouseClicked(LeftButton) then
 	begin
 		SpriteSetValue(toUpdate, 'VerticalVelocity', SpriteValue(toUpdate, 'VerticalVelocity') + -(JUMP_RECOVERY_BOOST));
-		WriteLn('X: ', SpriteX(toUpdate):4:2, 'Y: ', SpriteY(toUpdate):4:2);
 	end;
 end;
 
