@@ -13,7 +13,8 @@ const
 type
 	PoleData = record
 		ScoreLimiter: Boolean;
-		Pole: Sprite;
+		UpPole: Sprite;
+		DownPole: Sprite;
 	end;
 
 	Poles = array [0..3] of PoleData;
@@ -41,7 +42,7 @@ begin
 	LoadMusic('MagicalNight.ogg');
 end;
 
-function GetRandomPole(): PoleData;
+function GetRandomPoles(): PoleData;
 var
 	i: Integer;
 begin
@@ -49,32 +50,43 @@ begin
 	case i  of
 			 0 :
 			 begin
-				 result.Pole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
+				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
-			 	result.Pole := CreateSprite(BitmapNamed('upward_pole_2'));
-				SpriteSetY(result.Pole, ScreenHeight() - SpriteHeight(result.pole));
-			 	result.ScoreLimiter := true;
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
+ 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+ 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
+ 				SpriteSetY(result.DownPole, 0);
+ 				result.ScoreLimiter := true;
 			 end;
 			 2 :
 			 begin
-				 result.Pole := CreateSprite(BitmapNamed('downward_pole_1'));
-				 SpriteSetY(result.Pole, 0);
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
+				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
 			 end;
 			 3 :
 			 begin
-				 result.Pole := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result.Pole, 0);
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
+				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
 			 end;
 		end;
-		SpriteSetX(result.Pole, ScreenWidth() + RND(1200));
-		SpriteSetDx(result.Pole, -2);
-		SpriteSetDy(result.Pole, 0);
+		SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+		SpriteSetDx(result.UpPole, -2);
+		SpriteSetDy(result.UpPole, 0);
+		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+		SpriteSetDx(result.DownPole, -2);
+		SpriteSetDy(result.DownPole, 0);
 end;
 
 function GetNewPlayer(): Sprite;
@@ -84,6 +96,7 @@ begin
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
 	SpriteStartAnimation(result, 'Fly');
+	SpriteAddValue(result, 'VerticalVelocity', 0);
 end;
 
 procedure SetUpParallaxBackground(var background, foreground: Sprite);
@@ -105,7 +118,7 @@ var
 begin
 	for i:= Low(gData.Poles) to High(gData.Poles) do
 	begin
-		gData.Poles[i] := GetRandomPole();
+		gData.Poles[i] := GetRandomPoles();
 	end;
 	gData.player := GetNewPlayer();
 	gData.Score := 0;
@@ -119,22 +132,23 @@ procedure UpdateRotation(var toRotate: Sprite);
 var
 	rotationPercentage: Double;
 begin
-	rotationPercentage := SpriteDy(toRotate)/MAX_SPEED;
+	rotationPercentage := SpriteValue(toRotate, 'VerticalVelocity')/MAX_SPEED;
 	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
 end;
 
 procedure UpdateVelocity(var toUpdate: Sprite);
 begin
-	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
+	SpriteSetValue(toUpdate, 'VerticalVelocity', SpriteValue(toUpdate, 'VerticalVelocity') + GRAVITY);
 
-	if SpriteDy(toUpdate) > MAX_SPEED then
+	if SpriteValue(toUpdate, 'VerticalVelocity') > MAX_SPEED then
 	begin
-		SpriteSetDy(toUpdate, MAX_SPEED);
+		SpriteSetValue(toUpdate, 'VerticalVelocity', MAX_SPEED);
 	end
-	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
+	else if (SpriteValue(toUpdate, 'VerticalVelocity') < MAX_SPEED * -1) then
 	begin
-		SpriteSetDy(toUpdate,  MAX_SPEED * -1);
+		SpriteSetValue(toUpdate, 'VerticalVelocity', MAX_SPEED * -1);
 	end;
+	SpriteSetY(toUpdate, SpriteY(toUpdate) + SpriteValue(toUpdate, 'VerticalVelocity'));
 end;
 
 procedure UpdateBackground(var gData: GameData);
@@ -163,7 +177,7 @@ begin
 
 	for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
 	begin
-		if SpriteCollision(toUpdate.player, toUpdate.Poles[i].Pole) then
+		if SpriteCollision(toUpdate.player, toUpdate.Poles[i].UpPole) or SpriteCollision(toUpdate.player, toUpdate.Poles[i].DownPole)then
 		begin
 			toUpdate.isDead := true;
 			exit;
@@ -173,8 +187,7 @@ end;
 
 procedure UpdatePlayer(var toUpdate: Sprite);
 begin
-	UpdateSprite(toUpdate);
-	UpdateRotation(toUpdate);
+	// UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
 	UpdateSprite(toUpdate);
 end;
@@ -183,7 +196,8 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1));
+		SpriteSetValue(toUpdate, 'VerticalVelocity', SpriteValue(toUpdate, 'VerticalVelocity') + -(JUMP_RECOVERY_BOOST));
+		WriteLn('X: ', SpriteX(toUpdate):4:2, 'Y: ', SpriteY(toUpdate):4:2);
 	end;
 end;
 
@@ -193,9 +207,10 @@ var
 begin
 	for i:= Low(myGame.Poles) to High(myGame.Poles) do
 	begin
-		UpdateSprite(myGame.Poles[i].Pole);
+		UpdateSprite(myGame.Poles[i].UpPole);
+		UpdateSprite(myGame.Poles[i].DownPole);
 
-		if SpriteX (myGame.Poles[i].Pole) < (SpriteX(myGame.player)) then
+		if SpriteX (myGame.Poles[i].UpPole) < (SpriteX(myGame.player)) then
 		begin
 			if (myGame.Poles[i].ScoreLimiter = true) then
 			begin
@@ -204,9 +219,9 @@ begin
 			end;
 		end;
 
-		if (SpriteOffscreen(myGame.Poles[i].Pole)) then
+		if (SpriteOffscreen(myGame.Poles[i].UpPole)) and (SpriteOffscreen(myGame.Poles[i].DownPole))then
 		begin
-			myGame.Poles[i] := GetRandomPole();
+			myGame.Poles[i] := GetRandomPoles();
 		end;
 	end;
 end;
@@ -233,7 +248,8 @@ var
 begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
-		DrawSprite(myPoles[i].Pole);
+		DrawSprite(myPoles[i].UpPole);
+		DrawSprite(myPoles[i].DownPole);
 	end;
 end;
 
