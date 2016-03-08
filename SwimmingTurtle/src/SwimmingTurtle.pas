@@ -82,7 +82,7 @@ begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
-	SpriteSetSpeed(result, 0.5);
+	SpriteSetSpeed(result, 0);
 	SpriteStartAnimation(result, 'fly');
 end;
 
@@ -111,7 +111,6 @@ begin
 	gData.Score := 0;
 	gData.isDead := false;
 	SetUpParallaxBackground(gData.background, gData.foreground);
-
 	SpriteStartAnimation(gData.foreground, 'fire');
 end;
 
@@ -119,7 +118,7 @@ procedure UpdateRotation(var toRotate: Sprite);
 var
 	rotationPercentage: Double;
 begin
-	rotationPercentage := SpriteSpeed(toRotate)/MAX_SPEED;
+	rotationPercentage := SpritedY(toRotate)/MAX_SPEED;
 	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
 end;
 
@@ -145,7 +144,6 @@ begin
 	begin
 		SpriteSetX(gData.foreground, 0);
 	end;
-
 
 	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
 	begin
@@ -175,6 +173,7 @@ end;
 
 procedure UpdatePlayer(var toUpdate: Sprite);
 begin
+	UpdateSprite(toUpdate);
 	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
 end;
@@ -259,8 +258,6 @@ begin
 
   repeat // The game loop...
     ProcessEvents();
-
-
     ClearScreen(ColorWhite);
     UpdateGame(gData);
     DrawGame(gData);
