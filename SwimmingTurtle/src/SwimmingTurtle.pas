@@ -52,11 +52,11 @@ begin
 	case i  of
 			 0 :
 			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
-				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result.DownPole, 0);
-				 result.ScoreLimiter := true;
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
+ 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+ 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
+ 				SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
+ 				result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
@@ -224,6 +224,7 @@ begin
 			SpriteSetX(myGame.Poles[i].DownPole, SpriteX(myGame.Poles[i].UpPole));
 			SpriteSetY(myGame.Poles[i].UpPole, ScreenHeight() - SpriteHeight(myGame.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 			SpriteSetY(myGame.Poles[i].DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
+			myGame.Poles[i].ScoreLimiter := true;
 		end;
 	end;
 end;
@@ -240,6 +241,7 @@ begin
 		SpriteSetY(gData.Poles[i].UpPole, ScreenHeight() - SpriteHeight(gData.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 	end;
 	gData.isDead := false;
+	gData.Score := 0;
 end;
 
 procedure UpdateGame(var gData: GameData);
