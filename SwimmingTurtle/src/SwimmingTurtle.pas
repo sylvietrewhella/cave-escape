@@ -173,6 +173,7 @@ end;
 
 procedure UpdatePlayer(var toUpdate: Sprite);
 begin
+	UpdateSprite(toUpdate);
 	UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
 	UpdateSprite(toUpdate);
@@ -258,8 +259,6 @@ begin
 
   repeat // The game loop...
     ProcessEvents();
-
-
     ClearScreen(ColorWhite);
     UpdateGame(gData);
     DrawGame(gData);
