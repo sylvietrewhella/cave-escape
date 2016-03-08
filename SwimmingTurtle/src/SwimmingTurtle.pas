@@ -223,9 +223,23 @@ begin
 		begin
 			SpriteSetX(myGame.Poles[i].UpPole, ScreenWidth() + RND(1200));
 			SpriteSetX(myGame.Poles[i].DownPole, SpriteX(myGame.Poles[i].UpPole));
-			// myGame.Poles[i] := GetRandomPoles();
+			SpriteSetY(myGame.Poles[i].UpPole, ScreenHeight() - SpriteHeight(myGame.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 		end;
 	end;
+end;
+
+procedure ResetGame(var gData: GameData);
+var
+	i: Integer;
+begin
+	gData.Player := GetNewPlayer();
+	for i:= Low(gData.Poles) to High(gData.Poles) do
+	begin
+		SpriteSetX(gData.Poles[i].UpPole, ScreenWidth() + RND(1200));
+		SpriteSetX(gData.Poles[i].DownPole, SpriteX(gData.Poles[i].UpPole));
+		SpriteSetY(gData.Poles[i].UpPole, ScreenHeight() - SpriteHeight(gData.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+	end;
+	gData.isDead := false;
 end;
 
 procedure UpdateGame(var gData: GameData);
@@ -240,7 +254,7 @@ begin
 	end
 	else //The player has died :(
 	begin
-		SetUpGame(gData);
+		ResetGame(gData);
 	end;
 end;
 
