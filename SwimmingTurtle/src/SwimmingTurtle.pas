@@ -21,6 +21,7 @@ type
 
 	GameData = record
 		Player: Sprite;
+		foreroof: Sprite;
 		foreground: Sprite;
 		background: Sprite;
 		isDead: Boolean;
@@ -37,6 +38,7 @@ begin
 	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
 	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
 	LoadBitmapNamed('background', 'background.png');
+	LoadBitmapNamed('foreroof', 'foreroof.png');
 	LoadFontNamed('game font', 'GoodDog.otf', 48);
 
 	LoadMusic('MagicalNight.ogg');
@@ -53,7 +55,7 @@ begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result.DownPole, 0);
+				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
@@ -61,7 +63,7 @@ begin
 				result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
  				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
  				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
- 				SpriteSetY(result.DownPole, 0);
+ 				SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
  				result.ScoreLimiter := true;
 			 end;
 			 2 :
@@ -69,7 +71,7 @@ begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
-				 SpriteSetY(result.DownPole, 0);
+				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 				 result.ScoreLimiter := true;
 			 end;
 			 3 :
@@ -77,7 +79,7 @@ begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
 				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result.DownPole, 0);
+				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 				 result.ScoreLimiter := true;
 			 end;
 		end;
@@ -99,7 +101,7 @@ begin
 	SpriteAddValue(result, 'VerticalVelocity', 0);
 end;
 
-procedure SetUpParallaxBackground(var background, foreground: Sprite);
+procedure SetUpParallaxBackground(var background, foreground, foreroof: Sprite);
 begin
 	background := CreateSprite(BitmapNamed('background'));
 	SpriteSetX(background, 0);
@@ -110,6 +112,10 @@ begin
 	SpriteSetX(foreground, 0);
 	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
 	SpriteSetDx(foreground, -2);
+	foreroof := CreateSprite(BitmapNamed('foreroof'));
+	SpriteSetX(foreroof, 0);
+	SpriteSetY(foreroof, -5);
+	SpriteSetDx(foreroof, -2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -123,7 +129,7 @@ begin
 	gData.player := GetNewPlayer();
 	gData.Score := 0;
 	gData.isDead := false;
-	SetUpParallaxBackground(gData.background, gData.foreground);
+	SetUpParallaxBackground(gData.background, gData.foreground, gData.foreroof);
 
 	SpriteStartAnimation(gData.foreground, 'Fire');
 end;
@@ -154,10 +160,12 @@ end;
 procedure UpdateBackground(var gData: GameData);
 begin
 	UpdateSprite(gData.foreGround);
+	UpdateSprite(gData.foreroof);
 	updateSprite(gData.background);
 	if (SpriteX(gdata.foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
 	begin
 		SpriteSetX(gData.foreground, 0);
+		SpriteSetX(gData.foreroof, 0);
 	end;
 	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
 	begin
@@ -224,6 +232,7 @@ begin
 			SpriteSetX(myGame.Poles[i].UpPole, ScreenWidth() + RND(1200));
 			SpriteSetX(myGame.Poles[i].DownPole, SpriteX(myGame.Poles[i].UpPole));
 			SpriteSetY(myGame.Poles[i].UpPole, ScreenHeight() - SpriteHeight(myGame.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+			SpriteSetY(myGame.Poles[i].DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 		end;
 	end;
 end;
@@ -273,6 +282,7 @@ procedure DrawGame(const gData: GameData);
 begin
 	DrawSprite(gData.Background);
 	DrawPoles(gData.Poles);
+	DrawSprite(gData.foreroof);
 	DrawSprite(gData.ForeGround);
 	DrawSprite(gData.player);
 	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
