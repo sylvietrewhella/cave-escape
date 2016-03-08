@@ -48,21 +48,21 @@ function GetRandomPoles(): PoleData;
 var
 	i: Integer;
 begin
-	i := Rnd(4);
+	i := Rnd(3);
 	case i  of
 			 0 :
 			 begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
+				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
-				result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
+				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
  				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
- 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
+ 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
  				SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
  				result.ScoreLimiter := true;
 			 end;
@@ -71,14 +71,6 @@ begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
 				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
-				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
-				 result.ScoreLimiter := true;
-			 end;
-			 3 :
-			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
-				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
 				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
 				 result.ScoreLimiter := true;
 			 end;
