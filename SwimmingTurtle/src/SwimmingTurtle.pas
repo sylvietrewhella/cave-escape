@@ -51,15 +51,15 @@ begin
 			 0 :
 			 begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
 				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
 			 end;
 			 1 :
 			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
- 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
+ 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
  				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
  				SpriteSetY(result.DownPole, 0);
  				result.ScoreLimiter := true;
@@ -67,7 +67,7 @@ begin
 			 2 :
 			 begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
 				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
@@ -75,7 +75,7 @@ begin
 			 3 :
 			 begin
 				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
 				 SpriteSetY(result.DownPole, 0);
 				 result.ScoreLimiter := true;
@@ -221,7 +221,9 @@ begin
 
 		if (SpriteOffscreen(myGame.Poles[i].UpPole)) and (SpriteOffscreen(myGame.Poles[i].DownPole))then
 		begin
-			myGame.Poles[i] := GetRandomPoles();
+			SpriteSetX(myGame.Poles[i].UpPole, ScreenWidth() + RND(1200));
+			SpriteSetX(myGame.Poles[i].DownPole, SpriteX(myGame.Poles[i].UpPole));
+			// myGame.Poles[i] := GetRandomPoles();
 		end;
 	end;
 end;
