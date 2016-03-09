@@ -164,7 +164,7 @@ end;
 
 procedure HandleInput(var toUpdate: Sprite);
 begin
-	if MouseClicked(LeftButton) then
+	if KeyTyped(SpaceKey) then
 	begin
 		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
 	end;
