@@ -4,3 +4,5 @@ bin/
 out.log
 tmp/
 lib/bring_fg.scpt
+*.DS_Store
+*.DS_Store?
