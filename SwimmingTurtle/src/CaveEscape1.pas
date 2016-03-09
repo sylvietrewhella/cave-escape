@@ -5,7 +5,6 @@ procedure Main();
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
 
   repeat // The game loop...
     ProcessEvents();

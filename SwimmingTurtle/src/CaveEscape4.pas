@@ -3,17 +3,12 @@ uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
   GRAVITY = 0.08;
-  JUMP_RECOVERY_BOOST = 2;
   MAX_SPEED = 5;
-  MAX_ROTATION_ANGLE = 90;
-  FOREGROUND_SCROLL_SPEED = 2;
-  BACKGROUND_SCROLL_SPEED = 1;
-  SPRITE_FRAME_DURATION = 150;
+  JUMP_RECOVERY_BOOST = 2;
 
 procedure LoadResources();
 begin
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-  LoadBitmapNamed('background', 'background.png');
 end;
 
 function GetNewPlayer(): Sprite;
@@ -21,28 +16,27 @@ begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
-	SpriteStartAnimation(result, 'fly');
+	SpriteStartAnimation(result, 'Fly');
 end;
 
 procedure HandleInput(var toUpdate: Sprite);
 begin
-	if MouseClicked(LeftButton) then
+	if KeyTyped(SpaceKey) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
 	end;
 end;
 
 procedure UpdateVelocity(var toUpdate: Sprite);
 begin
 	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
-
 	if SpriteDy(toUpdate) > MAX_SPEED then
 	begin
 		SpriteSetDy(toUpdate, MAX_SPEED);
 	end
-	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
+	else if (SpriteDy(toUpdate) < -(MAX_SPEED)) then
 	begin
-	SpriteSetDy(toUpdate,  MAX_SPEED * -1);
+	   SpriteSetDy(toUpdate,  -(MAX_SPEED));
 	end;
 end;
 
@@ -65,7 +59,6 @@ begin
 		UpdateSprite(player);
 
     DrawSprite(player);
-
 
     RefreshScreen();
 

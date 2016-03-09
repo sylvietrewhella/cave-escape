@@ -3,70 +3,73 @@ uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
   GRAVITY = 0.08;
-  JUMP_RECOVERY_BOOST = 2;
   MAX_SPEED = 5;
-  MAX_ROTATION_ANGLE = 90;
-  FOREGROUND_SCROLL_SPEED = 2;
-  BACKGROUND_SCROLL_SPEED = 1;
-  SPRITE_FRAME_DURATION = 150;
+  JUMP_RECOVERY_BOOST = 2;
+  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
 
 type
-    Poles = array [0..3] of Sprite;
+    PoleData = record
+  		UpPole: Sprite;
+  		DownPole: Sprite;
+  	end;
+
+    Poles = array [0..3] of PoleData;
 
 procedure LoadResources();
 begin
-  LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
-	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
-	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
-	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
-
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-  LoadBitmapNamed('background', 'background.png');
 end;
 
-function GetRandomPole(): Sprite;
+function GetRandomPoles(): PoleData;
 var
-	i: Integer;
+	poleId: Integer;
 begin
-	i := Rnd(4);
-	case i  of
-			 0 :
-			 begin
-				 result := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result, ScreenHeight() - SpriteHeight(result));
-			 end;
-			 1 :
-			 begin
-			 	result := CreateSprite(BitmapNamed('upward_pole_2'));
-				SpriteSetY(result, ScreenHeight() - SpriteHeight(result));
-			 end;
-			 2 :
-			 begin
-				 result := CreateSprite(BitmapNamed('downward_pole_1'));
-				 SpriteSetY(result, 0);
-			 end;
-			 3 :
-			 begin
-				 result := CreateSprite(BitmapNamed('downward_pole_2'));
-				 SpriteSetY(result, 0);
-			 end;
-		end;
-		SpriteSetX(result, ScreenWidth() + RND(1200));
-		SpriteSetDx(result, -2);
-		SpriteSetDy(result, 0);
-end;
-
-procedure UpdatePoles(var myPoles: Poles);
-var
-	i: Integer;
-begin
-	for i:= Low(myPoles) to High(myPoles) do
+	poleId := Rnd(3);
+	if (poleId = 0) then
 	begin
-		UpdateSprite(myPoles[i]);
+		result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('BigDownPole'));
+	end
+	else if (poleId = 1) then
+	begin
+		result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+	end
+	else
+	begin
+		result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+	end;
+		SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+		SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+		SpriteSetY(result.DownPole, 0);
+		SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+		SpriteSetDy(result.UpPole, 0);
+		SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+		SpriteSetDy(result.DownPole, 0);
+end;
 
-		if (SpriteOffscreen(myPoles[i])) then
+procedure ResetPoleData(var toReset: PoleData);
+begin
+	SpriteSetX(toReset.UpPole, ScreenWidth() + RND(1200));
+	SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
+	SpriteSetY(toReset.UpPole, ScreenHeight() - SpriteHeight(toReset.UpPole));
+	SpriteSetY(toReset.DownPole, 0);
+end;
+
+procedure UpdatePoles(var poles: array of PoleData);
+var
+	i: Integer;
+begin
+	for i:= Low(Poles) to High(Poles) do
+	begin
+		UpdateSprite(Poles[i].UpPole);
+		UpdateSprite(Poles[i].DownPole);
+
+		if (SpriteOffscreen(Poles[i].UpPole)) and (SpriteOffscreen(Poles[i].DownPole))then
 		begin
-			myPoles[i] := GetRandomPole();
+			ResetPoleData(Poles[i]);
 		end;
 	end;
 end;
@@ -77,7 +80,8 @@ var
 begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
-		DrawSprite(myPoles[i]);
+		DrawSprite(myPoles[i].UpPole);
+    DrawSprite(myPoles[i].DownPole);
 	end;
 end;
 
@@ -86,28 +90,27 @@ begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
-	SpriteStartAnimation(result, 'fly');
+	SpriteStartAnimation(result, 'Fly');
 end;
 
 procedure HandleInput(var toUpdate: Sprite);
 begin
-	if MouseClicked(LeftButton) then
+	if KeyTyped(SpaceKey) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + (JUMP_RECOVERY_BOOST * -1));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
 	end;
 end;
 
 procedure UpdateVelocity(var toUpdate: Sprite);
 begin
 	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
-
 	if SpriteDy(toUpdate) > MAX_SPEED then
 	begin
 		SpriteSetDy(toUpdate, MAX_SPEED);
 	end
-	else if (SpriteDy(toUpdate) < MAX_SPEED * -1) then
+	else if (SpriteDy(toUpdate) < -(MAX_SPEED)) then
 	begin
-	SpriteSetDy(toUpdate,  MAX_SPEED * -1);
+	   SpriteSetDy(toUpdate,  -(MAX_SPEED));
 	end;
 end;
 
@@ -123,7 +126,7 @@ begin
 
   for i:= Low(myPoles) to High(myPoles) do
 	begin
-		myPoles[i] := GetRandomPole();
+		myPoles[i] := GetRandomPoles();
 	end;
 
   player := GetNewPlayer();
