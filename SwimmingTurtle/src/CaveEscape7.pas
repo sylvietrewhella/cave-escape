@@ -5,7 +5,6 @@ const
 	GRAVITY = 0.08;
 	JUMP_RECOVERY_BOOST = 2;
 	MAX_SPEED = 5;
-	MAX_ROTATION_ANGLE = 90;
 	FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
 	BACKGROUND_SCROLL_SPEED = -1;
 
@@ -56,11 +55,9 @@ begin
 		SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
 		SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-		SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
+		SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
 		SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-		SpriteSetDy(result.UpPole, 0);
 		SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-		SpriteSetDy(result.DownPole, 0);
 		result.ScoreLimiter := true;
 end;
 
@@ -70,7 +67,6 @@ begin
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteStartAnimation(result, 'Fly');
-	SpriteSetDy(result, 0);
 end;
 
 procedure SetUpParallaxBackground(var Background, Foreground, Foreroof: Sprite);
@@ -140,7 +136,7 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteY(toUpdate.player) < 0) then
+	if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteCollision(toUpdate.player, toUpdate.Foreroof)) then
 	begin
 		toUpdate.IsDead := true;
 		exit;
