@@ -27,11 +27,6 @@ type
 		Poles: Poles;
 	end;
 
-procedure LoadResources();
-begin
-	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetRandomPoles(): PoleData;
 var
 	poleId: Integer;
@@ -69,7 +64,7 @@ begin
 	SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure SetUpParallaxBackground(var Background, Foreground, Foreroof: Sprite);
+procedure SetUpBackground(var Background, Foreground, Foreroof: Sprite);
 begin
 	Background := CreateSprite(BitmapNamed('Background'));
 	SpriteSetX(Background, 0);
@@ -90,6 +85,8 @@ procedure SetUpGame(var gData: GameData);
 var
 	i: Integer;
 begin
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
 	for i:= Low(gData.Poles) to High(gData.Poles) do
 	begin
 		gData.Poles[i] := GetRandomPoles();
@@ -97,7 +94,7 @@ begin
 	gData.player := GetNewPlayer();
 	gData.Score := 0;
 	gData.IsDead := false;
-	SetUpParallaxBackground(gData.Background, gData.Foreground, gData.Foreroof);
+	SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
 	SpriteStartAnimation(gData.Foreground, 'Fire');
 end;

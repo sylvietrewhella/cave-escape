@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1457501479 "Presenting Guide.tex" "Presenting Guide.pdf" "Presenting Guide" 1457501481
+["pdflatex"] 1457514823 "Presenting Guide.tex" "Presenting Guide.pdf" "Presenting Guide" 1457514828
   "./FinalGame.png" 1457413491 126958 5a8a1640cd454e7e261fc66f01f6ca92 ""
-  "./Presenting Guide.out" 1457501481 155 7136c460494c923e628aa360724d96eb ""
+  "./Presenting Guide.out" 1457514828 155 7136c460494c923e628aa360724d96eb ""
   "./Version1.png" 1457500701 76271 ddd62c35d29af4c7d3afdddac26fea83 ""
   "./Version2.png" 1457407913 70606 c329e72d48a12e19e0a7001bae136fa0 ""
   "./Version3.png" 1457407919 70520 a2fdbe66d8339c7f2f4cfcb0336ff1f1 ""
@@ -56,16 +56,16 @@
   "/usr/local/texlive/2015/texmf-var/web2c/pdftex/pdflatex.fmt" 1445966979 3849860 6be6f0aafe3dd70f5f110eb277e1c612 ""
   "/usr/local/texlive/2015/texmf.cnf" 1432479636 577 0d611272082f3cdb8e80e09a3c69cf07 ""
   "FinalGame.png" 1457413491 126958 5a8a1640cd454e7e261fc66f01f6ca92 ""
-  "Presenting Guide.aux" 1457501481 980 4de2d6c1d4a88d7c4a91880ab166534d ""
-  "Presenting Guide.out" 1457501481 155 7136c460494c923e628aa360724d96eb ""
-  "Presenting Guide.tex" 1457501478 6290 75ad15f3acc3b66a5b5b1ec669b2f886 ""
+  "Presenting Guide.aux" 1457514828 980 4de2d6c1d4a88d7c4a91880ab166534d ""
+  "Presenting Guide.out" 1457514828 155 7136c460494c923e628aa360724d96eb ""
+  "Presenting Guide.tex" 1457514814 6384 865700e3c43866e0c45176ca2086d3ca ""
   "Version1.png" 1457500701 76271 ddd62c35d29af4c7d3afdddac26fea83 ""
   "Version2.png" 1457407913 70606 c329e72d48a12e19e0a7001bae136fa0 ""
   "Version3.png" 1457407919 70520 a2fdbe66d8339c7f2f4cfcb0336ff1f1 ""
   "Version5.png" 1457408711 77646 aaaf31402a623d4b0d8707457f435cfc ""
   "Version6.png" 1457500876 120010 2831b883bcb7d1f9ddb6e38e12b13ad6 ""
   (generated)
-  "Presenting Guide.log"
-  "Presenting Guide.aux"
-  "Presenting Guide.out"
   "Presenting Guide.pdf"
+  "Presenting Guide.log"
+  "Presenting Guide.out"
+  "Presenting Guide.aux"

@@ -61,6 +61,7 @@ with the audience what different blocks of code actually do to the game.
 \newline
 \newline
 The presenter should have enough procedural programming knowledge and experience to talk through all lines of the code, and answer any questions about the code.
+It would be best to determine the general programming skill of the audience at large.
 
 \subsection{Installation}
 The development envioronment of Swingame using Pascal requires a few tools to be isntalled that the presenter or audience
@@ -68,13 +69,14 @@ may not have. Thankfully, there are detailed instructions in the form of videos 
 
 The presenter will not need these tools to present, this package is precompiled and ready to go, however if the audience would like to alter the source code
 for their own versions of the game, they should be directed to the videos on
-\href{https://www.youtube.com/playlist?list=PLdVESrjTNUXtU8zclRh9ovhstzWQAY05U}{\underline{YouTube}} and chose the isntallation videos.
+\href{https://www.youtube.com/playlist?list=PLdVESrjTNUXtU8zclRh9ovhstzWQAY05U}{\underline{YouTube}} and chose the installation videos.
 \pagebreak
 
 \section{\Large\textbf{Presentation}}
 
 \subsection*{File 1}
-The first code file provided is a basic game loop in SwinGame. Running the application will open a graphics window, however it will not display anything (as nothing has been drawn to the window!).
+The first code file provided is a basic game loop in SwinGame. Running the application will open a graphics window, however it will not display anything
+(as nothing has been drawn to the window!).
 At this stage the presenter should talk about how the lines of code are run in sequence. (procedural programming). It is important to mention how procedures work
 and shift the code operation.
 
@@ -82,7 +84,7 @@ and shift the code operation.
 \newpage
 
 \subsection*{File 2}
-The second code file provided adds and draws a sprite of our player, the background, and the foreground to the screen, but not much else. Nothing is moving.
+The second code file provided adds and draws a sprite of our player. Nothing is moving.
 Talk about how we added the sprite's image to the resource bundle, and how we load the image in our code.
 
 \center{\includegraphics[scale=0.12]{Version2}}
@@ -90,13 +92,14 @@ Talk about how we added the sprite's image to the resource bundle, and how we lo
 
 \subsection*{File 3}
 The third code file provided adds the functionality which makes the player fall (gravity), but no user input is handled so the player just falls off the screen!
-Talk about how this is a start, however is pretty boring still.
+Talk about how this is a start, however is pretty boring.
 
 \center{\includegraphics[scale=0.12]{Version3}}
 \newpage
 
 \subsection*{File 4}
-The fourth code file provided allows the player to jump when the user presses a button. Talk about how this is achieved in the code.
+The fourth code file provided allows the player to jump when the user presses the space bar. Talk about how this is achieved in the code, how we alter the
+vertical speed of the sprite, where this data is stored etc.
 
 \center{\includegraphics[scale=0.12]{Version3}}
 \newpage

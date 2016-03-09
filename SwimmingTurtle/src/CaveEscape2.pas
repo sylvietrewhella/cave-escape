@@ -30,7 +30,6 @@ begin
 		UpdateSprite(player);
     DrawSprite(player);
 
-
     RefreshScreen();
 
   until WindowCloseRequested();

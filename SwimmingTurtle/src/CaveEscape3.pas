@@ -5,11 +5,6 @@ const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
 
-procedure LoadResources();
-begin
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetNewPlayer(): Sprite;
 begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
@@ -37,7 +32,7 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   player := GetNewPlayer();
 

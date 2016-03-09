@@ -25,11 +25,6 @@ type
 		Poles: Poles;
 	end;
 
-procedure LoadResources();
-begin
-	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetRandomPoles(): PoleData;
 var
 	poleId: Integer;
@@ -70,7 +65,7 @@ begin
 	SpriteSetDy(result, 0);
 end;
 
-procedure SetUpParallaxBackground(var Background, Foreground, Foreroof: Sprite);
+procedure SetUpBackground(var Background, Foreground, Foreroof: Sprite);
 begin
 	Background := CreateSprite(BitmapNamed('Background'));
 	SpriteSetX(Background, 0);
@@ -96,7 +91,7 @@ begin
 		gData.Poles[i] := GetRandomPoles();
 	end;
 	gData.player := GetNewPlayer();
-	SetUpParallaxBackground(gData.Background, gData.Foreground, gData.Foreroof);
+	SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
 	SpriteStartAnimation(gData.Foreground, 'Fire');
 end;
@@ -141,7 +136,7 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if KeyTyped(SpaceKey) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate) - JUMP_RECOVERY_BOOST);
 	end;
 end;
 
@@ -204,7 +199,7 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
   SetUpGame(gData);
 
   repeat // The game loop...

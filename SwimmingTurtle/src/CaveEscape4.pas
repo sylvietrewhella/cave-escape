@@ -6,11 +6,6 @@ const
   MAX_SPEED = 5;
   JUMP_RECOVERY_BOOST = 2;
 
-procedure LoadResources();
-begin
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetNewPlayer(): Sprite;
 begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
@@ -23,7 +18,7 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if KeyTyped(SpaceKey) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate)-JUMP_RECOVERY_BOOST);
 	end;
 end;
 
@@ -46,7 +41,7 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   player := GetNewPlayer();
 

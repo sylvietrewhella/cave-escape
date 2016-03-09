@@ -15,11 +15,6 @@ type
 
     Poles = array [0..3] of PoleData;
 
-procedure LoadResources();
-begin
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetRandomPoles(): PoleData;
 var
 	poleId: Integer;
@@ -97,7 +92,7 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if KeyTyped(SpaceKey) then
 	begin
-		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate)-JUMP_RECOVERY_BOOST);
 	end;
 end;
 
@@ -122,7 +117,7 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   for i:= Low(myPoles) to High(myPoles) do
 	begin
