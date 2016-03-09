@@ -6,9 +6,8 @@ const
 	JUMP_RECOVERY_BOOST = 2;
 	MAX_SPEED = 5;
 	MAX_ROTATION_ANGLE = 90;
-	FOREGROUND_SCROLL_SPEED = 2;
-	BACKGROUND_SCROLL_SPEED = 1;
-	SPRITE_FRAME_DURATION = 150;
+	FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+	BACKGROUND_SCROLL_SPEED = -1;
 
 type
 	PoleData = record
@@ -58,9 +57,9 @@ begin
 		SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
 		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
 		SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
-		SpriteSetDx(result.UpPole, -2);
+		SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 		SpriteSetDy(result.UpPole, 0);
-		SpriteSetDx(result.DownPole, -2);
+		SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 		SpriteSetDy(result.DownPole, 0);
 		result.ScoreLimiter := true;
 end;
@@ -70,7 +69,6 @@ begin
 	result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
 	SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
 	SpriteSetY(result, ScreenHeight() / 2);
-	SpriteSetSpeed(result, 0.5);
 	SpriteStartAnimation(result, 'Fly');
 	SpriteSetDy(result, 0);
 end;
@@ -80,16 +78,16 @@ begin
 	Background := CreateSprite(BitmapNamed('Background'));
 	SpriteSetX(Background, 0);
 	SpriteSetY(Background, 0);
-	SpriteSetDx(Background, -1);
+	SpriteSetDx(Background, BACKGROUND_SCROLL_SPEED);
 
 	Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
 	SpriteSetX(Foreground, 0);
 	SpriteSetY(Foreground, ScreenHeight() - SpriteHeight(Foreground));
-	SpriteSetDx(Foreground, -2);
+	SpriteSetDx(Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 	Foreroof := CreateSprite(BitmapNamed('Foreroof'));
 	SpriteSetX(Foreroof, 0);
-	SpriteSetY(Foreroof, -5);
-	SpriteSetDx(Foreroof, -2);
+	SpriteSetY(Foreroof, 0);
+	SpriteSetDx(Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -127,12 +125,12 @@ begin
 	UpdateSprite(gData.foreGround);
 	UpdateSprite(gData.Foreroof);
 	updateSprite(gData.Background);
-	if (SpriteX(gdata.Foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
+	if (SpriteX(gdata.Foreground) <= -(SpriteWidth(gData.ForeGround) / 2)) then
 	begin
 		SpriteSetX(gData.Foreground, 0);
 		SpriteSetX(gData.Foreroof, 0);
 	end;
-	if (SpriteX(gdata.Background) <= SpriteWidth(gData.Background) / 2 * -1) then
+	if (SpriteX(gdata.Background) <= -(SpriteWidth(gData.Background) / 2)) then
 	begin
 		SpriteSetX(gData.Background, 0);
 	end;
