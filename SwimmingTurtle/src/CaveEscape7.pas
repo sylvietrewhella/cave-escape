@@ -253,7 +253,6 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResources();
   SetUpGame(gData);
 
 	FadeMusicIn('GameMusic', -1, 15000);

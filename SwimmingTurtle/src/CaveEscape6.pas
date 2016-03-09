@@ -86,6 +86,7 @@ procedure SetUpGame(var gData: GameData);
 var
 	i: Integer;
 begin
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 	for i:= Low(gData.Poles) to High(gData.Poles) do
 	begin
 		gData.Poles[i] := GetRandomPoles();
@@ -199,7 +200,6 @@ var
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
   SetUpGame(gData);
 
   repeat // The game loop...
