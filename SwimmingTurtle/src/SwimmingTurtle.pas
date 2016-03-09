@@ -21,10 +21,10 @@ type
 
 	GameData = record
 		Player: Sprite;
-		foreroof: Sprite;
-		foreground: Sprite;
-		background: Sprite;
-		isDead: Boolean;
+		Foreroof: Sprite;
+		Foreground: Sprite;
+		Background: Sprite;
+		IsDead: Boolean;
 		Score: Integer;
 		Poles: Poles;
 	end;
@@ -32,55 +32,37 @@ type
 procedure LoadResources();
 begin
 	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-
-	LoadBitmapNamed('upward_pole_1', 'UpwardPole1.png');
-	LoadBitmapNamed('upward_pole_2', 'UpwardPole2.png');
-	LoadBitmapNamed('downward_pole_1', 'DownwardPole1.png');
-	LoadBitmapNamed('downward_pole_2', 'DownwardPole2.png');
-	LoadBitmapNamed('background', 'background.png');
-	LoadBitmapNamed('foreroof', 'foreroof.png');
-	LoadFontNamed('game font', 'GoodDog.otf', 48);
-
-	LoadMusic('MagicalNight.ogg');
 end;
 
 function GetRandomPoles(): PoleData;
 var
-	i: Integer;
+	poleId: Integer;
 begin
-	i := Rnd(3);
-	case i  of
-			 0 :
-			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
- 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
- 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
- 				SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
- 				result.ScoreLimiter := true;
-			 end;
-			 1 :
-			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_2'));
- 				SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
- 				result.DownPole := CreateSprite(BitmapNamed('downward_pole_2'));
- 				SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
- 				result.ScoreLimiter := true;
-			 end;
-			 2 :
-			 begin
-				 result.UpPole := CreateSprite(BitmapNamed('upward_pole_1'));
-				 SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
-				 result.DownPole := CreateSprite(BitmapNamed('downward_pole_1'));
-				 SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
-				 result.ScoreLimiter := true;
-			 end;
-		end;
+	poleId := Rnd(3);
+	if (poleId = 0) then
+	begin
+		result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('BigDownPole'));
+	end
+	else if (poleId = 1) then
+	begin
+		result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+	end
+	else
+	begin
+		result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
+		result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+	end;
 		SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+		SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+		SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
 		SpriteSetDx(result.UpPole, -2);
 		SpriteSetDy(result.UpPole, 0);
-		SpriteSetX(result.DownPole, SpriteX(result.UpPole));
 		SpriteSetDx(result.DownPole, -2);
 		SpriteSetDy(result.DownPole, 0);
+		result.ScoreLimiter := true;
 end;
 
 function GetNewPlayer(): Sprite;
@@ -90,24 +72,24 @@ begin
 	SpriteSetY(result, ScreenHeight() / 2);
 	SpriteSetSpeed(result, 0.5);
 	SpriteStartAnimation(result, 'Fly');
-	SpriteAddValue(result, 'VerticalVelocity', 0);
+	SpriteSetDy(result, 0);
 end;
 
-procedure SetUpParallaxBackground(var background, foreground, foreroof: Sprite);
+procedure SetUpParallaxBackground(var Background, Foreground, Foreroof: Sprite);
 begin
-	background := CreateSprite(BitmapNamed('background'));
-	SpriteSetX(background, 0);
-	SpriteSetY(background, 0);
-	SpriteSetDx(background, -1);
+	Background := CreateSprite(BitmapNamed('Background'));
+	SpriteSetX(Background, 0);
+	SpriteSetY(Background, 0);
+	SpriteSetDx(Background, -1);
 
-	foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
-	SpriteSetX(foreground, 0);
-	SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
-	SpriteSetDx(foreground, -2);
-	foreroof := CreateSprite(BitmapNamed('foreroof'));
-	SpriteSetX(foreroof, 0);
-	SpriteSetY(foreroof, -5);
-	SpriteSetDx(foreroof, -2);
+	Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+	SpriteSetX(Foreground, 0);
+	SpriteSetY(Foreground, ScreenHeight() - SpriteHeight(Foreground));
+	SpriteSetDx(Foreground, -2);
+	Foreroof := CreateSprite(BitmapNamed('Foreroof'));
+	SpriteSetX(Foreroof, 0);
+	SpriteSetY(Foreroof, -5);
+	SpriteSetDx(Foreroof, -2);
 end;
 
 procedure SetUpGame(var gData: GameData);
@@ -120,48 +102,39 @@ begin
 	end;
 	gData.player := GetNewPlayer();
 	gData.Score := 0;
-	gData.isDead := false;
-	SetUpParallaxBackground(gData.background, gData.foreground, gData.foreroof);
+	gData.IsDead := false;
+	SetUpParallaxBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
-	SpriteStartAnimation(gData.foreground, 'Fire');
-end;
-
-procedure UpdateRotation(var toRotate: Sprite);
-var
-	rotationPercentage: Double;
-begin
-	rotationPercentage := SpriteValue(toRotate, 'VerticalVelocity')/MAX_SPEED;
-	SpriteSetRotation(toRotate, rotationPercentage * MAX_ROTATION_ANGLE);
+	SpriteStartAnimation(gData.Foreground, 'Fire');
 end;
 
 procedure UpdateVelocity(var toUpdate: Sprite);
 begin
-	SpriteSetValue(toUpdate, 'VerticalVelocity', SpriteValue(toUpdate, 'VerticalVelocity') + GRAVITY);
+	SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
 
-	if SpriteValue(toUpdate, 'VerticalVelocity') > MAX_SPEED then
+	if SpriteDy(toUpdate) > MAX_SPEED then
 	begin
-		SpriteSetValue(toUpdate, 'VerticalVelocity', MAX_SPEED);
+		SpriteSetDy(toUpdate, MAX_SPEED);
 	end
-	else if (SpriteValue(toUpdate, 'VerticalVelocity') < MAX_SPEED * -1) then
+	else if SpriteDy(toUpdate) < -(MAX_SPEED) then
 	begin
-		SpriteSetValue(toUpdate, 'VerticalVelocity', MAX_SPEED * -1);
+		SpriteSetDy(toUpdate, -(MAX_SPEED));
 	end;
-	SpriteSetY(toUpdate, SpriteY(toUpdate) + SpriteValue(toUpdate, 'VerticalVelocity'));
 end;
 
 procedure UpdateBackground(var gData: GameData);
 begin
 	UpdateSprite(gData.foreGround);
-	UpdateSprite(gData.foreroof);
-	updateSprite(gData.background);
-	if (SpriteX(gdata.foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
+	UpdateSprite(gData.Foreroof);
+	updateSprite(gData.Background);
+	if (SpriteX(gdata.Foreground) <= SpriteWidth(gData.ForeGround) / 2 * -1) then
 	begin
-		SpriteSetX(gData.foreground, 0);
-		SpriteSetX(gData.foreroof, 0);
+		SpriteSetX(gData.Foreground, 0);
+		SpriteSetX(gData.Foreroof, 0);
 	end;
-	if (SpriteX(gdata.background) <= SpriteWidth(gData.background) / 2 * -1) then
+	if (SpriteX(gdata.Background) <= SpriteWidth(gData.Background) / 2 * -1) then
 	begin
-		SpriteSetX(gData.background, 0);
+		SpriteSetX(gData.Background, 0);
 	end;
 end;
 
@@ -169,9 +142,9 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.player, toUpdate.foreground)) or (SpriteY(toUpdate.player) < 0) then
+	if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteY(toUpdate.player) < 0) then
 	begin
-		toUpdate.isDead := true;
+		toUpdate.IsDead := true;
 		exit;
 	end;
 
@@ -179,7 +152,7 @@ begin
 	begin
 		if SpriteCollision(toUpdate.player, toUpdate.Poles[i].UpPole) or SpriteCollision(toUpdate.player, toUpdate.Poles[i].DownPole)then
 		begin
-			toUpdate.isDead := true;
+			toUpdate.IsDead := true;
 			exit;
 		end;
 	end;
@@ -187,7 +160,6 @@ end;
 
 procedure UpdatePlayer(var toUpdate: Sprite);
 begin
-	// UpdateRotation(toUpdate);
 	UpdateVelocity(toUpdate);
 	UpdateSprite(toUpdate);
 end;
@@ -196,8 +168,17 @@ procedure HandleInput(var toUpdate: Sprite);
 begin
 	if MouseClicked(LeftButton) then
 	begin
-		SpriteSetValue(toUpdate, 'VerticalVelocity', SpriteValue(toUpdate, 'VerticalVelocity') + -(JUMP_RECOVERY_BOOST));
+		SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
 	end;
+end;
+
+procedure ResetPoleData(var toReset: PoleData);
+begin
+	SpriteSetX(toReset.UpPole, ScreenWidth() + RND(1200));
+	SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
+	SpriteSetY(toReset.UpPole, ScreenHeight() - SpriteHeight(toReset.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+	SpriteSetY(toReset.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
+	toReset.ScoreLimiter := true;
 end;
 
 procedure UpdatePoles(var myGame: GameData);
@@ -220,11 +201,7 @@ begin
 
 		if (SpriteOffscreen(myGame.Poles[i].UpPole)) and (SpriteOffscreen(myGame.Poles[i].DownPole))then
 		begin
-			SpriteSetX(myGame.Poles[i].UpPole, ScreenWidth() + RND(1200));
-			SpriteSetX(myGame.Poles[i].DownPole, SpriteX(myGame.Poles[i].UpPole));
-			SpriteSetY(myGame.Poles[i].UpPole, ScreenHeight() - SpriteHeight(myGame.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
-			SpriteSetY(myGame.Poles[i].DownPole, 0 + RND(BitmapHeight(BitmapNamed('foreroof'))));
-			myGame.Poles[i].ScoreLimiter := true;
+			ResetPoleData(myGame.Poles[i]);
 		end;
 	end;
 end;
@@ -236,17 +213,15 @@ begin
 	gData.Player := GetNewPlayer();
 	for i:= Low(gData.Poles) to High(gData.Poles) do
 	begin
-		SpriteSetX(gData.Poles[i].UpPole, ScreenWidth() + RND(1200));
-		SpriteSetX(gData.Poles[i].DownPole, SpriteX(gData.Poles[i].UpPole));
-		SpriteSetY(gData.Poles[i].UpPole, ScreenHeight() - SpriteHeight(gData.Poles[i].UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+		ResetPoleData(gData.Poles[i]);
 	end;
-	gData.isDead := false;
+	gData.IsDead := false;
 	gData.Score := 0;
 end;
 
 procedure UpdateGame(var gData: GameData);
 begin
-	if not (gData.isDead) then
+	if not (gData.IsDead) then
 	begin
 		CheckForCollisions(gData);
 		HandleInput(gData.player);
@@ -275,10 +250,10 @@ procedure DrawGame(const gData: GameData);
 begin
 	DrawSprite(gData.Background);
 	DrawPoles(gData.Poles);
-	DrawSprite(gData.foreroof);
+	DrawSprite(gData.Foreroof);
 	DrawSprite(gData.ForeGround);
 	DrawSprite(gData.player);
-	DrawText(IntToStr(gData.score), ColorWhite, 'game font', 10, 0);
+	DrawText(IntToStr(gData.score), ColorWhite, 'GameFont', 10, 0);
 end;
 
 procedure Main();
@@ -290,7 +265,7 @@ begin
   LoadResources();
   SetUpGame(gData);
 
-	FadeMusicIn('MagicalNight.ogg', -1, 15000);
+	FadeMusicIn('GameMusic', -1, 15000);
 
   repeat // The game loop...
     ProcessEvents();
