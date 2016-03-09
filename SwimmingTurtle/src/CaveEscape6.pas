@@ -208,8 +208,6 @@ begin
   LoadResources();
   SetUpGame(gData);
 
-	FadeMusicIn('GameMusic', -1, 15000);
-
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
