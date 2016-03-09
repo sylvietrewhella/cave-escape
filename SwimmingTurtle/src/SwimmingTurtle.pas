@@ -5,7 +5,6 @@ const
 	GRAVITY = 0.08;
 	JUMP_RECOVERY_BOOST = 2;
 	MAX_SPEED = 5;
-	MAX_ROTATION_ANGLE = 90;
 	FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
 	BACKGROUND_SCROLL_SPEED = -1;
 
@@ -137,7 +136,7 @@ procedure CheckForCollisions(var toUpdate: GameData);
 var
 	i: Integer;
 begin
-	if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteY(toUpdate.player) < 0) then
+	if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteCollision(toUpdate.player, toUpdate.Foreroof)) then
 	begin
 		toUpdate.IsDead := true;
 		exit;
