@@ -90,8 +90,25 @@ INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm
-INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
-INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/base/omscmr.fd
+INPUT Version1.png
+INPUT ./Version1.png
+INPUT ./Version1.png
+INPUT Version2.png
+INPUT ./Version2.png
+INPUT ./Version2.png
+INPUT Version3.png
+INPUT ./Version3.png
+INPUT ./Version3.png
+INPUT Version3.png
+INPUT ./Version3.png
+INPUT Version5.png
+INPUT ./Version5.png
+INPUT ./Version5.png
+INPUT Version6.png
+INPUT ./Version6.png
+INPUT ./Version6.png
+INPUT FinalGame.png
+INPUT ./FinalGame.png
 INPUT Presenting Guide.aux
 INPUT ./Presenting Guide.out
 INPUT ./Presenting Guide.out
@@ -99,5 +116,4 @@ INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
-INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb
