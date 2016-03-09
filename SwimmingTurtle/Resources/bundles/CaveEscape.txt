@@ -2,9 +2,9 @@ BITMAP,Player,player.png,75,42,4,1,4
 ANIM,PlayerAnimations,PlayerAnimations.txt
 BITMAP,Foreground,foreground.png,864,105,3,1,3
 ANIM,ForegroundAminations,ForegroundAnimations.txt
-BITMAP,BigDownPole,BigDownPole.png,102,311,1,1,1
+BITMAP,BigDownPole,BigDownPole.png,102,280,1,1,1
 BITMAP,SmallDownPole,SmallDownPole.png,102,248,1,1,1
-BITMAP,BigUpPole,BigUpPole.png,102,311,1,1,1
+BITMAP,BigUpPole,BigUpPole.png,102,280,1,1,1
 BITMAP,SmallUpPole,SmallUpPole.png,102,248,1,1,1
 BITMAP,Background,Background.png,864,769,1,1,1
 BITMAP,Foreroof,Foreroof.png,865,41,1,1,1
