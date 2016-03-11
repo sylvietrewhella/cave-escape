@@ -1,1 +1,5 @@
-# swimming-turtle
+# Cave Escape!
+
+If you're interested in learning more about computer programming, you should definitely check out the Swinburne CodeCasts series. They are a complete video tutorial series, which teach you all the fundementals of procedural programming, as demonstrated in the Cave Escape game. 
+
+The videos can be found on [Youtube](https://www.youtube.com/playlist?list=PLdVESrjTNUXtU8zclRh9ovhstzWQAY05U "Youtube").
