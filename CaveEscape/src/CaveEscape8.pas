@@ -1,0 +1,336 @@
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  JUMP_RECOVERY_BOOST = 2;
+  MAX_SPEED = 5;
+  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+  BACKGROUND_SCROLL_SPEED = -1;
+
+type
+  PoleData = record
+    ScoreLimiter: Boolean;
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
+
+  Poles = array [0..19] of PoleData;
+
+  GameData = record
+    Player: Sprite;
+    Foreroof: Sprite;
+    Foreground: Sprite;
+    Background: Sprite;
+    IsDead: Boolean;
+    Score: Integer;
+    Poles: Poles;
+  end;
+
+function GetRandomPoles(previousPolePosition: Double): PoleData;
+var
+  poleId: Integer;
+begin
+  poleId := Rnd(3);
+  if (poleId = 0) then
+  begin
+    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('BigDownPole'));
+  end
+  else if (poleId = 1) then
+  begin
+    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+  end
+  else
+  begin
+    result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
+  end;
+		if previousPolePosition > 0 then
+		begin
+			SpriteSetX(result.UpPole, previousPolePosition + SpriteWidth(result.UpPole) + Rnd(100));
+		end
+		else
+		begin
+			SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+		end;
+    SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+    SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+    SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
+    SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+    SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+    result.ScoreLimiter := true;
+end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure SetUpBackground(var Background, Foreground, Foreroof: Sprite);
+begin
+  Background := CreateSprite(BitmapNamed('Background'));
+  SpriteSetX(Background, 0);
+  SpriteSetY(Background, 0);
+  SpriteSetDx(Background, BACKGROUND_SCROLL_SPEED);
+
+  Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+  SpriteSetX(Foreground, 0);
+  SpriteSetY(Foreground, ScreenHeight() - SpriteHeight(Foreground));
+  SpriteSetDx(Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  Foreroof := CreateSprite(BitmapNamed('Foreroof'));
+  SpriteSetX(Foreroof, 0);
+  SpriteSetY(Foreroof, 0);
+  SpriteSetDx(Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+end;
+
+procedure SetUpGame(var gData: GameData);
+var
+  i: Integer;
+begin
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  for i := Low(gData.Poles) to High(gData.Poles) do
+  begin
+		if i > 0 then
+		begin
+			gData.Poles[i] := GetRandomPoles(SpriteX(gData.Poles[i - 1].UpPole));
+		end
+    else
+    begin
+    	gData.Poles[i] := GetRandomPoles(-1);
+    end;
+  end;
+  gData.player := GetNewPlayer();
+  gData.Score := 0;
+  gData.IsDead := false;
+  SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
+
+  SpriteStartAnimation(gData.Foreground, 'Fire');
+end;
+
+procedure UpdateVelocity(var toUpdate: Sprite);
+begin
+  SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
+
+  if SpriteDy(toUpdate) > MAX_SPEED then
+  begin
+    SpriteSetDy(toUpdate, MAX_SPEED);
+  end
+  else if SpriteDy(toUpdate) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(toUpdate, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdateBackground(var gData: GameData);
+begin
+  UpdateSprite(gData.foreGround);
+  UpdateSprite(gData.Foreroof);
+  updateSprite(gData.Background);
+  if (SpriteX(gdata.Foreground) <= -(SpriteWidth(gData.ForeGround) / 2)) then
+  begin
+    SpriteSetX(gData.Foreground, 0);
+    SpriteSetX(gData.Foreroof, 0);
+  end;
+  if (SpriteX(gdata.Background) <= -(SpriteWidth(gData.Background) / 2)) then
+  begin
+    SpriteSetX(gData.Background, 0);
+  end;
+end;
+
+procedure CheckForCollisions(var toUpdate: GameData);
+var
+  i: Integer;
+begin
+  if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteCollision(toUpdate.player, toUpdate.Foreroof)) then
+  begin
+    toUpdate.IsDead := true;
+    exit;
+  end;
+
+  for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
+  begin
+    if SpriteCollision(toUpdate.player, toUpdate.Poles[i].UpPole) or SpriteCollision(toUpdate.player, toUpdate.Poles[i].DownPole)then
+    begin
+      toUpdate.IsDead := true;
+      exit;
+    end;
+  end;
+end;
+
+procedure UpdatePlayer(var toUpdate: Sprite);
+begin
+  UpdateVelocity(toUpdate);
+  UpdateSprite(toUpdate);
+end;
+
+procedure HandleInput(var toUpdate: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
+  end;
+end;
+
+function SpriteOffLeftOfScreen(const sprite: Sprite): Boolean;
+begin
+	result := false;
+	if SpriteX(sprite) < (0 - SpriteWidth(sprite)) then
+	begin
+		result := true;
+	end;
+end;
+
+procedure ResetPoleData(var toReset: PoleData; xPosition: Double);
+begin
+  SpriteSetX(toReset.UpPole, xPosition);
+  SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
+  SpriteSetY(toReset.UpPole, ScreenHeight() - SpriteHeight(toReset.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+  SpriteSetY(toReset.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
+  toReset.ScoreLimiter := true;
+end;
+
+function GetNewResetPosition(const poles: Poles): Double;
+var
+	i: Integer;
+begin
+	result := SpriteX(poles[0].UpPole);
+	for i := 1 to High(poles) do
+	begin
+		if (SpriteX(poles[i].UpPole) > result) then
+		begin
+			result := SpriteX(poles[i].UpPole);
+		end;
+	end;
+	if result < ScreenWidth() then
+	begin
+		result := ScreenWidth() + RND(1200);
+	end
+	else
+	begin
+		result := result + SpriteWidth(poles[0].UpPole) + RND(SpriteWidth(poles[0].UpPole));
+	end;
+end;
+
+procedure ResetPoles(var toReset: Poles);
+var
+	i: Integer;
+begin
+	SpriteSetX(toReset[0].UpPole, ScreenWidth() + RND(1200));
+	SpriteSetX(toReset[0].DownPole, SpriteX(toReset[0].UpPole));
+	for i := 1 to High(toReset) do
+	begin
+		SpriteSetX(toReset[i].UpPole, 0);
+		SpriteSetX(toReset[i].DownPole, 0);
+	end;
+	for i := 1 to High(toReset) do
+	begin
+		ResetPoleData(toReset[i], GetNewResetPosition(toReset));
+	end;
+end;
+
+procedure UpdatePoles(var myGame: GameData);
+var
+  i: Integer;
+	newResetPosition: Double;
+begin
+	newResetPosition := 0;
+  for i:= Low(myGame.Poles) to High(myGame.Poles) do
+  begin
+		if (SpriteX(myGame.Poles[i].UpPole) > newResetPosition) and (SpriteX(myGame.Poles[i].UpPole) > ScreenWidth()) then
+		begin
+			newResetPosition := SpriteX(myGame.Poles[i].UpPole);
+		end;
+    UpdateSprite(myGame.Poles[i].UpPole);
+    UpdateSprite(myGame.Poles[i].DownPole);
+
+    if SpriteX (myGame.Poles[i].UpPole) < (SpriteX(myGame.player)) then
+    begin
+      if (myGame.Poles[i].ScoreLimiter = true) then
+      begin
+        myGame.Poles[i].ScoreLimiter := false;
+        myGame.Score += 1;
+      end;
+    end;
+
+    if (SpriteOffLeftOfScreen(myGame.Poles[i].UpPole)) and (SpriteOffLeftOfScreen(myGame.Poles[i].DownPole))then
+    begin
+			ResetPoleData(myGame.Poles[i], GetNewResetPosition(myGame.Poles));
+    end;
+  end;
+end;
+
+procedure ResetGame(var gData: GameData);
+var
+  i: Integer;
+begin
+  gData.Player := GetNewPlayer();
+  ResetPoles(gData.Poles);
+  gData.IsDead := false;
+  gData.Score := 0;
+end;
+
+procedure UpdateGame(var gData: GameData);
+begin
+  if not (gData.IsDead) then
+  begin
+    CheckForCollisions(gData);
+    HandleInput(gData.player);
+    UpdateBackground(gdata);
+    UpdatePlayer(gData.player);
+    UpdatePoles(gData);
+  end
+  else //The player has died :(
+  begin
+    ResetGame(gData);
+  end;
+end;
+
+procedure DrawPoles(const myPoles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(myPoles) to High(myPoles) do
+  begin
+    DrawSprite(myPoles[i].UpPole);
+    DrawSprite(myPoles[i].DownPole);
+  end;
+end;
+
+procedure DrawGame(const gData: GameData);
+begin
+  DrawSprite(gData.Background);
+  DrawPoles(gData.Poles);
+  DrawSprite(gData.Foreroof);
+  DrawSprite(gData.ForeGround);
+  DrawSprite(gData.player);
+  DrawText(IntToStr(gData.score), ColorWhite, 'GameFont', 10, 0);
+end;
+
+procedure Main();
+var
+  gData: GameData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  OpenAudio();
+  SetUpGame(gData);
+
+  FadeMusicIn('GameMusic', -1, 15000);
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateGame(gData);
+    DrawGame(gData);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
