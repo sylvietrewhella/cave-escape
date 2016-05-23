@@ -3,18 +3,18 @@ uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 procedure Main();
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
+	OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
 
-  repeat // The game loop...
-    ProcessEvents();
+	repeat // The game loop...
+		ProcessEvents();
 
-    ClearScreen(ColorWhite);
-    RefreshScreen()
+		ClearScreen(ColorWhite);
+		RefreshScreen()
 
-  until WindowCloseRequested();
+	until WindowCloseRequested();
 end;
 
 begin
-  Main();
+	Main();
 end.

@@ -2,18 +2,18 @@ program GameMain;
 uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
-  GRAVITY = 0.08;
-  MAX_SPEED = 5;
-  JUMP_RECOVERY_BOOST = 2;
-  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+	GRAVITY = 0.08;
+	MAX_SPEED = 5;
+	JUMP_RECOVERY_BOOST = 2;
+	FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
 
 type
-    PoleData = record
-  		UpPole: Sprite;
-  		DownPole: Sprite;
-  	end;
+		PoleData = record
+			UpPole: Sprite;
+			DownPole: Sprite;
+		end;
 
-    Poles = array [0..3] of PoleData;
+		Poles = array [0..3] of PoleData;
 
 function GetRandomPoles(): PoleData;
 var
@@ -76,7 +76,7 @@ begin
 	for i:= Low(myPoles) to High(myPoles) do
 	begin
 		DrawSprite(myPoles[i].UpPole);
-    DrawSprite(myPoles[i].DownPole);
+		DrawSprite(myPoles[i].DownPole);
 	end;
 end;
 
@@ -105,45 +105,45 @@ begin
 	end
 	else if (SpriteDy(toUpdate) < -(MAX_SPEED)) then
 	begin
-	   SpriteSetDy(toUpdate,  -(MAX_SPEED));
+		 SpriteSetDy(toUpdate,	-(MAX_SPEED));
 	end;
 end;
 
 procedure Main();
 var
-  player: Sprite;
-  myPoles: Poles;
-  i: Integer;
+	player: Sprite;
+	myPoles: Poles;
+	i: Integer;
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
+	OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
-  for i:= Low(myPoles) to High(myPoles) do
+	for i:= Low(myPoles) to High(myPoles) do
 	begin
 		myPoles[i] := GetRandomPoles();
 	end;
 
-  player := GetNewPlayer();
+	player := GetNewPlayer();
 
-  repeat // The game loop...
-    ProcessEvents();
+	repeat // The game loop...
+		ProcessEvents();
 		ClearScreen(ColorWhite);
 
-    UpdateVelocity(player);
-    HandleInput(player);
+		UpdateVelocity(player);
+		HandleInput(player);
 
-    UpdateSprite(player);
-    UpdatePoles(myPoles);
+		UpdateSprite(player);
+		UpdatePoles(myPoles);
 
-    DrawPoles(myPoles);
-    DrawSprite(player);
+		DrawPoles(myPoles);
+		DrawSprite(player);
 
-    RefreshScreen();
+		RefreshScreen();
 
-  until WindowCloseRequested();
+	until WindowCloseRequested();
 end;
 
 begin
-  Main();
+	Main();
 end.

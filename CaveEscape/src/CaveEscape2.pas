@@ -3,7 +3,7 @@ uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 procedure LoadResources();
 begin
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 end;
 
 function GetNewPlayer(): Sprite;
@@ -16,25 +16,25 @@ end;
 
 procedure Main();
 var
-  player: Sprite;
+	player: Sprite;
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
-  LoadResources();
+	OpenGraphicsWindow('Cave Escape', 432, 768);
+	LoadResources();
 
-  player := GetNewPlayer();
+	player := GetNewPlayer();
 
-  repeat // The game loop...
-    ProcessEvents();
+	repeat // The game loop...
+		ProcessEvents();
 		ClearScreen(ColorWhite);
 
 		UpdateSprite(player);
-    DrawSprite(player);
+		DrawSprite(player);
 
-    RefreshScreen();
+		RefreshScreen();
 
-  until WindowCloseRequested();
+	until WindowCloseRequested();
 end;
 
 begin
-  Main();
+	Main();
 end.

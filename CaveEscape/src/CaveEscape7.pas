@@ -251,21 +251,21 @@ procedure Main();
 var
 	gData: GameData;
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
+	OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  SetUpGame(gData);
+	SetUpGame(gData);
 
 	FadeMusicIn('GameMusic', -1, 15000);
 
-  repeat // The game loop...
-    ProcessEvents();
-    ClearScreen(ColorWhite);
-    UpdateGame(gData);
-    DrawGame(gData);
-    RefreshScreen();
-  until WindowCloseRequested();
+	repeat // The game loop...
+		ProcessEvents();
+		ClearScreen(ColorWhite);
+		UpdateGame(gData);
+		DrawGame(gData);
+		RefreshScreen();
+	until WindowCloseRequested();
 end;
 
 begin
-  Main();
+	Main();
 end.

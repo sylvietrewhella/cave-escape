@@ -2,9 +2,9 @@ program GameMain;
 uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
 const
-  GRAVITY = 0.08;
-  MAX_SPEED = 5;
-  JUMP_RECOVERY_BOOST = 2;
+	GRAVITY = 0.08;
+	MAX_SPEED = 5;
+	JUMP_RECOVERY_BOOST = 2;
 
 function GetNewPlayer(): Sprite;
 begin
@@ -31,35 +31,35 @@ begin
 	end
 	else if (SpriteDy(toUpdate) < -(MAX_SPEED)) then
 	begin
-	   SpriteSetDy(toUpdate,  -(MAX_SPEED));
+		 SpriteSetDy(toUpdate,	-(MAX_SPEED));
 	end;
 end;
 
 procedure Main();
 var
-  player: Sprite;
+	player: Sprite;
 begin
-  OpenGraphicsWindow('Cave Escape', 432, 768);
+	OpenGraphicsWindow('Cave Escape', 432, 768);
 	OpenAudio();
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+	LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
-  player := GetNewPlayer();
+	player := GetNewPlayer();
 
-  repeat // The game loop...
-    ProcessEvents();
+	repeat // The game loop...
+		ProcessEvents();
 		ClearScreen(ColorWhite);
 
-    UpdateVelocity(player);
-    HandleInput(player);
+		UpdateVelocity(player);
+		HandleInput(player);
 		UpdateSprite(player);
 
-    DrawSprite(player);
+		DrawSprite(player);
 
-    RefreshScreen();
+		RefreshScreen();
 
-  until WindowCloseRequested();
+	until WindowCloseRequested();
 end;
 
 begin
-  Main();
+	Main();
 end.
