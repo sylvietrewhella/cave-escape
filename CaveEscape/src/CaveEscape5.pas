@@ -15,18 +15,18 @@ type
 
     Poles = array [0..3] of PoleData;
 
-function GetRandomPoles(): PoleData;
-begin
+  function GetRandomPoles(): PoleData;
+  begin
     result.UpPole := CreateSprite(BitmapNamed('UpPole'));
     result.DownPole := CreateSprite(BitmapNamed('DownPole'));
-    SpriteSetX(result.UpPole, ScreenWidth());
+    SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
     SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
     SpriteSetX(result.DownPole, SpriteX(result.UpPole));
     SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
-    SpriteSetDx(result.UpPole, 0);
-    SpriteSetDx(result.DownPole, 0);
+    SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+    SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
     result.ScoreLimiter := true;
-end;
+  end;
 
 procedure ResetPoleData(var toReset: PoleData);
 begin
