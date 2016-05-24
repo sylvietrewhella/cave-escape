@@ -149,8 +149,8 @@ end;
 
 procedure ResetPoleData(var toReset: PoleData);
 begin
-  // FreeSprite(toReset.UpPole);
-  // FreeSprite(toReset.DownPole);
+  FreeSprite(toReset.UpPole);
+  FreeSprite(toReset.DownPole);
   toReset := GetRandomPoles();
 end;
 
