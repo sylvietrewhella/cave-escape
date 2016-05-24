@@ -26,33 +26,15 @@ type
   end;
 
 function GetRandomPoles(): PoleData;
-var
-  poleId: Integer;
 begin
-  poleId := Rnd(3);
-  if (poleId = 0) then
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('BigDownPole'));
-  end
-  else if (poleId = 1) then
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
-  end
-  else
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
-  end;
-    SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+    result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+    SpriteSetX(result.UpPole, ScreenWidth());
     SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
     SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-    SpriteSetY(result.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
-    SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-    SpriteSetDy(result.UpPole, 0);
-    SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-    SpriteSetDy(result.DownPole, 0);
+    SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
+    SpriteSetDx(result.UpPole, 0);
+    SpriteSetDx(result.DownPole, 0);
     result.ScoreLimiter := true;
 end;
 

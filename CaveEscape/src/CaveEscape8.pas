@@ -28,25 +28,9 @@ type
   end;
 
 function GetRandomPoles(): PoleData;
-var
-  poleId: Integer;
 begin
-  poleId := Rnd(3);
-  if (poleId = 0) then
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('BigDownPole'));
-  end
-  else if (poleId = 1) then
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('SmallUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
-  end
-  else
-  begin
-    result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
-    result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
-  end;
+    result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('DownPole'));
     SpriteSetX(result.UpPole, ScreenWidth());
     SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
     SpriteSetX(result.DownPole, SpriteX(result.UpPole));
@@ -165,11 +149,9 @@ end;
 
 procedure ResetPoleData(var toReset: PoleData);
 begin
-  SpriteSetX(toReset.UpPole, ScreenWidth());
-  SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
-  SpriteSetDx(toReset.UpPole, 0);
-  SpriteSetDx(toReset.DownPole, 0);
-  toReset.ScoreLimiter := true;
+  // FreeSprite(toReset.UpPole);
+  // FreeSprite(toReset.DownPole);
+  toReset := GetRandomPoles();
 end;
 
 procedure UpdatePoles(var myGame: GameData);
