@@ -15,7 +15,7 @@ type
     DownPole: Sprite;
   end;
 
-  Poles = array [0..19] of PoleData;
+  Poles = array [0..3] of PoleData;
 
   GameData = record
     Player: Sprite;
@@ -27,7 +27,7 @@ type
     Poles: Poles;
   end;
 
-function GetRandomPoles(previousPolePosition: Double): PoleData;
+function GetRandomPoles(): PoleData;
 var
   poleId: Integer;
 begin
@@ -47,19 +47,12 @@ begin
     result.UpPole := CreateSprite(BitmapNamed('BigUpPole'));
     result.DownPole := CreateSprite(BitmapNamed('SmallDownPole'));
   end;
-		if previousPolePosition > 0 then
-		begin
-			SpriteSetX(result.UpPole, previousPolePosition + SpriteWidth(result.UpPole) + Rnd(100));
-		end
-		else
-		begin
-			SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
-		end;
+    SpriteSetX(result.UpPole, ScreenWidth());
     SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
     SpriteSetX(result.DownPole, SpriteX(result.UpPole));
     SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
-    SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-    SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+    SpriteSetDx(result.UpPole, 0);
+    SpriteSetDx(result.DownPole, 0);
     result.ScoreLimiter := true;
 end;
 
@@ -94,16 +87,9 @@ var
 begin
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
-  for i := Low(gData.Poles) to High(gData.Poles) do
+  for i:= Low(gData.Poles) to High(gData.Poles) do
   begin
-		if i > 0 then
-		begin
-			gData.Poles[i] := GetRandomPoles(SpriteX(gData.Poles[i - 1].UpPole));
-		end
-    else
-    begin
-    	gData.Poles[i] := GetRandomPoles(-1);
-    end;
+    gData.Poles[i] := GetRandomPoles();
   end;
   gData.player := GetNewPlayer();
   gData.Score := 0;
@@ -177,75 +163,21 @@ begin
   end;
 end;
 
-function SpriteOffLeftOfScreen(const sprite: Sprite): Boolean;
+procedure ResetPoleData(var toReset: PoleData);
 begin
-	result := false;
-	if SpriteX(sprite) < (0 - SpriteWidth(sprite)) then
-	begin
-		result := true;
-	end;
-end;
-
-procedure ResetPoleData(var toReset: PoleData; xPosition: Double);
-begin
-  SpriteSetX(toReset.UpPole, xPosition);
+  SpriteSetX(toReset.UpPole, ScreenWidth());
   SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
-  SpriteSetY(toReset.UpPole, ScreenHeight() - SpriteHeight(toReset.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
-  SpriteSetY(toReset.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
+  SpriteSetDx(toReset.UpPole, 0);
+  SpriteSetDx(toReset.DownPole, 0);
   toReset.ScoreLimiter := true;
-end;
-
-function GetNewResetPosition(const poles: Poles): Double;
-var
-	i: Integer;
-begin
-	result := SpriteX(poles[0].UpPole);
-	for i := 1 to High(poles) do
-	begin
-		if (SpriteX(poles[i].UpPole) > result) then
-		begin
-			result := SpriteX(poles[i].UpPole);
-		end;
-	end;
-	if result < ScreenWidth() then
-	begin
-		result := ScreenWidth() + RND(1200);
-	end
-	else
-	begin
-		result := result + SpriteWidth(poles[0].UpPole) + RND(SpriteWidth(poles[0].UpPole));
-	end;
-end;
-
-procedure ResetPoles(var toReset: Poles);
-var
-	i: Integer;
-begin
-	SpriteSetX(toReset[0].UpPole, ScreenWidth() + RND(1200));
-	SpriteSetX(toReset[0].DownPole, SpriteX(toReset[0].UpPole));
-	for i := 1 to High(toReset) do
-	begin
-		SpriteSetX(toReset[i].UpPole, 0);
-		SpriteSetX(toReset[i].DownPole, 0);
-	end;
-	for i := 1 to High(toReset) do
-	begin
-		ResetPoleData(toReset[i], GetNewResetPosition(toReset));
-	end;
 end;
 
 procedure UpdatePoles(var myGame: GameData);
 var
   i: Integer;
-	newResetPosition: Double;
 begin
-	newResetPosition := 0;
   for i:= Low(myGame.Poles) to High(myGame.Poles) do
   begin
-		if (SpriteX(myGame.Poles[i].UpPole) > newResetPosition) and (SpriteX(myGame.Poles[i].UpPole) > ScreenWidth()) then
-		begin
-			newResetPosition := SpriteX(myGame.Poles[i].UpPole);
-		end;
     UpdateSprite(myGame.Poles[i].UpPole);
     UpdateSprite(myGame.Poles[i].DownPole);
 
@@ -258,9 +190,9 @@ begin
       end;
     end;
 
-    if (SpriteOffLeftOfScreen(myGame.Poles[i].UpPole)) and (SpriteOffLeftOfScreen(myGame.Poles[i].DownPole))then
+    if (SpriteOffscreen(myGame.Poles[i].UpPole)) and (SpriteOffscreen(myGame.Poles[i].DownPole) and (myGame.Poles[i].ScoreLimiter = false))then
     begin
-			ResetPoleData(myGame.Poles[i], GetNewResetPosition(myGame.Poles));
+      ResetPoleData(myGame.Poles[i]);
     end;
   end;
 end;
@@ -270,9 +202,38 @@ var
   i: Integer;
 begin
   gData.Player := GetNewPlayer();
-  ResetPoles(gData.Poles);
+  for i:= Low(gData.Poles) to High(gData.Poles) do
+  begin
+    ResetPoleData(gData.Poles[i]);
+  end;
   gData.IsDead := false;
   gData.Score := 0;
+end;
+
+procedure MarkPoleForMovement(var poles: Poles);
+var
+  i: Integer;
+  releaseDistance: Double;
+begin
+  releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
+  for i := Low(poles) to High(poles) do
+  begin
+    if SpriteX(poles[i].UpPole) = ScreenWidth() then
+    begin
+      if (i > 0) and ((SpriteX(poles[i].UpPole) - SpriteX(poles[i - 1].UpPole)) > releaseDistance) then
+      begin
+        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        break;
+      end
+      else if (i = 0) then
+      begin
+        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        break;
+      end;
+    end;
+  end;
 end;
 
 procedure UpdateGame(var gData: GameData);
@@ -283,6 +244,7 @@ begin
     HandleInput(gData.player);
     UpdateBackground(gdata);
     UpdatePlayer(gData.player);
+    MarkPoleForMovement(gdata.poles);
     UpdatePoles(gData);
   end
   else //The player has died :(
