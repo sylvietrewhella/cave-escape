@@ -290,7 +290,7 @@ begin
   OpenAudio();
   SetUpGame(gData);
 
-  // FadeMusicIn('GameMusic', -1, 15000);
+  FadeMusicIn('GameMusic', -1, 15000);
 
   repeat // The game loop...
     ProcessEvents();
