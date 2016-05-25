@@ -25,7 +25,6 @@ type
     SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
     SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
     SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-    result.ScoreLimiter := true;
   end;
 
 procedure ResetPoleData(var toReset: PoleData);

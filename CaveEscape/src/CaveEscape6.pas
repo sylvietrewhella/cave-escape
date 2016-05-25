@@ -10,7 +10,6 @@ const
 
 type
   PoleData = record
-    ScoreLimiter: Boolean;
     UpPole: Sprite;
     DownPole: Sprite;
   end;
@@ -35,7 +34,6 @@ begin
   SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
   SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
   SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-  result.ScoreLimiter := true;
 end;
 
 function GetNewPlayer(): Sprite;
