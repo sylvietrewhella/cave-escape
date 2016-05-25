@@ -267,7 +267,19 @@ begin
   DrawSprite(gData.Foreroof);
   DrawSprite(gData.ForeGround);
   DrawSprite(gData.player);
-  DrawText(IntToStr(gData.score), ColorWhite, 'GameFont', 10, 0);
+  if (gData.State = Play) then
+  begin
+    DrawText(IntToStr(gData.score), ColorWhite, 'GameFont', 10, 0);
+  end
+  else if (gData.State = Menu) then
+  begin
+    DrawBitmap(BitmapNamed('Logo'), 0, 40);
+    DrawText('PRESS SPACE!',
+    ColorWhite,
+    'GameFont',
+    ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
+    SpriteY(gData.Player) + TextHeight(FontNamed('GameFont'), ' ') * 2);
+  end;
 end;
 
 procedure Main();
@@ -278,7 +290,7 @@ begin
   OpenAudio();
   SetUpGame(gData);
 
-  FadeMusicIn('GameMusic', -1, 15000);
+  // FadeMusicIn('GameMusic', -1, 15000);
 
   repeat // The game loop...
     ProcessEvents();
