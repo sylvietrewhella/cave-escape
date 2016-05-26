@@ -69,10 +69,24 @@ begin
   SpriteSetDx(Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
+procedure CheckSaveFile(var highScore: Integer);
+var
+  saveFile: TextFile;
+begin
+  Assign(saveFile, 'scoreFile.txt');
+  if not (FileExists('scoreFile.txt')) then
+  begin
+    ReWrite(saveFile);
+    WriteLn(saveFile, 0);
+  end;
+  Reset(saveFile);
+  ReadLn(saveFile, highScore);
+  Close(saveFile);
+end;
+
 procedure SetUpGame(var gData: GameData);
 var
   i: Integer;
-  readFrom: TextFile;
 begin
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
@@ -84,10 +98,7 @@ begin
   gData.Score := 0;
   gData.IsDead := false;
   gData.State := Menu;
-  Assign(readFrom, 'scorefile.txt');
-  Reset(readFrom);
-  ReadLn(readFrom, gData.HighestScore);
-  Close(readFrom);
+  CheckSaveFile(gData.HighestScore);
   SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
   SpriteStartAnimation(gData.Foreground, 'Fire');
