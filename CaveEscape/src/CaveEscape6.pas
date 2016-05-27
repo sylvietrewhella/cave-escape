@@ -127,7 +127,6 @@ begin
   SpriteSetX(toReset.DownPole, SpriteX(toReset.UpPole));
   SpriteSetY(toReset.UpPole, ScreenHeight() - SpriteHeight(toReset.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
   SpriteSetY(toReset.DownPole, 0 + RND(BitmapHeight(BitmapNamed('Foreroof'))));
-  toReset.ScoreLimiter := true;
 end;
 
 procedure UpdatePoles(var myGame: GameData);

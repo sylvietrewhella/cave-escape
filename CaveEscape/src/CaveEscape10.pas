@@ -17,7 +17,7 @@ type
 
   GameState = (Menu, Play);
 
-  Poles = array [0..3] of PoleData;
+  Poles = array [0..19] of PoleData;
 
   GameData = record
     Player: Sprite;
@@ -184,10 +184,31 @@ begin
   toReset := GetRandomPoles();
 end;
 
+procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
+var
+  i: Integer;
+begin
+  releaseDistance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
+  if releaseDistance <= 0 then
+  begin
+    for i := Low(poles) to High(poles) do
+    begin
+      if SpriteDx(poles[i].UpPole) = 0 then
+      begin
+        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
+        break;
+      end;
+    end;
+  end;
+end;
+
 procedure UpdatePoles(var myGame: GameData);
 var
   i: Integer;
 begin
+  MarkPoleForMovement(myGame.poles, myGame.PoleReleaseDistance);
   for i:= Low(myGame.Poles) to High(myGame.Poles) do
   begin
     UpdateSprite(myGame.Poles[i].UpPole);
@@ -222,26 +243,6 @@ begin
   gData.Score := 0;
 end;
 
-procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
-var
-  i: Integer;
-begin
-  releaseDistance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
-  if releaseDistance <= 0 then
-  begin
-    for i := Low(poles) to High(poles) do
-    begin
-      if SpriteDx(poles[i].UpPole) = 0 then
-      begin
-        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
-        break;
-      end;
-    end;
-  end;
-end;
-
 procedure SaveHighScore(var gData: GameData);
 var
   saveTo: TextFile;
@@ -263,7 +264,6 @@ begin
     UpdatePlayer(gData.player, gdata.State);
     if (gdata.State = Play) then
     begin
-      MarkPoleForMovement(gdata.poles, gdata.PoleReleaseDistance);
       UpdatePoles(gData);
     end;
   end
