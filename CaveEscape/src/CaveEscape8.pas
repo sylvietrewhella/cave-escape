@@ -25,6 +25,7 @@ type
     IsDead: Boolean;
     Score: Integer;
     Poles: Poles;
+    PoleReleaseDistance: Integer;
   end;
 
 function GetRandomPoles(): PoleData;
@@ -78,6 +79,7 @@ begin
   gData.player := GetNewPlayer();
   gData.Score := 0;
   gData.IsDead := false;
+  gData.PoleReleaseDistance := 0;
   SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
   SpriteStartAnimation(gData.Foreground, 'Fire');
@@ -154,10 +156,31 @@ begin
   toReset := GetRandomPoles();
 end;
 
+procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
+var
+  i: Integer;
+begin
+  releaseDistance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
+  if releaseDistance <= 0 then
+  begin
+    for i := Low(poles) to High(poles) do
+    begin
+      if SpriteDx(poles[i].UpPole) = 0 then
+      begin
+        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
+        break;
+      end;
+    end;
+  end;
+end;
+
 procedure UpdatePoles(var myGame: GameData);
 var
   i: Integer;
 begin
+  MarkPoleForMovement(myGame.poles, myGame.PoleReleaseDistance);
   for i:= Low(myGame.Poles) to High(myGame.Poles) do
   begin
     UpdateSprite(myGame.Poles[i].UpPole);
@@ -192,32 +215,6 @@ begin
   gData.Score := 0;
 end;
 
-procedure MarkPoleForMovement(var poles: Poles);
-var
-  i: Integer;
-  releaseDistance: Double;
-begin
-  releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
-  for i := Low(poles) to High(poles) do
-  begin
-    if SpriteX(poles[i].UpPole) = ScreenWidth() then
-    begin
-      if (i > 0) and ((SpriteX(poles[i].UpPole) - SpriteX(poles[i - 1].UpPole)) > releaseDistance) then
-      begin
-        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        break;
-      end
-      else if (i = 0) then
-      begin
-        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        break;
-      end;
-    end;
-  end;
-end;
-
 procedure UpdateGame(var gData: GameData);
 begin
   if not (gData.IsDead) then
@@ -226,7 +223,6 @@ begin
     HandleInput(gData.player);
     UpdateBackground(gdata);
     UpdatePlayer(gData.player);
-    MarkPoleForMovement(gdata.poles);
     UpdatePoles(gData);
   end
   else //The player has died :(
