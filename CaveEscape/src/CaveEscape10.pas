@@ -29,6 +29,7 @@ type
     HighestScore: Integer;
     Poles: Poles;
     State: GameState;
+    PoleReleaseDistance: Integer;
   end;
 
 function GetRandomPoles(): PoleData;
@@ -98,6 +99,7 @@ begin
   gData.Score := 0;
   gData.IsDead := false;
   gData.State := Menu;
+  gData.PoleReleaseDistance := 0;
   CheckSaveFile(gData.HighestScore);
   SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
 
@@ -220,26 +222,20 @@ begin
   gData.Score := 0;
 end;
 
-procedure MarkPoleForMovement(var poles: Poles);
+procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
 var
   i: Integer;
-  releaseDistance: Double;
 begin
-  releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
-  for i := Low(poles) to High(poles) do
+  releaseDistance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
+  if releaseDistance <= 0 then
   begin
-    if SpriteX(poles[i].UpPole) = ScreenWidth() then
+    for i := Low(poles) to High(poles) do
     begin
-      if (i > 0) and ((SpriteX(poles[i].UpPole) - SpriteX(poles[i - 1].UpPole)) > releaseDistance) then
+      if SpriteDx(poles[i].UpPole) = 0 then
       begin
         SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
         SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        break;
-      end
-      else if (i = 0) then
-      begin
-        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
         break;
       end;
     end;
@@ -267,7 +263,7 @@ begin
     UpdatePlayer(gData.player, gdata.State);
     if (gdata.State = Play) then
     begin
-      MarkPoleForMovement(gdata.poles);
+      MarkPoleForMovement(gdata.poles, gdata.PoleReleaseDistance);
       UpdatePoles(gData);
     end;
   end
