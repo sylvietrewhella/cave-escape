@@ -10,7 +10,7 @@ begin
     ProcessEvents();
 
     ClearScreen(ColorWhite);
-    RefreshScreen()
+    RefreshScreen();
 
   until WindowCloseRequested();
 end;
