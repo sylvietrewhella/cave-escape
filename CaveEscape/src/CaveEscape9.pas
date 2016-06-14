@@ -52,107 +52,107 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure SetUpBackground(var Background, Foreground, Foreroof: Sprite);
+procedure SetUpBackground(var background, foreground, foreroof: Sprite);
 begin
-  Background := CreateSprite(BitmapNamed('Background'));
-  SpriteSetX(Background, 0);
-  SpriteSetY(Background, 0);
-  SpriteSetDx(Background, BACKGROUND_SCROLL_SPEED);
+  background := CreateSprite(BitmapNamed('Background'));
+  SpriteSetX(background, 0);
+  SpriteSetY(background, 0);
+  SpriteSetDx(background, BACKGROUND_SCROLL_SPEED);
 
-  Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
-  SpriteSetX(Foreground, 0);
-  SpriteSetY(Foreground, ScreenHeight() - SpriteHeight(Foreground));
-  SpriteSetDx(Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-  Foreroof := CreateSprite(BitmapNamed('Foreroof'));
-  SpriteSetX(Foreroof, 0);
-  SpriteSetY(Foreroof, 0);
-  SpriteSetDx(Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+  SpriteSetX(foreground, 0);
+  SpriteSetY(foreground, ScreenHeight() - SpriteHeight(foreground));
+  SpriteSetDx(foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  foreroof := CreateSprite(BitmapNamed('Foreroof'));
+  SpriteSetX(foreroof, 0);
+  SpriteSetY(foreroof, 0);
+  SpriteSetDx(foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure SetUpGame(var gData: GameData);
+procedure SetUpGame(var game: GameData);
 var
   i: Integer;
 begin
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
-  for i:= Low(gData.Poles) to High(gData.Poles) do
+  for i:= Low(game.Poles) to High(game.Poles) do
   begin
-    gData.Poles[i] := GetRandomPoles();
+    game.Poles[i] := GetRandomPoles();
   end;
-  gData.player := GetNewPlayer();
-  gData.Score := 0;
-  gData.IsDead := false;
-  gData.State := Menu;
-  gData.PoleReleaseDistance := 0;
-  SetUpBackground(gData.Background, gData.Foreground, gData.Foreroof);
+  game.Player := GetNewPlayer();
+  game.Score := 0;
+  game.IsDead := false;
+  game.State := Menu;
+  game.PoleReleaseDistance := 0;
+  SetUpBackground(game.Background, game.Foreground, game.Foreroof);
 
-  SpriteStartAnimation(gData.Foreground, 'Fire');
+  SpriteStartAnimation(game.Foreground, 'Fire');
 end;
 
-procedure UpdateVelocity(var toUpdate: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
-  SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
-  if SpriteDy(toUpdate) > MAX_SPEED then
+  if SpriteDy(player) > MAX_SPEED then
   begin
-    SpriteSetDy(toUpdate, MAX_SPEED);
+    SpriteSetDy(player, MAX_SPEED);
   end
-  else if SpriteDy(toUpdate) < -(MAX_SPEED) then
+  else if SpriteDy(player) < -(MAX_SPEED) then
   begin
-    SpriteSetDy(toUpdate, -(MAX_SPEED));
+    SpriteSetDy(player, -(MAX_SPEED));
   end;
 end;
 
-procedure UpdateBackground(var gData: GameData);
+procedure UpdateBackground(var game: GameData);
 begin
-  UpdateSprite(gData.foreGround);
-  UpdateSprite(gData.Foreroof);
-  updateSprite(gData.Background);
-  if (SpriteX(gdata.Foreground) <= -(SpriteWidth(gData.ForeGround) / 2)) then
+  UpdateSprite(game.ForeGround);
+  UpdateSprite(game.Foreroof);
+  updateSprite(game.Background);
+  if (SpriteX(game.Foreground) <= -(SpriteWidth(game.ForeGround) / 2)) then
   begin
-    SpriteSetX(gData.Foreground, 0);
-    SpriteSetX(gData.Foreroof, 0);
+    SpriteSetX(game.Foreground, 0);
+    SpriteSetX(game.Foreroof, 0);
   end;
-  if (SpriteX(gdata.Background) <= -(SpriteWidth(gData.Background) / 2)) then
+  if (SpriteX(game.Background) <= -(SpriteWidth(game.Background) / 2)) then
   begin
-    SpriteSetX(gData.Background, 0);
+    SpriteSetX(game.Background, 0);
   end;
 end;
 
-procedure CheckForCollisions(var toUpdate: GameData);
+procedure CheckForCollisions(var game: GameData);
 var
   i: Integer;
 begin
-  if (SpriteCollision(toUpdate.player, toUpdate.Foreground)) or (SpriteCollision(toUpdate.player, toUpdate.Foreroof)) then
+  if (SpriteCollision(game.Player, game.Foreground)) or (SpriteCollision(game.Player, game.Foreroof)) then
   begin
-    toUpdate.IsDead := true;
+    game.IsDead := true;
     exit;
   end;
 
-  for i := Low(toUpdate.Poles) to High(toUpdate.Poles) do
+  for i := Low(game.Poles) to High(game.Poles) do
   begin
-    if SpriteCollision(toUpdate.player, toUpdate.Poles[i].UpPole) or SpriteCollision(toUpdate.player, toUpdate.Poles[i].DownPole)then
+    if SpriteCollision(game.Player, game.Poles[i].UpPole) or SpriteCollision(game.Player, game.Poles[i].DownPole)then
     begin
-      toUpdate.IsDead := true;
+      game.IsDead := true;
       exit;
     end;
   end;
 end;
 
-procedure UpdatePlayer(var toUpdate: Sprite; state: GameState);
+procedure UpdatePlayer(var player: Sprite; state: GameState);
 begin
   if (state = Play) then
   begin
-    UpdateVelocity(toUpdate);
+    UpdateVelocity(player);
   end;
-  UpdateSprite(toUpdate);
+  UpdateSprite(player);
 end;
 
-procedure HandleInput(var toUpdate: Sprite; var state: GameState);
+procedure HandleInput(var player: Sprite; var state: GameState);
 begin
   if KeyTyped(SpaceKey) and (state = Play) then
   begin
-    SpriteSetDy(toUpdate, SpriteDy(toUpdate) + -(JUMP_RECOVERY_BOOST));
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
   end
   else if KeyTyped(SpaceKey) then
   begin
@@ -160,11 +160,11 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var toReset: PoleData);
+procedure ResetPoleData(var pole: PoleData);
 begin
-  FreeSprite(toReset.UpPole);
-  FreeSprite(toReset.DownPole);
-  toReset := GetRandomPoles();
+  FreeSprite(pole.UpPole);
+  FreeSprite(pole.DownPole);
+  pole := GetRandomPoles();
 end;
 
 procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
@@ -180,119 +180,119 @@ begin
       begin
         SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
         SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        releaseDistance := RND(SpriteWidth(poles[0].UpPole)) + SpriteWidth(poles[0].UpPole);
+        releaseDistance := BitmapWidth(BitmapNamed('UpPole')) + RND(BitmapWidth(BitmapNamed('UpPole')));
         break;
       end;
     end;
   end;
 end;
 
-procedure UpdatePoles(var myGame: GameData);
+procedure UpdatePoles(var game: GameData);
 var
   i: Integer;
 begin
-  MarkPoleForMovement(myGame.poles, myGame.PoleReleaseDistance);
-  for i:= Low(myGame.Poles) to High(myGame.Poles) do
+  MarkPoleForMovement(game.poles, game.PoleReleaseDistance);
+  for i:= Low(game.Poles) to High(game.Poles) do
   begin
-    UpdateSprite(myGame.Poles[i].UpPole);
-    UpdateSprite(myGame.Poles[i].DownPole);
+    UpdateSprite(game.Poles[i].UpPole);
+    UpdateSprite(game.Poles[i].DownPole);
 
-    if SpriteX (myGame.Poles[i].UpPole) < (SpriteX(myGame.player)) then
+    if SpriteX (game.Poles[i].UpPole) < (SpriteX(game.Player)) then
     begin
-      if (myGame.Poles[i].ScoreLimiter = true) then
+      if (game.Poles[i].ScoreLimiter = true) then
       begin
-        myGame.Poles[i].ScoreLimiter := false;
-        myGame.Score += 1;
+        game.Poles[i].ScoreLimiter := false;
+        game.Score += 1;
       end;
     end;
 
-    if (SpriteOffscreen(myGame.Poles[i].UpPole)) and (SpriteOffscreen(myGame.Poles[i].DownPole) and (myGame.Poles[i].ScoreLimiter = false))then
+    if (SpriteOffscreen(game.Poles[i].UpPole)) and (SpriteOffscreen(game.Poles[i].DownPole) and (game.Poles[i].ScoreLimiter = false))then
     begin
-      ResetPoleData(myGame.Poles[i]);
+      ResetPoleData(game.Poles[i]);
     end;
   end;
 end;
 
-procedure ResetGame(var gData: GameData);
+procedure ResetGame(var game: GameData);
 var
   i: Integer;
 begin
-  gData.Player := GetNewPlayer();
-  for i:= Low(gData.Poles) to High(gData.Poles) do
+  game.Player := GetNewPlayer();
+  for i:= Low(game.Poles) to High(game.Poles) do
   begin
-    ResetPoleData(gData.Poles[i]);
+    ResetPoleData(game.Poles[i]);
   end;
-  gData.IsDead := false;
-  gData.Score := 0;
+  game.IsDead := false;
+  game.Score := 0;
 end;
 
-procedure UpdateGame(var gData: GameData);
+procedure UpdateGame(var game: GameData);
 begin
-  if not (gData.IsDead) then
+  if not (game.IsDead) then
   begin
-    CheckForCollisions(gData);
-    HandleInput(gData.player, gdata.State);
-    UpdateBackground(gdata);
-    UpdatePlayer(gData.player, gdata.State);
-    if (gdata.State = Play) then
+    CheckForCollisions(game);
+    HandleInput(game.Player, game.State);
+    UpdateBackground(game);
+    UpdatePlayer(game.Player, game.State);
+    if (game.State = Play) then
     begin
-      UpdatePoles(gData);
+      UpdatePoles(game);
     end;
   end
   else //The player has died :(
   begin
-    ResetGame(gData);
+    ResetGame(game);
   end;
 end;
 
-procedure DrawPoles(const myPoles: Poles);
+procedure DrawPoles(const poles: Poles);
 var
   i: Integer;
 begin
-  for i:= Low(myPoles) to High(myPoles) do
+  for i:= Low(poles) to High(poles) do
   begin
-    DrawSprite(myPoles[i].UpPole);
-    DrawSprite(myPoles[i].DownPole);
+    DrawSprite(poles[i].UpPole);
+    DrawSprite(poles[i].DownPole);
   end;
 end;
 
-procedure DrawGame(const gData: GameData);
+procedure DrawGame(const game: GameData);
 begin
-  DrawSprite(gData.Background);
-  DrawPoles(gData.Poles);
-  DrawSprite(gData.Foreroof);
-  DrawSprite(gData.ForeGround);
-  DrawSprite(gData.player);
-  if (gData.State = Play) then
+  DrawSprite(game.Background);
+  DrawPoles(game.Poles);
+  DrawSprite(game.Foreroof);
+  DrawSprite(game.ForeGround);
+  DrawSprite(game.Player);
+  if (game.State = Play) then
   begin
-    DrawText(IntToStr(gData.score), ColorWhite, 'GameFont', 10, 0);
+    DrawText(IntToStr(game.score), ColorWhite, 'GameFont', 10, 0);
   end
-  else if (gData.State = Menu) then
+  else if (game.State = Menu) then
   begin
     DrawBitmap(BitmapNamed('Logo'), 0, 40);
     DrawText('PRESS SPACE!',
     ColorWhite,
     'GameFont',
     ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
-    SpriteY(gData.Player) + TextHeight(FontNamed('GameFont'), ' ') * 2);
+    SpriteY(game.Player) + TextHeight(FontNamed('GameFont'), ' ') * 2);
   end;
 end;
 
 procedure Main();
 var
-  gData: GameData;
+  game: GameData;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
   OpenAudio();
-  SetUpGame(gData);
+  SetUpGame(game);
 
   FadeMusicIn('GameMusic', -1, 15000);
 
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
-    UpdateGame(gData);
-    DrawGame(gData);
+    UpdateGame(game);
+    DrawGame(game);
     RefreshScreen();
   until WindowCloseRequested();
 end;

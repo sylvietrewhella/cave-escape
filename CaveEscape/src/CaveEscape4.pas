@@ -14,24 +14,25 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure HandleInput(var toUpdate: Sprite);
+procedure HandleInput(var player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
-    SpriteSetDy(toUpdate, SpriteDy(toUpdate)-JUMP_RECOVERY_BOOST);
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
   end;
 end;
 
-procedure UpdateVelocity(var toUpdate: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
-  SpriteSetDy(toUpdate, SpriteDy(toUpdate) + GRAVITY);
-  if SpriteDy(toUpdate) > MAX_SPEED then
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
   begin
-    SpriteSetDy(toUpdate, MAX_SPEED);
+    SpriteSetDy(player, MAX_SPEED);
   end
-  else if (SpriteDy(toUpdate) < -(MAX_SPEED)) then
+  else if SpriteDy(player) < -(MAX_SPEED) then
   begin
-     SpriteSetDy(toUpdate,  -(MAX_SPEED));
+    SpriteSetDy(player, -(MAX_SPEED));
   end;
 end;
 
