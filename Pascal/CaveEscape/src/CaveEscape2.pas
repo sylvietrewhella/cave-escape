@@ -1,11 +1,6 @@
 program GameMain;
 uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
-procedure LoadResources();
-begin
-  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
-end;
-
 function GetNewPlayer(): Sprite;
 begin
   result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
@@ -19,7 +14,7 @@ var
   player: Sprite;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
-  LoadResources();
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   player := GetNewPlayer();
 

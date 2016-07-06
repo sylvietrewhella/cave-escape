@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include "SwinGame.h"
 
-void load_resources()
-{
-  load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
-}
-
 sprite get_new_player()
 {
   sprite result;
@@ -22,14 +17,14 @@ int main()
     sprite player;
 
     open_graphics_window("Cave Escape", 432, 768);
-    load_resources();
+    load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
 
-    do
+    do // The game loop...
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
 
       update_sprite(player);
       draw_sprite(player);
