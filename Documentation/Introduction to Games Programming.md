@@ -2,7 +2,13 @@
 
 In the first iteration of **Cave Escape**, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a **Graphics Window** and a basic **Game Loop**, where all of the instructions that you implement will be called from.
 
-### Code
+#### What to Expect
+
+Once you're finished working through and implementing **Iteration One**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_1.png)
+Although it may not look very exciting, it's and excellent start and it's sets the foundations for moving forward to adding more functionality to your game.
+
+#### Code
 
 The code for **Iteration One** is as follows:
 
@@ -69,5 +75,4 @@ So, that being said, let's take a moment to analyse the *Main* procedure and the
 #### Have a Crack
 Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
 
-Once you're done and it's all working, you should have something that looks just like this:
-![Iteration One](Resources/Images/iteration_1.png)
+# 2. Iteration Two
