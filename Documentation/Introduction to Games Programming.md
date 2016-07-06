@@ -62,6 +62,6 @@ So, that being said, let's take a moment to analyse the *Main* procedure and the
   1. Firstly, a call to ```OpenGraphicsWindow()``` is made, where we can see the title of the window being opened is *Cave Escape* and the *width* and *height* of the window is 432 by 768 pixels.
   2. The **Game Loop** is opened. The game loops will loop over and over, until the user closes the window.
      * The following instructions are executed within the **Game Loop**:
-        1. ```ProcessEvents()``` is called. ```ProcessEvents()``` is used to listen for any user input made while the program is running.
-        2. We then clear the screen with ```ClearScreen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
-        3. We then refresh the screen with ```RefreshScreen()``` so that we can see what we've drawn.
+      1. ```ProcessEvents()``` is called. ```ProcessEvents()``` is used to listen for any user input made while the program is running.
+      2. We then clear the screen with ```ClearScreen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
+      3. We then refresh the screen with ```RefreshScreen()``` so that we can see what we've drawn.
