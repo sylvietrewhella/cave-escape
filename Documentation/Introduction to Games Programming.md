@@ -67,7 +67,7 @@ So, that being said, let's take a moment to analyse the *Main* procedure and the
       3. We then refresh the screen with ```RefreshScreen()``` so that we can see what we've drawn.
 
 #### Have a Crack
-Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. Try and resist the urge to **Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
 
 Once you're done and it's all working, you should have something that looks just like this:
 ![Iteration One](Resources/Images/iteration_1.png)
