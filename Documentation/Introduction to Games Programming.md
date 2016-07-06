@@ -8,30 +8,33 @@ In the first iteration of **Cave Escape**, you will implement the boiler plate c
 The code for **Iteration One** is as follows:
 
 ##### Pascal
-  ```pascal
-  program GameMain;
-  uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
-  procedure Main();
-  begin
-    OpenGraphicsWindow('Cave Escape', 432, 768);
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
-    repeat // The game loop...
-      ProcessEvents();
+procedure Main();
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
 
-      ClearScreen(ColorWhite);
-      RefreshScreen();
+  repeat // The game loop...
+    ProcessEvents();
 
-    until WindowCloseRequested();
-  end;
+    ClearScreen(ColorWhite);
+    RefreshScreen();
 
-  begin
-    Main();
-  end.```
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+
+```
 
 ##### C
 
-  ```c
+```c
   #include <stdio.h>
   #include "SwinGame.h"
 
@@ -49,7 +52,8 @@ The code for **Iteration One** is as follows:
       } while(!window_close_requested());
 
       return 0;
-  }```
+}
+```
 
 #### How it's Working
 The **Main** procedure, as demonstrated in the code above, is responsible for executing all of the instructions required for our game to run. The instructions are executed in **Sequence**, meaning that the code within the **Main** procedure will be executed in the exact order in which it is specified.
