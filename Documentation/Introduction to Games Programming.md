@@ -76,3 +76,6 @@ So, that being said, let's take a moment to analyse the *Main* procedure and the
 Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
 
 # 2. Iteration Two
+
+In the second iteration of **Cave Escape**, you will implement the functionality to have your game produce a graphical representation of the **Player**. The **Player** will be drawn to the centre of the **Graphics Window** and come complete with an animation!
+![Iteration Two](Resources/Images/iteration_2.gif)
