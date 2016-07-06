@@ -33,7 +33,7 @@ end;
 begin
   Main();
 end.
-    ```
+```
 
 ##### - How it's Working
 The ```Main()``` procedure, as demonstrated in the code above, is responsible for executing all of the instructions required for our game to run. The instructions are executed in **Sequence**, meaning that the code within the ```Main()``` **Procedure** will be executed in the exact order in which it is specified.
