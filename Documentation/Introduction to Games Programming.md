@@ -60,8 +60,14 @@ The **Main** procedure, as demonstrated in the code above, is responsible for ex
 So, that being said, let's take a moment to analyse the *Main* procedure and the **Instructions** it is executing. The **Sequence** is as follows:
 
   1. Firstly, a call to ```OpenGraphicsWindow()``` is made, where we can see the title of the window being opened is *Cave Escape* and the *width* and *height* of the window is 432 by 768 pixels.
-  2. The **Game Loop** is opened. The game loops will loop over and over, until the user closes the window.
+  2. The **Game Loop** is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instruction will be continually executed for as long as the loop is running. Note that the condition of the loop is ```WindowCloseRequested()```.
      * The following instructions are executed within the **Game Loop**:
       1. ```ProcessEvents()``` is called. ```ProcessEvents()``` is used to listen for any user input made while the program is running.
       2. We then clear the screen with ```ClearScreen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
       3. We then refresh the screen with ```RefreshScreen()``` so that we can see what we've drawn.
+
+#### Have a Crack
+Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. Try and resist the urge to **Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+Once you're done and it's all working, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_1.png)
