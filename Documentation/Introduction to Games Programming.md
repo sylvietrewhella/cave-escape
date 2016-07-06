@@ -7,8 +7,8 @@ In the first iteration of **Cave Escape**, you will implement the boiler plate c
 
 The code for **Iteration One** is as follows:
 
-* ##### Pascal
-  ``` pascal
+##### Pascal
+  ```pascal
   program GameMain;
   uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
 
@@ -29,9 +29,9 @@ The code for **Iteration One** is as follows:
     Main();
   end.```
 
-* ##### C
+##### C
 
-  ``` c
+  ```c
   #include <stdio.h>
   #include "SwinGame.h"
 
