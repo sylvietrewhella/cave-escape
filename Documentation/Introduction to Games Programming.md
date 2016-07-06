@@ -74,7 +74,7 @@ function GetNewPlayer(): Sprite;
     SpriteSetY(result, ScreenHeight() / 2);
     SpriteStartAnimation(result, 'Fly');
   end;
-  ```
+```
 
 ##### - What's the New Code Doing?
 ```GetNewPlayer()``` **Function**, as demonstrated in the code above, is used to generate the data associated with the **Player** entity that we'll be using in our game. It's important to note that **Functions** use a special **Variable** called ```result``` to store the value in that they calculate.
