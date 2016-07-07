@@ -88,7 +88,7 @@ So, let's take a look at the **Instructions** the ```GetNewPlayer()``` **Functio
   5. The animation for the **Sprite** is started and the **Function** comes to an end, returning the value stored within it's ```result``` **Variable**.
 
 ##### - Complete Code
-The complete code for **Iteration One** is as follows:
+The complete code for **Iteration Two** is as follows:
 
 ```pascal
 program GameMain;
@@ -139,3 +139,112 @@ Take a close look at the **Complete Code** above and review the ```Main()``` **P
 
 ### Have a Crack
 Now it's time for you to have a go at implementing **Iteration Two** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+---
+# 3. Iteration Three
+
+In the third iteration of **Cave Escape**, you will implement the functionality to give your **Player** the ability to fly! Well, almost. You're going to add some velocity to the **Player** so that it's not just stuck in the middle of the screen, instead, when you're finished, the **Player** will fall right off the screen!
+
+### What to Expect
+
+Once you're finished working through and implementing **Iteration Three**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_3.png)
+So with some velocity, the game is a little more dynamic than it previously was in **Iteration Two**.
+
+### Code
+
+##### - New Code
+The new code in **Iteration Three** is as follows:
+
+Addition one
+```pascal
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;```
+
+Addition two
+```pascal    
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+```
+
+##### - What's the New Code Doing?
+We've taken the time to add some **Constant** values that are going to be used in the calculation of the **Player's** velocity. Those values represent an imposed ```GRAVITY``` and a ```MAX_SPEED``` in regards to what we want to impose as the maximum velocity the **Player** can move, or fall at. The ```UpdateVelocity()``` **Procedure**, as demonstrated in the code above, uses these two new **Constant** values to determine what the **Player's** speed will be by using **Conditional** **Statements**. The **Conditional** **Statements** ensure that ```if``` the **Player** is not already falling at the ```MAX_SPEED```, increase it's velocity, ```else```, if the **Player** is already falling at the ```MAX_SPEED```, ensure that if stays falling at the ```MAX_SPEED``` rather than speeding up.
+
+##### - Complete Code
+The complete code for **Iteration Three** is as follows:
+
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+
+    UpdateVelocity(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+
+    RefreshScreen();
+
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
+#### - Take a Look at Main
+The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```UpdateVelocity()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're updating the **Player's** velcoty accrodingly.
+
+
+### Have a Crack
+Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.

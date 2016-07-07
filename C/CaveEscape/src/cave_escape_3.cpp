@@ -4,11 +4,6 @@
 #define GRAVITY 0.08
 #define MAX_SPEED 5
 
-void load_resources()
-{
-  load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
-}
-
 sprite get_new_player()
 {
   sprite result;
@@ -39,18 +34,17 @@ int main()
     sprite player;
 
     open_graphics_window("Cave Escape", 432, 768);
-    load_resources();
+    load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
 
-    do
+    do // The game loop...
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
 
       update_velocity(player);
       update_sprite(player);
-      
       draw_sprite(player);
 
       refresh_screen();

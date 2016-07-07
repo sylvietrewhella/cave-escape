@@ -13,7 +13,7 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -32,7 +32,6 @@ var
   player: Sprite;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
-  OpenAudio();
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   player := GetNewPlayer();
@@ -43,7 +42,6 @@ begin
 
     UpdateVelocity(player);
     UpdateSprite(player);
-
     DrawSprite(player);
 
     RefreshScreen();
