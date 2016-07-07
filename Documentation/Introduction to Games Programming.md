@@ -10,7 +10,7 @@ That's it! Just a blank **Graphics Window**, but we'll work on that blank canvas
 
 ### Code
 
-##### Complete Code
+##### - Complete Code
 The complete code for **Iteration One** is as follows:
 
 ```pascal
@@ -243,7 +243,116 @@ end.
 ```
 
 #### - Take a Look at Main
-The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```UpdateVelocity()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're updating the **Player's** velcoty accrodingly.
+The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```UpdateVelocity()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're updating the **Player's** velocity accordingly.
+
+
+### Have a Crack
+Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+---
+# 4. Iteration Four
+
+In the fourth iteration of **Cave Escape**, we will actually implement the ability to have you control the way the **Player** flies. Instead of the **Player** just falling into the abyss, as it was in **Iteration Three**, **Iteration Four** sees the inclusion of the logic required to keep the **Player** on the screen by using keyboard input. In particular, we're going to make it so that every time the **Space Bar** is pressed, the **Player** is going to fly a little higher, and further away from the bottom of the screen..
+
+### What to Expect
+
+Once you're finished working through and implementing **Iteration Four**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_4.png)
+Look at that! Control over the **Players** velocity!
+
+### Code
+
+##### - New Code
+The new code in **Iteration Four** is as follows:
+
+Addition one
+```pascal
+JUMP_RECOVERY_BOOST = 2;
+```
+
+Addition two
+```pascal    
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+```
+
+##### - What's the New Code Doing?
+In order to be able to control the **Player's** velocity with user input, we've had to a new **Constant** value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new **Procedure** ```HandleInput()```, which is exactly what we're going to do now. The new **Procedure** ```HandleInput()``` is implemented to listen for user input while the **Game** is running. Specifically, the input it's listening for is when the **Space Bar** is pressed. Every time the **Space Bar** is pressed, the ```HandleInput()``` **Procedure** will decrement the value of the **Constant** ```JUMP_RECOVERY_BOOST``` from the **Player's** current velocity, meaning, the each time the **Space Bar** is pressed, the **Player** will fall a little slower, but only briefly. The aim is to have the user continually press the **Space Bar** to keep the **Player** on the screen and give it the affect of flying!
+
+##### - Complete Code
+The complete code for **Iteration Three** is as follows:
+
+```pascal
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+
+    RefreshScreen();
+
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
+#### - Main has Changed, Again
+The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```HandleInput()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're listening for any user input, specifically, if the **Space Bar** has been pressed. Now we have a more functional game where the user finally has some control over the way the game behaves.
 
 
 ### Have a Crack

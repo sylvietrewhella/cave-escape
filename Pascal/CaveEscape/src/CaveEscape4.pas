@@ -1,6 +1,3 @@
-program GameMain;
-uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
-
 const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
@@ -14,7 +11,7 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure HandleInput(var player: Sprite);
+procedure HandleInput(player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -22,7 +19,7 @@ begin
   end;
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -41,7 +38,6 @@ var
   player: Sprite;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
-  OpenAudio();
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
   player := GetNewPlayer();
@@ -53,7 +49,6 @@ begin
     UpdateVelocity(player);
     HandleInput(player);
     UpdateSprite(player);
-
     DrawSprite(player);
 
     RefreshScreen();
