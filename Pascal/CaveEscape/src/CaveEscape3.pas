@@ -39,13 +39,10 @@ begin
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
-
     UpdateVelocity(player);
     UpdateSprite(player);
     DrawSprite(player);
-
     RefreshScreen();
-
   until WindowCloseRequested();
 end;
 

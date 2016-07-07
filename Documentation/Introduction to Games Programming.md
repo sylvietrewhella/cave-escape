@@ -77,15 +77,7 @@ function GetNewPlayer(): Sprite;
 ```
 
 ##### - What's the New Code Doing?
-```GetNewPlayer()``` **Function**, as demonstrated in the code above, is used to generate the data associated with the **Player** entity that we'll be using in our game. It's important to note that **Functions** use a special **Variable** called ```result``` to store the value in that they calculate.
-
-So, let's take a look at the **Instructions** the ```GetNewPlayer()``` **Function** implements in order to achieve the end goal of generating a new **Player**. The **Sequence** is as follows:
-
-  1. By Looking at the **Function** declaration, we can see that the type of value the ```GetNewPlayer()`` **Function** will return is a **Sprite**.
-  2. The **Function's** ```result``` **Variable** is **Assigned** the value of the game's **Player** graphics and is given the data required to animate the **Player** **Sprite**.
-  3. The **Sprite's** X location on the screen is set to be in the middle, horizontally.
-  4. The **Sprite's** Y location on the screen is set to be in the middle , horizontally. Now that both the X and Y position of the **Sprite** are centered, the **Sprite** is positioned in the middle of the screen.
-  5. The animation for the **Sprite** is started and the **Function** comes to an end, returning the value stored within it's ```result``` **Variable**.
+```GetNewPlayer()``` **Function**, as demonstrated in the code above, is used to generate the data associated with the **Player** entity that we'll be using in our game. It's important to note that **Functions** use a special **Variable** called ```result``` to store the value in that they calculate. So, in short, the **Function** is creating a **Sprite** for the **Player**, setting the **Sprite's** location to the centre of the screen and setting an animation for the **Sprite**. Once the **Function** finishes, it returns the **Sprite** it creates.
 
 ##### - Complete Code
 The complete code for **Iteration Two** is as follows:
@@ -129,13 +121,7 @@ end.
 ```
 
 #### - You've Changed, Main
-Take a close look at the **Complete Code** above and review the ```Main()``` **Procedure**. A few things have changed in order to cater for our new ```GetNewPlayer()``` **Function** as well as drawing our **Player** to the screen. Let's talk about those changes:
-
-  1. There is now a **Variable** called ```player```, which is used to store the value that the ```GetNewPlayer()``` **Function** returns.
-  2. There's a call to a **Procedure** called ```LoadResouceBundleNamed()```. This procedure is loading all of the assets that the game needs. Assets include graphics, such as the graphics for the **Player**, fonts and sounds.
-  3. The ```player``` **Variable** is assigned the value returned by calling the **Function** ```GetNewPlayer()```.
-  4. The **Game Loop** has changed a little, too. There's now a call to two new **Procedures**, ```UpdateSprite()``` and ```DrawSprite()```. These two **Procedures** are handling the updating of the **Player** and the drawing of the **Player**.
-
+Take a close look at the **Complete Code** above and review the ```Main()``` **Procedure**. A few things have changed in order to cater for our new ```GetNewPlayer()``` **Function** as well as drawing our **Player** to the screen. The **Sprite** that the **Function** ```GetNewPlayer()``` returns is assigned to a variable called ```player``` and then within the **Game Loop**, the **Player** **Sprite** is updated and drawn.
 
 ### Have a Crack
 Now it's time for you to have a go at implementing **Iteration Two** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
@@ -252,7 +238,7 @@ Now it's time for you to have a go at implementing **Iteration Three** on your o
 ---
 # 4. Iteration Four
 
-In the fourth iteration of **Cave Escape**, we will actually implement the ability to have you control the way the **Player** flies. Instead of the **Player** just falling into the abyss, as it was in **Iteration Three**, **Iteration Four** sees the inclusion of the logic required to keep the **Player** on the screen by using keyboard input. In particular, we're going to make it so that every time the **Space Bar** is pressed, the **Player** is going to fly a little higher, and further away from the bottom of the screen..
+In the fourth iteration of **Cave Escape**, we will actually implement the ability to have you control the way the **Player** flies. Instead of the **Player** just falling into the abyss, as it was in **Iteration Three**, **Iteration Four** sees the inclusion of the logic required to keep the **Player** on the screen by using keyboard input. In particular, we're going to make it so that every time the **Space Bar** is pressed, the **Player** is going to fly a little higher, and further away from the bottom of the screen.
 
 ### What to Expect
 
@@ -282,10 +268,10 @@ end;
 ```
 
 ##### - What's the New Code Doing?
-In order to be able to control the **Player's** velocity with user input, we've had to a new **Constant** value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new **Procedure** ```HandleInput()```, which is exactly what we're going to do now. The new **Procedure** ```HandleInput()``` is implemented to listen for user input while the **Game** is running. Specifically, the input it's listening for is when the **Space Bar** is pressed. Every time the **Space Bar** is pressed, the ```HandleInput()``` **Procedure** will decrement the value of the **Constant** ```JUMP_RECOVERY_BOOST``` from the **Player's** current velocity, meaning, the each time the **Space Bar** is pressed, the **Player** will fall a little slower, but only briefly. The aim is to have the user continually press the **Space Bar** to keep the **Player** on the screen and give it the affect of flying!
+In order to be able to control the **Player's** velocity with user input, we've had to add a new **Constant** value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new **Procedure** ```HandleInput()```, which is exactly what we're going to do now. The new **Procedure** ```HandleInput()``` is implemented to listen for user input while the **Game** is running. Specifically, the input it's listening for is when the **Space Bar** is pressed. Every time the **Space Bar** is pressed, the ```HandleInput()``` **Procedure** will decrement the value of the **Constant** ```JUMP_RECOVERY_BOOST``` from the **Player's** current velocity, meaning, the each time the **Space Bar** is pressed, the **Player** will fall a little slower, but only briefly. The aim is to have the user continually press the **Space Bar** to keep the **Player** on the screen and give it the affect of flying!
 
 ##### - Complete Code
-The complete code for **Iteration Three** is as follows:
+The complete code for **Iteration Four** is as follows:
 
 ```pascal
 const
@@ -354,6 +340,543 @@ end.
 #### - Main has Changed, Again
 The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```HandleInput()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're listening for any user input, specifically, if the **Space Bar** has been pressed. Now we have a more functional game where the user finally has some control over the way the game behaves.
 
+
+### Have a Crack
+Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+---
+# 5. Iteration Five
+
+In the fifth iteration of **Cave Escape**, we add quite a bit of functionality, more so than in the previous iterations. We're up for a big step with this one. We're going to add an obstacle. We'll refer to the obstacle as **Poles**. It's the aim of the game to avoid the **Poles**, but we'll worry about that later. For now, let's just worry about getting the **Poles** onto the screen. So, this iteration concerns the generation of a single set of **Poles** as well as the way the **Poles** behave.
+
+### What to Expect
+
+Once you're finished working through and implementing **Iteration Five**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_5.png)
+While **Iteration Five** is quite a bit involved, in terms of new code required, it adds loads of functionality to our game and now, more than ever, it's looking more and more like a game.
+
+### Code
+
+##### - New Code
+The new code in **Iteration Five** is as follows:
+
+Addition one
+```pascal
+POLE_SCROLL_SPEED = -2;
+```
+
+Addition two
+```pascal    
+type
+    PoleData = record
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+```
+
+Addition three
+```pascal    
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+```
+
+Addition four
+```pascal    
+procedure UpdatePole(var poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+end;
+```
+
+Addition five
+```pascal    
+procedure DrawPoles(const poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+```
+
+##### - What's the New Code Doing?
+The **Poles** that we're adding to the game will move horizontally across the screen, from left to right. In order to cater for this, we've added another **Constant** called ```POLE_SCROLL_SPEED``` in order to keep track of the speed at which the **Poles** travel across the screen. In order to be able to keep track of the data required to add the **Poles** to the **Game**, we've added a **Record** called ```PoleData```. If you take a look at the ```PoleData``` **Record**, you'll notice that it has two **Fields** as **Sprites**. ```PoleData``` needs two **Sprites** because one **Pole** will come down from the top of the screen and the other will come up from the bottom.
+
+Now, we need some logic in order to be able to add the **Poles** to the **Game** so that we can see them. Firstly, we've got a new **Function** called ```GetRandomPoles()```, which is responsible for generating the data associated with the **Poles**. This **Function** behaves similarly to the **Function** ```GetNewPlayer()```, as discussed in **Iteration Two**. ```GetRandomPoles()``` assigns the top and bottom **Poles** their own **Sprites**, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the **Poles** scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the **Function** assigns their **Delta X**, or horizontal movement speed to that of the value of the **Constant** ```POLE_SCROLL_SPEED```. A **Procedure** called ```UpdatePoles()``` has been added to update the **Poles** and another **Procedure** called ```DrawPoles()``` to draw the **Poles** to the screen.
+
+##### - Complete Code
+The complete code for **Iteration Five** is as follows:
+
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+
+type
+    PoleData = record
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure UpdatePoles(var poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+end;
+
+procedure DrawPoles(const poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: PoleData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  gamePoles := GetRandomPoles();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
+#### - More Changes to Main
+The ```Main``` **Procedure** has now changed. Notice that we're now using our new **Function** ```GetRandomPoles()``` and assigning the value it returns to a **Variable** called ```gamePoles```. In order to move the **Poles** across the screen and draw them, we've added the calls to the **Procedures** ```UpdatePoles()``` and ```DrawPoles()``` within the **GameLoop**
+
+### Have a Crack
+Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+---
+# 6. Iteration Six
+
+In the sixth iteration of **Cave Escape**, we're going to make a few additions to ensure that once the **Poles** move off the far left of the screen, they get moved back to off the right of the screen. This will ensure that the **Poles** can be reused as obstacles.
+
+### What to Expect
+
+Once you're finished working through and implementing **Iteration Six**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_6.png)
+The **Poles** are much better when they wrap around the game screen!.
+
+### Code
+
+##### - New Code
+The new code in **Iteration Six** is as follows:
+
+Addition one
+```pascal
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+```
+
+Addition two (Note: ```UpdatePoles()``` has had code added to it)
+```pascal    
+procedure UpdatePoles(var poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+```
+
+##### - What's the New Code Doing?
+We've added a new **Procedure** called ```ResetPoleData()``` that is going to reset the **Poles** once they move off the screen. Notice that it calls the **Function** ```GetRandomPoles()``` that we implemented before. It makes sense to reuse code where you can, and the **Poles** that the **Function** ```GetRandomPoles()``` returns are exactly what we need when we have to reset them. We've modified ```UpdatePoles()``` to check to see if the **Poles** have moved off the screen and ```if``` they have, we simply reset them.
+
+##### - Complete Code
+The complete code for **Iteration Six** is as follows:
+
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+
+type
+    PoleData = record
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure UpdatePoles(var poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure DrawPoles(const poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: PoleData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  gamePoles := GetRandomPoles();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
+### Have a Crack
+Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+
+---
+# 7. Iteration Seven
+
+In **Iteration Seven** of **Cave Escape**, we're going to implement the logic to have more than one set of **Poles**. One set of **Poles** is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
+
+### What to Expect
+
+Once you're finished working through and implementing **Iteration Seven**, you should have something that looks just like this:
+![Iteration One](Resources/Images/iteration_7.png)
+Now we have lots of **Poles**.
+
+### Code
+
+##### - New Code
+The new code in **Iteration Seven** is as follows:
+
+Addition one
+```pascal
+NUM_POLES = 4;
+```
+
+Addition two
+```pascal    
+Poles = array [0..NUM_POLES - 1] of PoleData;
+```
+
+Addition three (Note: ```UpdatePoles()``` has had code added to it)
+```pascal    
+procedure UpdatePoles(var poles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(poles) to High(poles) do
+  begin
+    UpdateSprite(poles[i].UpPole);
+    UpdateSprite(poles[i].DownPole);
+
+    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) then
+    begin
+      ResetPoleData(poles[i]);
+    end;
+  end;
+end;
+```
+
+Addition four (Note: ```DrawPoles()``` has had code added to it)
+```pascal    
+procedure DrawPoles(const poles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(poles) to High(poles) do
+  begin
+    DrawSprite(poles[i].UpPole);
+    DrawSprite(poles[i].DownPole);
+  end;
+end;
+```
+
+##### - What's the New Code Doing?
+We've added a **Constant** called ```NUM_POLES``` to store the number of sets of **Poles** we want in the **Game**. The code provided has ```NUM_POLES``` being equal to the value of four, so this means there will be exactly four sets of **Poles** in the **Game**. The second addition is an **Array** of ```PoleData``` called ```Poles```. This **Array** is where our four sets of **Poles** will be stored. You can see the **Array** is declared as such ```Poles = array [0..NUM_POLES - 1] of PoleData;```. It's important to understand the logic in the square bracers ```[0..NUM_POLES - 1]```. Now, ```NUM_POLES``` is four, so ```NUM_POLES - 1``` is equal to three, so the logic equates to ```[0..3]```. Computers are zero based, meaning that our first set of **Poles** is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
+
+```UpdatePoles()``` has only changed to work with our new **Array** of **Poles** instead of just working with a single set of **Poles** and the same applies to ```DrawPoles()```. Notice that both **Procedures** are using a ```for``` **Loop** to make sure every set of **Poles** in the **Array** is updated and drawn.
+
+##### - Complete Code
+The complete code for **Iteration Seven** is as follows:
+
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+  NUM_POLES = 4;
+
+type
+    PoleData = record
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+    Poles = array [0..NUM_POLES] of PoleData;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure ResetPoleData(var pole: PoleData);
+begin
+  FreeSprite(pole.UpPole);
+  FreeSprite(pole.DownPole);
+  pole := GetRandomPoles();
+end;
+
+procedure UpdatePoles(var poles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(poles) to High(poles) do
+  begin
+    UpdateSprite(poles[i].UpPole);
+    UpdateSprite(poles[i].DownPole);
+
+    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) then
+    begin
+      ResetPoleData(poles[i]);
+    end;
+  end;
+end;
+
+procedure DrawPoles(const poles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(poles) to High(poles) do
+  begin
+    DrawSprite(poles[i].UpPole);
+    DrawSprite(poles[i].DownPole);
+  end;
+end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: Poles;
+  i: Integer;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  for i:= Low(gamePoles) to High(gamePoles) do
+  begin
+    gamePoles[i] := GetRandomPoles();
+  end;
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
 
 ### Have a Crack
 Now it's time for you to have a go at implementing **Iteration Three** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to **Build** and **Run** your code to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.

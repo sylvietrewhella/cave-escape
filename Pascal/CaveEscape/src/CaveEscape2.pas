@@ -21,12 +21,9 @@ begin
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
-
     UpdateSprite(player);
     DrawSprite(player);
-
     RefreshScreen();
-
   until WindowCloseRequested();
 end;
 

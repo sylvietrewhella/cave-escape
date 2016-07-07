@@ -15,7 +15,9 @@ type
     DownPole: Sprite;
   end;
 
-  Poles = array [0..3] of PoleData;
+  GameState = (Menu, Play);
+
+  Poles = array [0..19] of PoleData;
 
   GameData = record
     Player: Sprite;
@@ -24,20 +26,23 @@ type
     Background: Sprite;
     IsDead: Boolean;
     Score: Integer;
+    HighestScore: Integer;
     Poles: Poles;
+    State: GameState;
+    PoleReleaseDistance: Integer;
   end;
 
 function GetRandomPoles(): PoleData;
 begin
-  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
-  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
-  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
-  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
-  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
-  SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-  SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-  result.ScoreLimiter := true;
+    result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+    result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+    SpriteSetX(result.UpPole, ScreenWidth());
+    SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+    SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+    SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
+    SpriteSetDx(result.UpPole, 0);
+    SpriteSetDx(result.DownPole, 0);
+    result.ScoreLimiter := true;
 end;
 
 function GetNewPlayer(): Sprite;
@@ -65,6 +70,21 @@ begin
   SpriteSetDx(foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
+procedure CheckSaveFile(var highScore: Integer);
+var
+  saveFile: TextFile;
+begin
+  Assign(saveFile, 'scoreFile.txt');
+  if not (FileExists('scoreFile.txt')) then
+  begin
+    ReWrite(saveFile);
+    WriteLn(saveFile, 0);
+  end;
+  Reset(saveFile);
+  ReadLn(saveFile, highScore);
+  Close(saveFile);
+end;
+
 procedure SetUpGame(var game: GameData);
 var
   i: Integer;
@@ -78,6 +98,9 @@ begin
   game.Player := GetNewPlayer();
   game.Score := 0;
   game.IsDead := false;
+  game.State := Menu;
+  game.PoleReleaseDistance := 0;
+  CheckSaveFile(game.HighestScore);
   SetUpBackground(game.Background, game.Foreground, game.Foreroof);
 
   SpriteStartAnimation(game.Foreground, 'Fire');
@@ -133,17 +156,24 @@ begin
   end;
 end;
 
-procedure UpdatePlayer(var player: Sprite);
+procedure UpdatePlayer(var player: Sprite; state: GameState);
 begin
-  UpdateVelocity(player);
+  if (state = Play) then
+  begin
+    UpdateVelocity(player);
+  end;
   UpdateSprite(player);
 end;
 
-procedure HandleInput(var player: Sprite);
+procedure HandleInput(var player: Sprite; var state: GameState);
 begin
-  if KeyTyped(SpaceKey) then
+  if KeyTyped(SpaceKey) and (state = Play) then
   begin
     SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end
+  else if KeyTyped(SpaceKey) then
+  begin
+    state := Play;
   end;
 end;
 
@@ -154,10 +184,31 @@ begin
   pole := GetRandomPoles();
 end;
 
+procedure MarkPoleForMovement(var poles: Poles; var releaseDistance: Integer);
+var
+  i: Integer;
+begin
+  releaseDistance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
+  if releaseDistance <= 0 then
+  begin
+    for i := Low(poles) to High(poles) do
+    begin
+      if SpriteDx(poles[i].UpPole) = 0 then
+      begin
+        SpriteSetDx(poles[i].UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        SpriteSetDx(poles[i].DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+        releaseDistance := BitmapWidth(BitmapNamed('UpPole')) + RND(BitmapWidth(BitmapNamed('UpPole')));
+        break;
+      end;
+    end;
+  end;
+end;
+
 procedure UpdatePoles(var game: GameData);
 var
   i: Integer;
 begin
+  MarkPoleForMovement(game.poles, game.PoleReleaseDistance);
   for i:= Low(game.Poles) to High(game.Poles) do
   begin
     UpdateSprite(game.Poles[i].UpPole);
@@ -186,10 +237,22 @@ begin
   game.Player := GetNewPlayer();
   for i:= Low(game.Poles) to High(game.Poles) do
   begin
-    ResetPoleData(game.Poles[i]);
+    if SpriteX(game.Poles[i].UpPole) < ScreenWidth() then
+      ResetPoleData(game.Poles[i]);
   end;
   game.IsDead := false;
   game.Score := 0;
+end;
+
+procedure SaveHighScore(var game: GameData);
+var
+  saveTo: TextFile;
+begin
+  game.HighestScore := game.Score;
+  Assign(saveTo, 'scorefile.txt');
+  ReWrite(saveTo);
+  WriteLn(saveTo, game.HighestScore);
+  Close(saveTo);
 end;
 
 procedure UpdateGame(var game: GameData);
@@ -197,13 +260,20 @@ begin
   if not (game.IsDead) then
   begin
     CheckForCollisions(game);
-    HandleInput(game.Player);
+    HandleInput(game.Player, game.State);
     UpdateBackground(game);
-    UpdatePlayer(game.Player);
-    UpdatePoles(game);
+    UpdatePlayer(game.Player, game.State);
+    if (game.State = Play) then
+    begin
+      UpdatePoles(game);
+    end;
   end
   else //The player has died :(
   begin
+    if game.Score > game.HighestScore then
+    begin
+      SaveHighScore(game);
+    end;
     ResetGame(game);
   end;
 end;
@@ -226,7 +296,24 @@ begin
   DrawSprite(game.Foreroof);
   DrawSprite(game.ForeGround);
   DrawSprite(game.Player);
-  DrawText(IntToStr(game.score), ColorWhite, 'GameFont', 10, 0);
+  if (game.State = Play) then
+  begin
+    DrawText(IntToStr(game.score), ColorWhite, 'GameFont', 10, 0);
+  end
+  else if (game.State = Menu) then
+  begin
+    DrawBitmap(BitmapNamed('Logo'), 0, 40);
+    DrawText(('HIGH SCORE ' + IntToStr(game.HighestScore)),
+    ColorWhite,
+    'GameFont', ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'),
+    ('HIGH SCORE ' + IntToStr(game.HighestScore))) / 2,
+    40 + BitmapHeight(BitmapNamed('Logo')));
+    DrawText('PRESS SPACE!',
+    ColorWhite,
+    'GameFont',
+    ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
+    SpriteY(game.Player) + TextHeight(FontNamed('GameFont'), ' ') * 2);
+  end;
 end;
 
 procedure Main();

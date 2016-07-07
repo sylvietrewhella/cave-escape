@@ -15,9 +15,7 @@ type
     DownPole: Sprite;
   end;
 
-  GameState = (Menu, Play);
-
-  Poles = array [0..19] of PoleData;
+  Poles = array [0..3] of PoleData;
 
   GameData = record
     Player: Sprite;
@@ -26,9 +24,7 @@ type
     Background: Sprite;
     IsDead: Boolean;
     Score: Integer;
-    HighestScore: Integer;
     Poles: Poles;
-    State: GameState;
     PoleReleaseDistance: Integer;
   end;
 
@@ -70,21 +66,6 @@ begin
   SpriteSetDx(foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure CheckSaveFile(var highScore: Integer);
-var
-  saveFile: TextFile;
-begin
-  Assign(saveFile, 'scoreFile.txt');
-  if not (FileExists('scoreFile.txt')) then
-  begin
-    ReWrite(saveFile);
-    WriteLn(saveFile, 0);
-  end;
-  Reset(saveFile);
-  ReadLn(saveFile, highScore);
-  Close(saveFile);
-end;
-
 procedure SetUpGame(var game: GameData);
 var
   i: Integer;
@@ -98,9 +79,7 @@ begin
   game.Player := GetNewPlayer();
   game.Score := 0;
   game.IsDead := false;
-  game.State := Menu;
   game.PoleReleaseDistance := 0;
-  CheckSaveFile(game.HighestScore);
   SetUpBackground(game.Background, game.Foreground, game.Foreroof);
 
   SpriteStartAnimation(game.Foreground, 'Fire');
@@ -156,24 +135,17 @@ begin
   end;
 end;
 
-procedure UpdatePlayer(var player: Sprite; state: GameState);
+procedure UpdatePlayer(var player: Sprite);
 begin
-  if (state = Play) then
-  begin
-    UpdateVelocity(player);
-  end;
+  UpdateVelocity(player);
   UpdateSprite(player);
 end;
 
-procedure HandleInput(var player: Sprite; var state: GameState);
+procedure HandleInput(var player: Sprite);
 begin
-  if KeyTyped(SpaceKey) and (state = Play) then
+  if KeyTyped(SpaceKey) then
   begin
     SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
-  end
-  else if KeyTyped(SpaceKey) then
-  begin
-    state := Play;
   end;
 end;
 
@@ -237,22 +209,10 @@ begin
   game.Player := GetNewPlayer();
   for i:= Low(game.Poles) to High(game.Poles) do
   begin
-    if SpriteX(game.Poles[i].UpPole) < ScreenWidth() then
-      ResetPoleData(game.Poles[i]);
+    ResetPoleData(game.Poles[i]);
   end;
   game.IsDead := false;
   game.Score := 0;
-end;
-
-procedure SaveHighScore(var game: GameData);
-var
-  saveTo: TextFile;
-begin
-  game.HighestScore := game.Score;
-  Assign(saveTo, 'scorefile.txt');
-  ReWrite(saveTo);
-  WriteLn(saveTo, game.HighestScore);
-  Close(saveTo);
 end;
 
 procedure UpdateGame(var game: GameData);
@@ -260,20 +220,13 @@ begin
   if not (game.IsDead) then
   begin
     CheckForCollisions(game);
-    HandleInput(game.Player, game.State);
+    HandleInput(game.Player);
     UpdateBackground(game);
-    UpdatePlayer(game.Player, game.State);
-    if (game.State = Play) then
-    begin
-      UpdatePoles(game);
-    end;
+    UpdatePlayer(game.Player);
+    UpdatePoles(game);
   end
   else //The player has died :(
   begin
-    if game.Score > game.HighestScore then
-    begin
-      SaveHighScore(game);
-    end;
     ResetGame(game);
   end;
 end;
@@ -296,24 +249,7 @@ begin
   DrawSprite(game.Foreroof);
   DrawSprite(game.ForeGround);
   DrawSprite(game.Player);
-  if (game.State = Play) then
-  begin
-    DrawText(IntToStr(game.score), ColorWhite, 'GameFont', 10, 0);
-  end
-  else if (game.State = Menu) then
-  begin
-    DrawBitmap(BitmapNamed('Logo'), 0, 40);
-    DrawText(('HIGH SCORE ' + IntToStr(game.HighestScore)),
-    ColorWhite,
-    'GameFont', ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'),
-    ('HIGH SCORE ' + IntToStr(game.HighestScore))) / 2,
-    40 + BitmapHeight(BitmapNamed('Logo')));
-    DrawText('PRESS SPACE!',
-    ColorWhite,
-    'GameFont',
-    ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
-    SpriteY(game.Player) + TextHeight(FontNamed('GameFont'), ' ') * 2);
-  end;
+  DrawText(IntToStr(game.score), ColorWhite, 'GameFont', 10, 0);
 end;
 
 procedure Main();

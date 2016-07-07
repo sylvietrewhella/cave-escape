@@ -1,3 +1,6 @@
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
 const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
@@ -45,14 +48,11 @@ begin
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
-
     UpdateVelocity(player);
     HandleInput(player);
     UpdateSprite(player);
     DrawSprite(player);
-
     RefreshScreen();
-
   until WindowCloseRequested();
 end;
 

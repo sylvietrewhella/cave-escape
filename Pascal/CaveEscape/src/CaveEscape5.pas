@@ -5,61 +5,13 @@ const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
   JUMP_RECOVERY_BOOST = 2;
-  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+  POLE_SCROLL_SPEED = -2;
 
 type
     PoleData = record
       UpPole: Sprite;
       DownPole: Sprite;
     end;
-
-    Poles = array [0..3] of PoleData;
-
-function GetRandomPoles(): PoleData;
-begin
-  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
-  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
-  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
-  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
-  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-  SpriteSetY(result.DownPole, 0);
-  SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-  SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-end;
-
-procedure ResetPoleData(var pole: PoleData);
-begin
-  FreeSprite(pole.UpPole);
-  FreeSprite(pole.DownPole);
-  pole := GetRandomPoles();
-end;
-
-procedure UpdatePoles(var poles: Poles);
-var
-  i: Integer;
-begin
-  for i:= Low(poles) to High(poles) do
-  begin
-    UpdateSprite(poles[i].UpPole);
-    UpdateSprite(poles[i].DownPole);
-
-    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) then
-    begin
-      ResetPoleData(poles[i]);
-    end;
-  end;
-end;
-
-procedure DrawPoles(const poles: Poles);
-var
-  i: Integer;
-begin
-  for i:= Low(poles) to High(poles) do
-  begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
-  end;
-end;
 
 function GetNewPlayer(): Sprite;
 begin
@@ -69,7 +21,19 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure HandleInput(var player: Sprite);
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -77,7 +41,7 @@ begin
   end;
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -91,38 +55,40 @@ begin
   end;
 end;
 
+procedure UpdatePoles(var poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+end;
+
+procedure DrawPoles(const poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
 procedure Main();
 var
   player: Sprite;
-  gamePoles: Poles;
-  i: Integer;
+  gamePoles: PoleData;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
-  OpenAudio();
   LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
 
-  for i:= Low(gamePoles) to High(gamePoles) do
-  begin
-    gamePoles[i] := GetRandomPoles();
-  end;
-
   player := GetNewPlayer();
+
+  gamePoles := GetRandomPoles();
 
   repeat // The game loop...
     ProcessEvents();
     ClearScreen(ColorWhite);
-
     UpdateVelocity(player);
     HandleInput(player);
-
     UpdateSprite(player);
-    UpdatePoles(gamePoles);
-
-    DrawPoles(gamePoles);
     DrawSprite(player);
-
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
     RefreshScreen();
-
   until WindowCloseRequested();
 end;
 
