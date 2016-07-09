@@ -58,7 +58,11 @@ In the second **Iteration** of **Cave Escape**, you will implement the functiona
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Two**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_2.gif)
+
+
 What's different from **Iteration One**? We've got a graphical representation of the **Game's** **Player**! Now let's take a look at how this is implemented.
 
 ### Code
@@ -131,7 +135,11 @@ In the **Third Iteration** of **Cave Escape**, you will implement the functional
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Three**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_3.gif)
+
+
 So with some velocity, the **Game** is a little more dynamic than it previously was in **Iteration Two**.
 
 ### Code
@@ -237,7 +245,11 @@ In the **Fourth Iteration** of **Cave Escape**, we will actually implement the a
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Four**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_4.gif)
+
+
 Look at that! Control over the **Players** velocity!
 
 ### Code
@@ -346,7 +358,11 @@ In the fifth **Iteration** of **Cave Escape**, we add quite a bit of functionali
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Five**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_5.gif)
+
+
 While **Iteration Five** is quite a bit involved, in terms of new **Code** required, it adds loads of functionality to our **Game** and now, more than ever, it's looking more and more like a **Game**.
 
 ### Code
@@ -522,7 +538,11 @@ In the **Sixth Iteration** of **Cave Escape**, we're going to make a few additio
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Six**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_6.gif)
+
+
 The **Poles** are much better when they wrap around the **Game** screen!
 
 ### Code
@@ -685,7 +705,11 @@ In **Iteration Seven** of **Cave Escape**, we're going to implement the logic to
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Seven**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_7.gif)
+
+
 Now we have lots of **Poles**!
 
 ### Code
@@ -886,7 +910,11 @@ In **Iteration Eight** of **Cave Escape**, we're going to focus a fair bit on po
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Eight**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_8.gif)
+
+
 That scrolling **Background** really complements the theme of the **Game**!
 
 ### Code
@@ -1241,7 +1269,11 @@ Now it's time for you to have a go at implementing **Iteration Eight** on your o
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Nine**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_9.gif)
+
+
 We're getting closer and closer to a complete **Game**!
 
 ### Code
@@ -1725,7 +1757,11 @@ Now it's time for you to have a go at implementing **Iteration Nine** on your ow
 ### What to Expect
 
 Once you're finished working through and implementing **Iteration Ten**, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_10.gif)
+
+
 We're done now!
 
 ### Code
