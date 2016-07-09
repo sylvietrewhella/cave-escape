@@ -8,10 +8,10 @@ const
   POLE_SCROLL_SPEED = -2;
 
 type
-    PoleData = record
-      UpPole: Sprite;
-      DownPole: Sprite;
-    end;
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
 
 function GetNewPlayer(): Sprite;
 begin

@@ -76,6 +76,13 @@ begin
   end;
 end;
 
+procedure ResetPoleData(var pole: PoleData);
+begin
+  FreeSprite(pole.UpPole);
+  FreeSprite(pole.DownPole);
+  pole := GetRandomPoles();
+end;
+
 procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
@@ -88,13 +95,6 @@ begin
   begin
     SpriteSetDy(player, -(MAX_SPEED));
   end;
-end;
-
-procedure ResetPoleData(var pole: PoleData);
-begin
-  FreeSprite(pole.UpPole);
-  FreeSprite(pole.DownPole);
-  pole := GetRandomPoles();
 end;
 
 procedure UpdatePoles(var poles: Poles);
@@ -110,17 +110,6 @@ begin
     begin
       ResetPoleData(poles[i]);
     end;
-  end;
-end;
-
-procedure DrawPoles(const poles: Poles);
-var
-  i: Integer;
-begin
-  for i:= Low(poles) to High(poles) do
-  begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
   end;
 end;
 
@@ -154,6 +143,17 @@ begin
   UpdatePoles(game.Poles);
 end;
 
+procedure DrawPoles(const poles: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(poles) to High(poles) do
+  begin
+    DrawSprite(poles[i].UpPole);
+    DrawSprite(poles[i].DownPole);
+  end;
+end;
+
 procedure DrawGame(const game: GameData);
 begin
   DrawSprite(game.Scene.Background);
@@ -181,7 +181,6 @@ var
   game: GameData;
 begin
   OpenGraphicsWindow('Cave Escape', 432, 768);
-  OpenAudio();
   SetUpGame(game);
 
   repeat // The game loop...

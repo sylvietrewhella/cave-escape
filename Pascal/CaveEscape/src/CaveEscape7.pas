@@ -9,12 +9,12 @@ const
   NUM_POLES = 4;
 
 type
-    PoleData = record
-      UpPole: Sprite;
-      DownPole: Sprite;
-    end;
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
 
-    Poles = array [0..NUM_POLES] of PoleData;
+  Poles = array [0..NUM_POLES] of PoleData;
 
 function GetNewPlayer(): Sprite;
 begin
@@ -44,6 +44,13 @@ begin
   end;
 end;
 
+procedure ResetPoleData(var pole: PoleData);
+begin
+  FreeSprite(pole.UpPole);
+  FreeSprite(pole.DownPole);
+  pole := GetRandomPoles();
+end;
+
 procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
@@ -56,13 +63,6 @@ begin
   begin
     SpriteSetDy(player, -(MAX_SPEED));
   end;
-end;
-
-procedure ResetPoleData(var pole: PoleData);
-begin
-  FreeSprite(pole.UpPole);
-  FreeSprite(pole.DownPole);
-  pole := GetRandomPoles();
 end;
 
 procedure UpdatePoles(var poles: Poles);

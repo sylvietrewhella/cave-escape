@@ -8,10 +8,10 @@ const
   POLE_SCROLL_SPEED = -2;
 
 type
-    PoleData = record
-      UpPole: Sprite;
-      DownPole: Sprite;
-    end;
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
 
 function GetNewPlayer(): Sprite;
 begin
@@ -41,6 +41,13 @@ begin
   end;
 end;
 
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
 procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
@@ -53,13 +60,6 @@ begin
   begin
     SpriteSetDy(player, -(MAX_SPEED));
   end;
-end;
-
-procedure ResetPoleData(var poles: PoleData);
-begin
-  FreeSprite(poles.UpPole);
-  FreeSprite(poles.DownPole);
-  poles := GetRandomPoles();
 end;
 
 procedure UpdatePoles(var poles: PoleData);
