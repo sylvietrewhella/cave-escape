@@ -34,7 +34,6 @@ type
     Player = record
       Playing: Sprite;
       Score: Integer;
-      HighestScore: Integer;
       IsDead: Boolean;
       State: PlayerState;
     end;
@@ -45,32 +44,6 @@ type
       GamePoles: GamePoles;
     end;
 
-procedure CheckSaveFile(var highScore: Integer);
-var
-  saveFile: TextFile;
-begin
-  Assign(saveFile, 'scoreFile.txt');
-  if not (FileExists('scoreFile.txt')) then
-  begin
-    ReWrite(saveFile);
-    WriteLn(saveFile, 0);
-  end;
-  Reset(saveFile);
-  ReadLn(saveFile, highScore);
-  Close(saveFile);
-end;
-
-procedure SaveHighScore(var highScore, newHighScore: Integer);
-var
-  saveTo: TextFile;
-begin
-  highScore := newHighScore;
-  Assign(saveTo, 'scorefile.txt');
-  ReWrite(saveTo);
-  WriteLn(saveTo, highScore);
-  Close(saveTo);
-end;
-
 function GetNewPlayer(): Player;
 begin
   result.Playing := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
@@ -78,7 +51,6 @@ begin
   SpriteSetY(result.Playing, ScreenHeight() / 2);
   SpriteStartAnimation(result.Playing, 'Fly');
   result.Score := 0;
-  CheckSaveFile(result.HighestScore);
   result.IsDead := false;
   result.State := Menu;
 end;
@@ -272,10 +244,6 @@ begin
   else //The player has died :(
   begin
     ResetGame(game);
-    if game.Player.Score > game.Player.HighestScore then
-    begin
-      SaveHighScore(game.Player.HighestScore, game.Player.Score);
-    end;
   end;
 end;
 
@@ -304,11 +272,6 @@ begin
   else if (game.Player.State = Menu) then
   begin
     DrawBitmap(BitmapNamed('Logo'), 0, 40);
-    DrawText(('HIGH SCORE ' + IntToStr(game.Player.HighestScore)),
-    ColorWhite,
-    'GameFont', ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'),
-    ('HIGH SCORE ' + IntToStr(game.Player.HighestScore))) / 2,
-    40 + BitmapHeight(BitmapNamed('Logo')));
     DrawText('PRESS SPACE!',
     ColorWhite,
     'GameFont',
