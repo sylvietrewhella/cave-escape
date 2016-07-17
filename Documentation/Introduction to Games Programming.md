@@ -1019,7 +1019,7 @@ end;
 ```
 - ```UpdateGame()``` also has a change to suit the **State System**. The changes ensure that the **Poles** only scroll across the screen if the **Player** has started playing the **Game**.
 
-Addition seven (Note: The **Procedure** ```DrawGame()``` has changed)
+#### Addition seven (Note: The **Procedure** ```DrawGame()``` has changed)
 ```pascal
 procedure DrawGame(const game: GameData);
 begin
