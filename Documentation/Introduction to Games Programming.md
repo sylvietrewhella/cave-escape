@@ -68,7 +68,7 @@ What's different from **Iteration One**? We've got a graphical representation of
 ##### - New Code
 The new **Code** in **Iteration Two** is as follows:
 
-Addition one
+###### Addition one
 ```pascal    
 function GetNewPlayer(): Sprite;
 begin
@@ -129,7 +129,7 @@ So with some velocity, the **Game** is a little more dynamic than it previously 
 ##### - New Code
 The new **Code** in **Iteration Three** is as follows:
 
-Addition one
+###### Addition one
 ```pascal
 const
   GRAVITY = 0.08;
@@ -137,7 +137,7 @@ const
 ```
 - We've taken the time to add some **Constant** values that are going to be used in the calculation of the **Player's** velocity. Those values represent an imposed ```GRAVITY``` and a ```MAX_SPEED``` in regards to what we want to impose as the maximum velocity the **Player** can move, or fall at.
 
-Addition two
+###### Addition two
 ```pascal    
 procedure UpdateVelocity(player: Sprite);
 begin
@@ -205,7 +205,7 @@ Look at that! Control over the **Players** velocity!
 ##### - New Code
 The new **Code** in **Iteration Four** is as follows:
 
-Addition one (Note: There is a new **Constant** value)
+###### Addition one (Note: There is a new **Constant** value)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -214,7 +214,7 @@ const
 ```
 - In order to be able to control the **Player's** velocity with user input, we've had to add a new **Constant** value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new **Procedure** ```HandleInput()```.
 
-Addition two
+###### Addition two
 ```pascal    
 procedure HandleInput(player: Sprite);
 begin
@@ -278,7 +278,7 @@ While **Iteration Five** is quite a bit involved, in terms of new **Code** requi
 ##### - New Code
 The new **Code** in **Iteration Five** is as follows:
 
-Addition one (Note: There is a new **Constant** value)
+###### Addition one (Note: There is a new **Constant** value)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -288,7 +288,7 @@ const
 ```
 - The **Poles** that we're adding to the **Game** will move horizontally across the screen, from left to right. In order to cater for this, we've added another **Constant** called ```POLE_SCROLL_SPEED``` in order to keep track of the speed at which the **Poles** travel across the screen.
 
-Addition two
+###### Addition two
 ```pascal    
 type
   PoleData = record
@@ -298,7 +298,7 @@ type
 ```
 - In order to be able to keep track of the **Data** required to add the **Poles** to the **Game**, we've added a **Record** called ```PoleData```. If you take a look at the ```PoleData``` **Record**, you'll notice that it has two **Fields** as **Sprites**. ```PoleData``` needs two **Sprites** because one **Pole** will come down from the top of the screen and the other will come up from the bottom.
 
-Addition three
+###### Addition three
 ```pascal    
 function GetRandomPoles(): PoleData;
 begin
@@ -314,7 +314,7 @@ end;
 ```
 - Now, we need some logic in order to be able to add the **Poles** to the **Game** so that we can see them. Firstly, we've got a new **Function** called ```GetRandomPoles()```, which is responsible for generating the **Data** associated with the **Poles**. This **Function** behaves similarly to the **Function** ```GetNewPlayer()```, as discussed in **Iteration Two**. ```GetRandomPoles()``` assigns the top and bottom **Poles** their own **Sprites**, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the **Poles** scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the **Function** assigns their **Delta X**, or horizontal movement speed to that of the value of the **Constant** ```POLE_SCROLL_SPEED```.
 
-Addition four
+###### Addition four
 ```pascal    
 procedure UpdatePoles(poles: PoleData);
 begin
@@ -324,7 +324,7 @@ end;
 ```
 - A **Procedure** called ```UpdatePoles()``` has been added to update the **Poles**.
 
-Addition five
+###### Addition five
 ```pascal    
 procedure DrawPoles(poles: PoleData);
 begin
@@ -389,7 +389,7 @@ The **Poles** are much better when they wrap around the **Game** screen!
 ##### - New Code
 The new **Code** in **Iteration Six** is as follows:
 
-Addition one
+###### Addition one
 ```pascal
 procedure ResetPoleData(poles: PoleData);
 begin
@@ -400,7 +400,7 @@ end;
 ```
 - We've added a new **Procedure** called ```ResetPoleData()``` that is going to reset the **Poles** once they move off the left of screen. Notice that it calls the **Function** ```GetRandomPoles()``` that we implemented before. It makes sense to reuse **Code** where you can, and the **Poles** that the **Function** ```GetRandomPoles()``` **Returns** are exactly what we need when we have to reset them.
 
-Addition two (Note: ```UpdatePoles()``` has had **Code** added to it)
+###### Addition two (Note: ```UpdatePoles()``` has had **Code** added to it)
 ```pascal    
 procedure UpdatePoles(poles: PoleData);
 begin
@@ -444,7 +444,7 @@ Now we have lots of **Poles**!
 ##### - New Code
 The new **Code** in **Iteration Seven** is as follows:
 
-Addition one (Note: There is a new **Constant** value)
+###### Addition one (Note: There is a new **Constant** value)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -455,13 +455,13 @@ const
 ```
 - We've added a **Constant** called ```NUM_POLES``` to store the number of sets of **Poles** we want in the **Game**. The **Code** provided has ```NUM_POLES``` being equal to the value of four, so this means there will be exactly four sets of **Poles** in the **Game**.
 
-Addition two
+###### Addition two
 ```pascal    
 Poles = array [0..NUM_POLES - 1] of PoleData;
 ```
 - The second addition is an **Array** of ```PoleData``` called ```Poles```. This **Array** is where our four sets of **Poles** will be stored. You can see the **Array** is declared as such ```Poles = array [0..NUM_POLES - 1] of PoleData;```. It's important to understand the logic in the square bracers ```[0..NUM_POLES - 1]```. Now, ```NUM_POLES``` is four, so ```NUM_POLES - 1``` is equal to three, so the logic equates to ```[0..3]```. Computers are zero based, meaning that our first set of **Poles** is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
 
-Addition three (Note: ```UpdatePoles()``` has had **Code** added to it)
+###### Addition three (Note: ```UpdatePoles()``` has had **Code** added to it)
 ```pascal    
 procedure UpdatePoles(poles: Poles);
 var
@@ -481,7 +481,7 @@ end;
 ```
 - ```UpdatePoles()``` has only changed to work with our new **Array** of **Poles** instead of just working with a single set of **Poles**. Notice that the **Procedure** is using a ```for``` **Loop** to make sure every set of **Poles** in the **Array** is updated.
 
-Addition four (Note: ```DrawPoles()``` has had **Code** added to it)
+###### Addition four (Note: ```DrawPoles()``` has had **Code** added to it)
 ```pascal    
 procedure DrawPoles(poles: Poles);
 var
@@ -559,7 +559,7 @@ That scrolling **Background** really complements the theme of the **Game**!
 ##### - New Code
 The new **Code** in **Iteration Eight** is as follows:
 
-Addition one (Note: There is a new **Constant** value and the **Constant** ```POLE_SCROLL_SPEED``` has been changed to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```)
+###### Addition one (Note: There is a new **Constant** value and the **Constant** ```POLE_SCROLL_SPEED``` has been changed to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -571,7 +571,7 @@ const
 ```
 - In order to cater for the **Game's** new visual **Background**, we've changed the **Constant** ```POLE_SCROLL_SPEED``` to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```, because the roof element of the **Background** is going to have the same scrolling speed as the **Poles**. We've also added another **Constant** ```BACKGROUND_SCROLL_SPEED``` to store the value at which we want the **Background** to scroll at. These values ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED``` and ```BACKGROUND_SCROLL_SPEED``` are different because we want to create parallax scrolling.
 
-Addition two
+###### Addition two
 ```pascal    
 BackgroundData = record
   Foreroof: Sprite;
@@ -581,7 +581,7 @@ end;
 ```
 - ```BackgroundData``` has been added to house all the information related to the **Game's** **Background**. Notice it consists of three separate **Sprites**, ```Foreroof```, ```Foreground``` and ```Background```.
 
-Addition three
+###### Addition three
 ```pascal    
 GameData = record
   Player: Sprite;
@@ -591,7 +591,7 @@ end;
 ```
 -  The **Record** ```GameData``` has been added to house all the information that the **Game** relies upon, like the **Player**, **Background** and the **Poles**. We'll talk more about this a little later when we discuss how the ```Main``` **Procedure** has changed in this **Iteration**.
 
-Addition four
+###### Addition four
 ```pascal    
 function GetNewBackground(): BackgroundData;
 begin
@@ -614,7 +614,7 @@ end;
 ```
 - Now, we need some logic in order to be able to add the **Background** to the **Game** so that we can see it. Firstly, we've got a new **Function** called ```GetNewBackground()```, which is responsible for generating the **Data** associated with the **Background**. This **Function** behaves similarly to the **Functions** ```GetNewPlayer()``` and ```GetRandomPoles()```. ```GetNewBackground()``` **Returns** a value of ```BackgroundData```, and as you can see, it is responsible for setting all of the values within the ```BackgroundData``` **Record**. It sets the **Sprites** for the ```Foreroof```, ```ForeGround``` and ```Background```, as well as their locations and the animation for the ```ForeGround``` **Sprite**. Because the **Background** has a scrolling affect, the **Delta X**, or horizontal movement speed of the three **Sprites** have been set accordingly.
 
-Addition five
+###### Addition five
 ```pascal
 procedure UpdateBackground(scene: BackgroundData);
 begin
@@ -634,7 +634,7 @@ end;
 ```
 - A new **Procedure** called ```UpdateBackground()``` has been added to ensure the **Background** wraps continuously around the screen, similar to the fashion in which the **Poles** do. The logic within the **Procedure** makes sure that the **Game** scene always renders the **Background** in a manner which makes the scrolling of the images seem infinite.
 
-Addition six
+###### Addition six
 ```pascal
 procedure UpdatePlayer(player: Sprite);
 begin
@@ -644,7 +644,7 @@ end;
 ```
 - The **Procedure** ```UpdatePlayer()``` has been added so that the logic to update the **Player** can be moved out of the ```Main()``` **Procedure** into a separate **Procedure** which focusses exclusively on managing the **Player** element. We've done this to conform to good conventional practice and to apply what is called **Modular Decomposition**. Briefly, **Modular Decomposition** involves separating **Code** into logical blocks, which are focussed on a specific task, I.e. updating the **Player**.
 
-Addition seven
+###### Addition seven
 ```pascal
 procedure UpdateGame(var game: GameData);
 begin
@@ -656,7 +656,7 @@ end;
 ```
 - A **Procedure** called ```UpdateGame()``` has been added, for the same reasons as the **Procedure** ```UpdatePlayer()```. More application of good practice and a general **Code** tidy up.
 
-Addition eight
+###### Addition eight
 ```pascal
 procedure DrawGame(const game: GameData);
 begin
@@ -669,7 +669,7 @@ end;
 ```
 - Yet another **Procedure** has been added to apply **Modular Decomposition** to our **Game**. ```DrawGame()``` has been created to house all the calls, which are responsible for drawing the **Game** elements to the screen.
 
-Addition nine
+###### Addition nine
 ```pascal
 procedure SetUpGame(var game: GameData);
 var
@@ -733,7 +733,7 @@ We're getting closer and closer to a complete **Game**!
 ##### - New Code
 The new **Code** in **Iteration Nine** is as follows:
 
-Addition one (Note: The **Record** ```PoleData``` has changed)
+###### Addition one (Note: The **Record** ```PoleData``` has changed)
 ```pascal
 PoleData = record
   ScoreLimiter: Boolean;
@@ -743,7 +743,7 @@ end;
 ```
 - We've added a **Field** to our **Record** ```PoleData``` called ```ScoreLimiter```. We need this to be able to make the scoring system work. We'll talk more about that soon. Promise.
 
-Addition two
+###### Addition two
 ```pascal    
 Player = record
   Playing: Sprite;
@@ -753,7 +753,7 @@ end;
 ```
 - We've added a new **Record** called ```Player```. Our **Player** can no longer just be a **Sprite**. If you take a look at the **Record**, you'll notice it has three **Fields**. The first of which is our **Player** **Sprite**. The next being the ```Score``` and the third being a **Field** called ```IsDead```. We need this **Field** to tell the **Game** when the **Player** dies, from colliding with the environment.
 
-Addition three (Note: The **Record** ```GameData``` has changed)
+###### Addition three (Note: The **Record** ```GameData``` has changed)
 ```pascal    
 GameData = record
   Player: Player;
@@ -763,7 +763,7 @@ end;
 ```
 - The ```GameData``` **Record** has changed only slightly. Instead of the ```Player``` **Field** being just a **Sprite**, it is now a value of our new **Record** ```Player```.
 
-Addition four (Note: The **Function** ```GetNewPlayer()``` has changed)
+###### Addition four (Note: The **Function** ```GetNewPlayer()``` has changed)
 ```pascal    
 function GetNewPlayer(): Player;
 begin
@@ -777,7 +777,7 @@ end;
 ```
 - Our **Function** ```GetNewPlayer()``` has had to change in order to support the new scoring system as well as our collision system. In the **Function** we now set the ```Score``` to zero and set the **Player** to be alive when the **Function** is called.
 
-Addition five (Note: The **Function** ```GetRandomPoles()``` has changed)
+###### Addition five (Note: The **Function** ```GetRandomPoles()``` has changed)
 ```pascal
 function GetRandomPoles(): PoleData;
 begin
@@ -794,7 +794,7 @@ end;
 ```
 - The ```GetRandomPoles()``` **Function** has also changed. Only slightly, though. Notice that now the **Function** sets the ```PoleData``` value that it **Returns** to have a ```ScoreLimiter``` value of ```true``` and also, the positioning of the **Poles** in terms of their vertical position is random. Because we have the the roof and floor, we can position the **Poles** more dynamically. Now, we're going to use the ```ScoreLimiter``` to increment the ```Score``` of the **Player** every time they pass a set of **Poles**. Once they pass a set of **Poles**, the **Player's*** ```Score``` will be incremented and the ```ScoreLimiter``` for that set of **Poles** will be set to ```false```. The reasoning behind this will become a more clear when we talk about the changes made to ```UpdatePoles()```.
 
-Addition six (Note: The **Procedure** ```UpdatePoles()``` has changed)
+###### Addition six (Note: The **Procedure** ```UpdatePoles()``` has changed)
 ```pascal
 procedure UpdatePoles(var poles: Poles; var player: Player);
 var
@@ -823,7 +823,7 @@ end;
 ```
 - Now we're going to take a look at the changes made to ```UpdatePoles()```. Take a close look at the conditional statements in this **Procedure**. In particular, let's focus on this conditional section of **Code** here ```if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then``` to understand why we need the ```ScoreLimiter```. Firstly, we're checking to see if the **Player** has passed any **Poles**. That's what the first ```if``` **Statement** is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```ScoreLimiter``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```Player's``` ```Score```. Now, it has to change to ```false``` because, if it never did, once the **Player** passes some **Poles**, the first ```if``` statement would be ```true``` and the ```Player's``` score would keep incrementing because the **Player** would be beyond the **Poles**. Phew. Tongue twisting. The best way to see the **Bug** that this would cause is to remove the nested ```if``` **Statement** and see what happens for yourself.
 
-Addition seven
+###### Addition seven
 ```pascal
 procedure CheckForCollisions(var game: GameData);
 var
@@ -847,7 +847,7 @@ end;
 ```
 - We've got a new **Procedure** called ```CheckForCollisions()```. The role of this **Procedure** is to check to see if the **Player** has collided with any of the eligible **Game** elements (the **Poles**, the roof and the floor). ```If``` the **Player** does collide with anything that it shouldn't, we set the ```Player's``` ```IsDead``` to ```true```.
 
-Addition eight
+###### Addition eight
 ```pascal
 procedure ResetPlayer(var player: Player);
 begin
@@ -857,7 +857,7 @@ end;
 ```
 - Another new **Procedure** called ```ResetPlayer()``` has been added to reset the ```Player``` to a default state. When we mention default state, we mean a new **Game** where the **Score** is zero and the **Player** has to start over. This **Procedure** is only used when the ```Player``` dies (collides with the environment).
 
-Addition nine
+###### Addition nine
 ```pascal
 procedure ResetGame(var game: GameData);
 var
@@ -872,7 +872,7 @@ end;
 ```
 - A **Procedure** called ```ResetGame()``` has been added to reset the **Game** to the default state. This **Procedure** is only used when the **Player** dies.
 
-Addition ten (Note: The **Procedure** ```UpdateGame()``` has changed)
+###### Addition ten (Note: The **Procedure** ```UpdateGame()``` has changed)
 ```pascal
 procedure UpdateGame(var game: GameData);
 begin
@@ -892,7 +892,7 @@ end;
 ```
 - The **Procedure** ```UpdateGame()``` has changed in order to act upon the **Player** dying. So, as long as the **Player** is not dead, we want the **Game** to run normally, you know, with **Poles** scrolling across the screen that the **Player** has to avoid. If the **Player** has died, ```UpdateGame()``` knows when that happens and will reset the **Game**.
 
-Addition eleven (Note: The **Procedure** ```DrawGame()``` has changed)
+###### Addition eleven (Note: The **Procedure** ```DrawGame()``` has changed)
 ```pascal
 procedure DrawGame(const game: GameData);
 begin
@@ -935,13 +935,13 @@ We're done now!
 ##### - New Code
 The new **Code** in **Iteration Ten** is as follows:
 
-Addition one
+###### Addition one
 ```pascal
 PlayerState = (Menu, Play);
 ```
 - We've added an **Enumeration** called ```PlayerState``` with two values, ```Menu``` and ```Play```. This **Enumeration** is going to be used to help the **Game** determine whether or not to show the **Menu** or to let the **Player** play.
 
-Addition two (Note: The **Record** ```Player``` has changed)
+###### Addition two (Note: The **Record** ```Player``` has changed)
 ```pascal    
 Player = record
   Playing: Sprite;
@@ -952,7 +952,7 @@ end;
 ```
 -  Now because of the addition of the **Enumeration** ```PlayerState```, we've changed the ```Player``` **Record** to house the current **Game State**. The new **Field** is called ```State```.
 
-Addition three (Note: The **Function** ```GetNewPlayer``` has changed)
+###### Addition three (Note: The **Function** ```GetNewPlayer``` has changed)
 ```pascal    
 function GetNewPlayer(): Player;
 begin
@@ -967,7 +967,7 @@ end;
 ```
 - The **Function** ```GetNewPlayer()``` has changed to set the value of the ```Player's``` new field ```State``` to ```Menu```. This way, we can ensure that the **Game** starts in the **Menu State**.
 
-Addition four (Note: The **Procedure** ```HandleInput()``` has changed)
+###### Addition four (Note: The **Procedure** ```HandleInput()``` has changed)
 ```pascal    
 procedure HandleInput(var player: Player);
 begin
@@ -983,7 +983,7 @@ end;
 ```
 - The **Procedure** ```HandleInput()``` has changed to accommodate for the new **State System** being implemented. Basically, the change ensures that ```if``` the game hasn't started yet (the ```Player's``` ```State``` is ```Menu```) and the **Player** presses the **Space Bar**, we want to set the ```Player's``` ```State``` to ```Play```. If the **Player** is already playing, then just handle the input like we normally would by boosting the **Players** velocity.
 
-Addition five (Note: The **Procedure** ```UpdatePlayer()``` has changed)
+###### Addition five (Note: The **Procedure** ```UpdatePlayer()``` has changed)
 ```pascal
 procedure UpdatePlayer(player: Player);
 begin
@@ -996,7 +996,7 @@ end;
 ```
 - ```UpdatePlayer()``` has also changed to suit the new **State System**. The changes made ensure that we only update the **Player's** velocity ```if``` the current ```State``` is set to ```Play```. Otherwise, the **Player** will just hover in the middle of the screen. We're doing this so that the **Player** only starts moving when we are ready to play!
 
-Addition six (Note: The **Procedure** ```UpdateGame()``` has changed)
+###### Addition six (Note: The **Procedure** ```UpdateGame()``` has changed)
 ```pascal
 procedure UpdateGame(var game: GameData);
 begin
