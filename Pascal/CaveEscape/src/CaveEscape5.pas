@@ -55,13 +55,13 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: PoleData);
+procedure UpdatePoles(poles: PoleData);
 begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
 end;
 
-procedure DrawPoles(const poles: PoleData);
+procedure DrawPoles(poles: PoleData);
 begin
   DrawSprite(poles.UpPole);
   DrawSprite(poles.DownPole);

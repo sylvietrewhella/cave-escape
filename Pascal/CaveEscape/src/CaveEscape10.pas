@@ -16,7 +16,7 @@ type
       DownPole: Sprite;
     end;
 
-    Poles = array [0..NUM_POLES] of PoleData;
+    Poles = array [0..NUM_POLES - 1] of PoleData;
 
     PlayerState = (Menu, Play);
 
@@ -177,7 +177,7 @@ begin
   end;
 end;
 
-procedure UpdateBackground(var scene: BackgroundData);
+procedure UpdateBackground(scene: BackgroundData);
 begin
   UpdateSprite(scene.ForeGround);
   UpdateSprite(scene.Foreroof);
@@ -221,7 +221,7 @@ begin
   end;
 end;
 
-procedure DrawPoles(const poles: Poles);
+procedure DrawPoles(poles: Poles);
 var
   i: Integer;
 begin

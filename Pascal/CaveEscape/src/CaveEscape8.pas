@@ -15,7 +15,7 @@ type
       DownPole: Sprite;
     end;
 
-    Poles = array [0..NUM_POLES] of PoleData;
+    Poles = array [0..NUM_POLES - 1] of PoleData;
 
     BackgroundData = record
       Foreroof: Sprite;
@@ -76,7 +76,7 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var pole: PoleData);
+procedure ResetPoleData(pole: PoleData);
 begin
   FreeSprite(pole.UpPole);
   FreeSprite(pole.DownPole);
@@ -97,7 +97,7 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: Poles);
+procedure UpdatePoles(poles: Poles);
 var
   i: Integer;
 begin
@@ -113,7 +113,7 @@ begin
   end;
 end;
 
-procedure UpdateBackground(var scene: BackgroundData);
+procedure UpdateBackground(scene: BackgroundData);
 begin
   UpdateSprite(scene.ForeGround);
   UpdateSprite(scene.Foreroof);
@@ -143,7 +143,7 @@ begin
   UpdatePoles(game.Poles);
 end;
 
-procedure DrawPoles(const poles: Poles);
+procedure DrawPoles(poles: Poles);
 var
   i: Integer;
 begin

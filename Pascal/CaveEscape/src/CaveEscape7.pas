@@ -14,7 +14,7 @@ type
     DownPole: Sprite;
   end;
 
-  Poles = array [0..NUM_POLES] of PoleData;
+  Poles = array [0..NUM_POLES - 1] of PoleData;
 
 function GetNewPlayer(): Sprite;
 begin
@@ -44,7 +44,7 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var pole: PoleData);
+procedure ResetPoleData(pole: PoleData);
 begin
   FreeSprite(pole.UpPole);
   FreeSprite(pole.DownPole);
@@ -65,7 +65,7 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: Poles);
+procedure UpdatePoles(poles: Poles);
 var
   i: Integer;
 begin
@@ -81,7 +81,7 @@ begin
   end;
 end;
 
-procedure DrawPoles(const poles: Poles);
+procedure DrawPoles(poles: Poles);
 var
   i: Integer;
 begin

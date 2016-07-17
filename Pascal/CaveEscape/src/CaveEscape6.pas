@@ -41,7 +41,7 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var poles: PoleData);
+procedure ResetPoleData(poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
@@ -62,7 +62,7 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: PoleData);
+procedure UpdatePoles(poles: PoleData);
 begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
@@ -73,7 +73,7 @@ begin
   end;
 end;
 
-procedure DrawPoles(const poles: PoleData);
+procedure DrawPoles(poles: PoleData);
 begin
   DrawSprite(poles.UpPole);
   DrawSprite(poles.DownPole);
