@@ -25,7 +25,7 @@ type
     end;
 
     Player = record
-      Playing: Sprite;
+      Sprite: Sprite;
       Score: Integer;
       IsDead: Boolean;
     end;
@@ -38,10 +38,10 @@ type
 
 function GetNewPlayer(): Player;
 begin
-  result.Playing := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
-  SpriteSetX(result.Playing, ScreenWidth() / 2 - SpriteWidth(result.Playing));
-  SpriteSetY(result.Playing, ScreenHeight() / 2);
-  SpriteStartAnimation(result.Playing, 'Fly');
+  result.Sprite := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result.Sprite, ScreenWidth() / 2 - SpriteWidth(result.Sprite));
+  SpriteSetY(result.Sprite, ScreenHeight() / 2);
+  SpriteStartAnimation(result.Sprite, 'Fly');
   result.Score := 0;
   result.IsDead := false;
 end;
@@ -78,7 +78,7 @@ begin
   SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure HandleInput(player: Sprite);
+procedure HandleInput(var player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -90,7 +90,7 @@ procedure CheckForCollisions(var game: GameData);
 var
   i: Integer;
 begin
-  if (SpriteCollision(game.Player.Playing, game.Scene.Foreground)) or (SpriteCollision(game.Player.Playing, game.Scene.Foreroof)) then
+  if (SpriteCollision(game.Player.Sprite, game.Scene.Foreground)) or (SpriteCollision(game.Player.Sprite, game.Scene.Foreroof)) then
   begin
     game.Player.IsDead := true;
     exit;
@@ -98,7 +98,7 @@ begin
 
   for i := Low(game.Poles) to High(game.Poles) do
   begin
-    if SpriteCollision(game.Player.Playing, game.Poles[i].UpPole) or SpriteCollision(game.Player.Playing, game.Poles[i].DownPole)then
+    if SpriteCollision(game.Player.Sprite, game.Poles[i].UpPole) or SpriteCollision(game.Player.Sprite, game.Poles[i].DownPole)then
     begin
       game.Player.IsDead := true;
       exit;
@@ -106,16 +106,16 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var pole: PoleData);
+procedure ResetPoleData(var poles: PoleData);
 begin
-  FreeSprite(pole.UpPole);
-  FreeSprite(pole.DownPole);
-  pole := GetRandomPoles();
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
 end;
 
 procedure ResetPlayer(var player: Player);
 begin
-  FreeSprite(player.Playing);
+  FreeSprite(player.Sprite);
   player := GetNewPlayer();
 end;
 
@@ -130,7 +130,7 @@ begin
   end;
 end;
 
-procedure UpdateVelocity(player: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -153,7 +153,7 @@ begin
     UpdateSprite(poles[i].UpPole);
     UpdateSprite(poles[i].DownPole);
 
-    if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then
+    if SpriteX (poles[i].UpPole) < (SpriteX(player.Sprite)) then
     begin
       if (poles[i].ScoreLimiter = true) then
       begin
@@ -196,9 +196,9 @@ begin
   if not (game.Player.IsDead) then
   begin
     CheckForCollisions(game);
-    HandleInput(game.Player.Playing);
+    HandleInput(game.Player.Sprite);
     UpdateBackground(game.Scene);
-    UpdatePlayer(game.Player.Playing);
+    UpdatePlayer(game.Player.Sprite);
     UpdatePoles(game.Poles, game.Player);
   end
   else //The player has died :(
@@ -224,7 +224,7 @@ begin
   DrawPoles(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
-  DrawSprite(game.Player.Playing);
+  DrawSprite(game.Player.Sprite);
   DrawText(IntToStr(game.Player.Score), ColorWhite, 'GameFont', 10, 0);
 end;
 

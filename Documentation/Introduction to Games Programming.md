@@ -1,17 +1,21 @@
 # 1. Iteration One
 
-In the **First Iteration** of **Cave Escape**, you will implement the boiler plate **Code** for a simple **Game**. The boiler plater **Code** includes the **Instructions** to open a **Graphics Window** and a basic **Game Loop**, where all of the **Instructions** that you implement will be called from.
+In the first iteration of Cave Escape, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a graphics window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration One**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration one, you should have something that looks just like this:
+
+
 ![Iteration One](Resources/Images/iteration_1.png)
-That's it! Just a blank **Graphics Window**, but we'll work on that blank canvas in future **Iterations**.
+
+
+That's it! Just a blank graphics window, but we'll work on that blank canvas in future iterations.
 
 ## Code
 
 ### - Complete Code
-The complete **Code** for **Iteration One** is as follows:
+The complete code for iteration one is as follows:
 
 ```pascal
 program GameMain;
@@ -34,39 +38,39 @@ end.
 ```
 
 ### - How it's Working
-The ```Main()``` **Procedure**, as demonstrated in the **Code** above, is responsible for **Executing** all of the **Instructions** required for our **Game** to run. The **Instructions** are **Executed** in **Sequence**, meaning that the **Code** within the ```Main()``` **Procedure** will be **Executed** in the exact order in which it is specified.
+The ```Main()``` procedure, as demonstrated in the code above, is responsible for executing all of the instructions required for our game to run. The instructions are executed in sequence, meaning that the code within the ```Main()``` procedure will be executed in the exact order in which it is specified.
 
-So, that being said, let's take a moment to analyse the ```Main()``` **Procedure** and the **Instructions** it is **Executing**. The **Sequence** is as follows:
+So, that being said, let's take a moment to analyse the ```Main()``` procedure and the instructions it is executing. The sequence is as follows:
 
-  1. Firstly, a call to ```OpenGraphicsWindow()``` is made, where we can see the title of the **Window** being opened is **Cave Escape** and the **width** and **height** of the **Window** is **432** by **768** pixels.
-  2. The **Game Loop** is opened. The **Game Loop** will **Loop** over and over, until the user closes the **Window**, meaning all of the **Instructions** will be continually **Executed** for as long as the **Loop** is running. Note that the **Condition** of the **Loop** is ```WindowCloseRequested()```.
-     * The following **Instructions** are **Executed** within the **Game Loop**:
+  1. Firstly, a call to ```OpenGraphicsWindow()``` is made, where we can see the title of the window being opened is Cave Escape and the width and height of the window is 432 by 768 pixels.
+  2. The game loop is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instructions will be continually executed for as long as the loop is running. Note that the condition of the loop is ```WindowCloseRequested()```.
+     * The following instructions are executed within the game loop:
       1. ```ProcessEvents()``` is called. ```ProcessEvents()``` is used to listen for any user input made while the program is running.
-      2. We then clear the screen with ```ClearScreen()``` before we draw anything to it (we're not drawing anything in this **Iteration**, but that will come soon!).
+      2. We then clear the screen with ```ClearScreen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
       3. We then refresh the screen with ```RefreshScreen()``` so that we can see what we've drawn.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration One** on your own. You'll have to type the **Instructions** above into your **Text Editor**. **Try and resist the urge to Copy and Paste** **Code** if it arrises, as typing it out helps build your understanding in regards to what the **Code** is doing. When you're done, you'll need to **Build** and **Run** your **Code** to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+Now it's time for you to have a go at implementing iteration one on your own. You'll have to type the instructions above into your text editor. Try and resist the urge to copy and paste code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to build and run your code to see if it is all working. If you encounter any build errors, you'll have to resolve those and build and run again.
 
 ---
 # 2. Iteration Two
 
-In the second **Iteration** of **Cave Escape**, you will implement the functionality to have your **Game** produce a graphical representation of the **Player**. The **Player** will be drawn to the centre of the **Graphics Window** and come complete with an animation!
+In the second iteration of Cave Escape, you will implement the functionality to have your game produce a graphical representation of the player. The player will be drawn to the centre of the graphics window and come complete with an animation!
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Two**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration two, you should have something that looks just like this:
 
 
 ![Iteration Two](Resources/Images/iteration_2.gif)
 
 
-What's different from **Iteration One**? We've got a graphical representation of the **Game's** **Player**! Now let's take a look at how this is implemented.
+What's different from iteration one? We've got a graphical representation of the game's player! Now let's take a look at how this is implemented.
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Two** is as follows:
+The new code in iteration two is as follows:
 
 #### Addition one
 ```pascal    
@@ -78,10 +82,10 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 ```
-- The ```GetNewPlayer()``` **Function**, as demonstrated in the **Code** above, is used to generate the **Data** associated with the **Player** entity that we'll be using in our **Game**. It's important to note that **Functions** use a special **Variable** called ```result``` to store the value in that they calculate. So, in short, the **Function** is creating a **Sprite** for the **Player**, setting the **Sprite's** location to the centre of the screen and setting an animation for the **Sprite**. Once the **Function** finishes, it **Returns** the **Sprite** it creates (the ```result``` **Variable**).
+- The ```GetNewPlayer()``` function, as demonstrated in the code above, is used to generate the data associated with the player entity that we'll be using in our game. It's important to note that functions use a special variable called ```result``` to store the value in that they calculate. So, in short, the function is creating a sprite for the player, setting the sprite's location to the centre of the screen and setting an animation for the sprite. Once the function finishes, it returns the sprite it creates (the ```result``` variable).
 
 ### - Complete Code
-The complete **Code** for **Iteration Two** can be found [here](../Pascal/CaveEscape/src/CaveEscape2.pas).
+The complete code for iteration two can be found [here](../Pascal/CaveEscape/src/CaveEscape2.pas).
 
 ### - You've Changed, Main
 ```pascal
@@ -104,30 +108,30 @@ begin
 end;
 ```
 
-Take a close look at the **Complete Code** above and review the ```Main()``` **Procedure**. A few things have changed in order to cater for our new ```GetNewPlayer()``` **Function** as well as drawing our **Player** to the screen. The **Sprite** that the **Function** ```GetNewPlayer()``` **Returns** is assigned to a **Variable** called ```player``` and then within the **Game Loop**, the **Player** **Sprite** is updated and drawn.
+Take a close look at the ```Main()``` procedure. A few things have changed in order to cater for our new ```GetNewPlayer()``` function as well as drawing our player to the screen. The sprite that the function ```GetNewPlayer()``` returns is assigned to a variable called ```player``` and then within the game loop, the player sprite is updated and drawn.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Two** on your own. As before, you'll have to type the **Instructions** above into your **Text Editor**. Continue to **Try and resist the urge to Copy and Paste** **Code** if it arrises, as typing it out helps build your understanding in regards to what the **Code** is doing. When you're done, you'll need to **Build** and **Run** your **Code** to see if it is all working. If you encounter any **Build Errors**, you'll have to resolve those and **Build** and **Run** again.
+Now it's time for you to have a go at implementing iteration two on your own. As before, you'll have to type the instructions above into your text editor. Continue to try and resist the urge to copy and paste code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to build and run your code to see if it is all working. If you encounter any build errors, you'll have to resolve those and build and run again.
 
 ---
 # 3. Iteration Three
 
-In the **Third Iteration** of **Cave Escape**, you will implement the functionality to give your **Player** the ability to fly! Well, almost. You're going to add some velocity to the **Player** so that it's not just stuck in the middle of the screen, instead, when you're finished, the **Player** will fall right off the bottom of the screen!
+In the third iteration of Cave Escape, you will implement the functionality to give your player the ability to fly! Well, almost. You're going to add some velocity to the player so that it's not just stuck in the middle of the screen, instead, when you're finished, the player will fall right off the bottom of the screen!
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Three**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration three, you should have something that looks just like this:
 
 
 ![Iteration Three](Resources/Images/iteration_3.gif)
 
 
-So with some velocity, the **Game** is a little more dynamic than it previously was in **Iteration Two**.
+So with some velocity, the game is a little more dynamic than it previously was in iteration two.
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Three** is as follows:
+The new code in iteration three is as follows:
 
 #### Addition one
 ```pascal
@@ -135,11 +139,11 @@ const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
 ```
-- We've taken the time to add some **Constant** values that are going to be used in the calculation of the **Player's** velocity. Those values represent an imposed ```GRAVITY``` and a ```MAX_SPEED``` in regards to what we want to impose as the maximum velocity the **Player** can move, or fall at.
+- We've taken the time to add some constant values that are going to be used in the calculation of the player's velocity. Those values represent an imposed ```GRAVITY``` and a ```MAX_SPEED``` in regards to what we want to impose as the maximum velocity the player can move, or fall at.
 
 #### Addition two
 ```pascal    
-procedure UpdateVelocity(player: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -153,10 +157,10 @@ begin
   end;
 end;
 ```
-- The ```UpdateVelocity()``` **Procedure**, as demonstrated in the **Code** above, uses these two new **Constant** values to determine what the **Player's** speed will be by using **Conditional** **Statements**. The **Conditional** **Statements** ensure that ```if``` the **Player** is not already falling at the ```MAX_SPEED```, increase it's velocity, ```else if``` the **Player** is already falling at the ```MAX_SPEED```, ensure that it stays falling at the ```MAX_SPEED``` rather than going any faster.
+- The ```UpdateVelocity()``` procedure, as demonstrated in the code above, uses these two new constant values to determine what the player's speed will be by using conditional statements. The conditional statements ensure that ```if``` the player is not already falling at the ```MAX_SPEED```, increase it's velocity, ```else if``` the player is already falling at the ```MAX_SPEED```, ensure that it stays falling at the ```MAX_SPEED``` rather than going any faster.
 
 ### - Complete Code
-The complete **Code** for **Iteration Three** can be found [here](../Pascal/CaveEscape/src/CaveEscape3.pas).
+The complete code for iteration three can be found [here](../Pascal/CaveEscape/src/CaveEscape3.pas).
 
 ### - Take a Look at Main
 ```pascal
@@ -180,43 +184,43 @@ begin
 end;
 ```
 
-The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```UpdateVelocity()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're updating the **Player's** velocity accordingly.
+The ```Main()``` procedure has now changed. Notice that in the game loop, there's now a call to the new procedure ```UpdateVelocity()```. This ensures that for each time the game loop executes, we're ensuring that we're updating the player's velocity accordingly.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Three** on your own. Give it a crack and see how you go.
+Now it's time for you to have a go at implementing iteration three on your own. Give it a crack and see how you go.
 
 ---
 # 4. Iteration Four
 
-In the **Fourth Iteration** of **Cave Escape**, we will actually implement the ability to have you control the way the **Player** flies. Instead of the **Player** just falling into the abyss, as it was in **Iteration Three**, **Iteration Four** sees the inclusion of the logic required to keep the **Player** on the screen by using keyboard input. In particular, we're going to make it so that every time the **Space Bar** is pressed, the **Player** is going to fly a little higher, and further away from the bottom of the screen.
+In the fourth iteration of Cave Escape, we will actually implement the ability to have you control the way the player flies. Instead of the player just falling into the abyss, as it was in iteration three, iteration four sees the inclusion of the logic required to keep the player on the screen by using keyboard input. In particular, we're going to make it so that every time the space bar is pressed, the player is going to fly a little higher, and further away from the bottom of the screen.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Four**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration four, you should have something that looks just like this:
 
 
 ![Iteration Four](Resources/Images/iteration_4.gif)
 
 
-Look at that! Control over the **Players** velocity!
+Look at that! Control over the player's velocity!
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Four** is as follows:
+The new code in iteration four is as follows:
 
-#### Addition one (Note: There is a new **Constant** value)
+#### Addition one (Note: There is a new constant value)
 ```pascal
 const
   GRAVITY = 0.08;
   MAX_SPEED = 5;
   JUMP_RECOVERY_BOOST = 2;
 ```
-- In order to be able to control the **Player's** velocity with user input, we've had to add a new **Constant** value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new **Procedure** ```HandleInput()```.
+- In order to be able to control the player's velocity with user input, we've had to add a new constant value called ```JUMP_RECOVERY_BOOST```. The reason for this will become more clear when we talk about the new procedure ```HandleInput()```.
 
 #### Addition two
 ```pascal    
-procedure HandleInput(player: Sprite);
+procedure HandleInput(var player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -224,10 +228,10 @@ begin
   end;
 end;
 ```
-- The new **Procedure** ```HandleInput()``` is implemented to listen for user input while the **Game** is running. Specifically, the input it's listening for is when the **Space Bar** is pressed. Every time the **Space Bar** is pressed, the ```HandleInput()``` **Procedure** will decrement the value of the **Constant** ```JUMP_RECOVERY_BOOST``` from the **Player's** current velocity, meaning, that each time the **Space Bar** is pressed, the **Player** will fall a little slower, but only briefly. The aim is to have the user continually press the **Space Bar** to keep the **Player** on the screen and give it the affect of flying!
+- The new procedure ```HandleInput()``` is implemented to listen for user input while the game is running. Specifically, the input it's listening for is when the space bar is pressed. Every time the space bar is pressed, the ```HandleInput()``` procedure will decrement the value of the constant ```JUMP_RECOVERY_BOOST``` from the player's current velocity, meaning, that each time the space bar is pressed, the player will fall a little slower, but only briefly. The aim is to have the user continually press the space bar to keep the player on the screen and give it the affect of flying!
 
 ### - Complete Code
-The complete **Code** for **Iteration Four** can be found [here](../Pascal/CaveEscape/src/CaveEscape4.pas).
+The complete code for iteration four can be found [here](../Pascal/CaveEscape/src/CaveEscape4.pas).
 
 ### - Main has Changed, Again
 ```pascal
@@ -252,33 +256,33 @@ begin
 end;
 ```
 
-The ```Main``` **Procedure** has now changed. Notice that in the **Game Loop**, there's now a call to the new **Procedure** ```HandleInput()```. This ensures that for each time the **Game Loop** executes, we're ensuring that we're listening for any user input, specifically, if the **Space Bar** has been pressed. Now we have a more functional **Game** where the user finally has some control over the way the **Game** behaves.
+The ```Main()``` procedure has now changed. Notice that in the game loop, there's now a call to the new procedure ```HandleInput()```. This ensures that for each time the game loop executes, we're ensuring that we're listening for any user input, specifically, if the space bar has been pressed. Now we have a more functional game where the user finally has some control over the way the game behaves.
 
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Four** on your own.
+Now it's time for you to have a go at implementing iteration four on your own.
 
 ---
 # 5. Iteration Five
 
-In the fifth **Iteration** of **Cave Escape**, we add quite a bit of functionality, more so than in the previous **Iterations**. We're up for a big step with this one. We're going to add an obstacle. We'll refer to the obstacle as a set of **Poles**. It's the aim of the **Game** to avoid the **Poles**, but we'll worry about that later. For now, let's just worry about getting the **Poles** onto the screen. So, this **Iteration** concerns the generation of a single set of **Poles** as well as the way the **Poles** behave.
+In the fifth iteration of Cave Escape, we add quite a bit of functionality, more so than in the previous iterations. We're up for a big step with this one. We're going to add an obstacle. We'll refer to the obstacle as a set of poles. It's the aim of the game to avoid the poles, but we'll worry about that later. For now, let's just worry about getting the poles onto the screen. So, this iteration concerns the generation of a single set of poles as well as the way the poles behave.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Five**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration five, you should have something that looks just like this:
 
 
 ![Iteration Five](Resources/Images/iteration_5.gif)
 
 
-While **Iteration Five** is quite a bit involved, in terms of new **Code** required, it adds loads of functionality to our **Game** and now, more than ever, it's looking more and more like a **Game**.
+While iteration five is quite a bit involved, in terms of new code required, it adds loads of functionality to our game and now, more than ever, it's looking more and more like a game.
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Five** is as follows:
+The new code in iteration five is as follows:
 
-#### Addition one (Note: There is a new **Constant** value)
+#### Addition one (Note: There is a new constant value)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -286,7 +290,7 @@ const
   JUMP_RECOVERY_BOOST = 2;
   POLE_SCROLL_SPEED = -2;
 ```
-- The **Poles** that we're adding to the **Game** will move horizontally across the screen, from left to right. In order to cater for this, we've added another **Constant** called ```POLE_SCROLL_SPEED``` in order to keep track of the speed at which the **Poles** travel across the screen.
+- The poles that we're adding to the game will move horizontally across the screen, from left to right. In order to cater for this, we've added another constant called ```POLE_SCROLL_SPEED``` in order to keep track of the speed at which the poles travel across the screen.
 
 #### Addition two
 ```pascal    
@@ -296,7 +300,7 @@ type
     DownPole: Sprite;
   end;
 ```
-- In order to be able to keep track of the **Data** required to add the **Poles** to the **Game**, we've added a **Record** called ```PoleData```. If you take a look at the ```PoleData``` **Record**, you'll notice that it has two **Fields** as **Sprites**. ```PoleData``` needs two **Sprites** because one **Pole** will come down from the top of the screen and the other will come up from the bottom.
+- In order to be able to keep track of the data required to add the poles to the game, we've added a record called ```PoleData```. If you take a look at the ```PoleData``` record, you'll notice that it has two fields as sprites. ```PoleData``` needs two sprites because one pole will come down from the top of the screen and the other will come up from the bottom.
 
 #### Addition three
 ```pascal    
@@ -312,17 +316,17 @@ begin
   SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
 end;
 ```
-- Now, we need some logic in order to be able to add the **Poles** to the **Game** so that we can see them. Firstly, we've got a new **Function** called ```GetRandomPoles()```, which is responsible for generating the **Data** associated with the **Poles**. This **Function** behaves similarly to the **Function** ```GetNewPlayer()```, as discussed in **Iteration Two**. ```GetRandomPoles()``` assigns the top and bottom **Poles** their own **Sprites**, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the **Poles** scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the **Function** assigns their **Delta X**, or horizontal movement speed to that of the value of the **Constant** ```POLE_SCROLL_SPEED```.
+- Now, we need some logic in order to be able to add the poles to the game so that we can see them. Firstly, we've got a new function called ```GetRandomPoles()```, which is responsible for generating the data associated with the poles. This function behaves similarly to the function ```GetNewPlayer()```, as discussed in iteration two. ```GetRandomPoles()``` assigns the top and bottom poles their own sprites, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the poles scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the function assigns their delta x, or horizontal movement speed to that of the value of the constant ```POLE_SCROLL_SPEED```.
 
 #### Addition four
 ```pascal    
-procedure UpdatePoles(poles: PoleData);
+procedure UpdatePoles(var poles: PoleData);
 begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
 end;
 ```
-- A **Procedure** called ```UpdatePoles()``` has been added to update the **Poles**.
+- A procedure called ```UpdatePoles()``` has been added to update the poles.
 
 #### Addition five
 ```pascal    
@@ -332,10 +336,10 @@ begin
   DrawSprite(poles.DownPole);
 end;
 ```
-- A **Procedure** called ```DrawPoles()``` to draw the **Poles** to the screen
+- A procedure called ```DrawPoles()``` has been added to draw the poles to the screen.
 
 ### - Complete Code
-The complete **Code** for **Iteration Five** can be found [here](../Pascal/CaveEscape/src/CaveEscape5.pas).
+The complete code for iteration five can be found [here](../Pascal/CaveEscape/src/CaveEscape5.pas).
 
 ### - More Changes to Main
 ```pascal
@@ -364,45 +368,45 @@ begin
   until WindowCloseRequested();
 end;
 ```
-The ```Main``` **Procedure** has now changed. Notice that we're now using our new **Function** ```GetRandomPoles()``` and assigning the value it **Returns** to a **Variable** called ```gamePoles```. In order to move the **Poles** across the screen and draw them, we've added the calls to the **Procedures** ```UpdatePoles()``` and ```DrawPoles()``` within the **GameLoop**.
+The ```Main()``` procedure has now changed. Notice that we're now using our new function ```GetRandomPoles()``` and assigning the value it returns to a variable called ```gamePoles```. In order to move the poles across the screen and draw them, we've added the calls to the procedures ```UpdatePoles()``` and ```DrawPoles()``` within the game loop.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Five** on your own.
+Now it's time for you to have a go at implementing iteration five on your own.
 
 ---
 # 6. Iteration Six
 
-In the **Sixth Iteration** of **Cave Escape**, we're going to make a few additions to ensure that once the **Poles** move off the far left of the screen, they get moved back default position. This will ensure that the **Poles** can be reused as obstacles.
+In the sixth iteration of Cave Escape, we're going to make a few additions to ensure that once the poles move off the far left of the screen, they get moved back default position. This will ensure that the poles can be reused as obstacles.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Six**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration six, you should have something that looks just like this:
 
 
 ![Iteration Six](Resources/Images/iteration_6.gif)
 
 
-The **Poles** are much better when they wrap around the **Game** screen!
+The poles are much better when they wrap around the game screen!
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Six** is as follows:
+The new code in iteration six is as follows:
 
 #### Addition one
 ```pascal
-procedure ResetPoleData(poles: PoleData);
+procedure ResetPoleData(var poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
   poles := GetRandomPoles();
 end;
 ```
-- We've added a new **Procedure** called ```ResetPoleData()``` that is going to reset the **Poles** once they move off the left of screen. Notice that it calls the **Function** ```GetRandomPoles()``` that we implemented before. It makes sense to reuse **Code** where you can, and the **Poles** that the **Function** ```GetRandomPoles()``` **Returns** are exactly what we need when we have to reset them.
+- We've added a new procedure called ```ResetPoleData()``` that is going to reset the poles once they move off the left of screen. Notice that it calls the function ```GetRandomPoles()``` that we implemented before. It makes sense to reuse code where you can, and the poles that the function ```GetRandomPoles()``` returns are exactly what we need when we have to reset them.
 
-#### Addition two (Note: ```UpdatePoles()``` has had **Code** added to it)
+#### Addition two (Note: ```UpdatePoles()``` has had code added to it)
 ```pascal    
-procedure UpdatePoles(poles: PoleData);
+procedure UpdatePoles(var poles: PoleData);
 begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
@@ -413,38 +417,38 @@ begin
   end;
 end;
 ```
-- We've modified ```UpdatePoles()``` to check to see if the **Poles** have moved off the screen and ```if``` they have, we simply reset them.
+- We've modified ```UpdatePoles()``` to check to see if the poles have moved off the left of the screen and ```if``` they have, we simply reset them.
 
 ### - Complete Code
-The complete **Code** for **Iteration Six** can be found [here](../Pascal/CaveEscape/src/CaveEscape6.pas).
+The complete code for iteration six can be found [here](../Pascal/CaveEscape/src/CaveEscape6.pas).
 
 ### - Any Changes to Main
-Not in this **Iteration**. Hurray!
+Not in this iteration. Hurray!
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Six** on your own.
+Now it's time for you to have a go at implementing iteration six on your own.
 
 ---
 # 7. Iteration Seven
 
-In **Iteration Seven** of **Cave Escape**, we're going to implement the logic to have more than one set of **Poles**. One set of **Poles** is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
+In iteration seven of Cave Escape, we're going to implement the logic to have more than one set of poles. One set of poles is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Seven**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration seven, you should have something that looks just like this:
 
 
 ![Iteration Seven](Resources/Images/iteration_7.gif)
 
 
-Now we have lots of **Poles**!
+Now we have lots of poles!
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Seven** is as follows:
+The new code in iteration seven is as follows:
 
-#### Addition one (Note: There is a new **Constant** value)
+#### Addition one (Note: There is a new constant value)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -453,17 +457,17 @@ const
   POLE_SCROLL_SPEED = -2;
   NUM_POLES = 4;
 ```
-- We've added a **Constant** called ```NUM_POLES``` to store the number of sets of **Poles** we want in the **Game**. The **Code** provided has ```NUM_POLES``` being equal to the value of four, so this means there will be exactly four sets of **Poles** in the **Game**.
+- We've added a constant called ```NUM_POLES``` to store the number of sets of poles we want in the game. The code provided has ```NUM_POLES``` being equal to the value of four, so this means there will be exactly four sets of poles in the game.
 
 #### Addition two
 ```pascal    
 Poles = array [0..NUM_POLES - 1] of PoleData;
 ```
-- The second addition is an **Array** of ```PoleData``` called ```Poles```. This **Array** is where our four sets of **Poles** will be stored. You can see the **Array** is declared as such ```Poles = array [0..NUM_POLES - 1] of PoleData;```. It's important to understand the logic in the square bracers ```[0..NUM_POLES - 1]```. Now, ```NUM_POLES``` is four, so ```NUM_POLES - 1``` is equal to three, so the logic equates to ```[0..3]```. Computers are zero based, meaning that our first set of **Poles** is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
+- The second addition is an array of ```PoleData``` called ```Poles```. This array is where our four sets of poles will be stored. You can see the array is declared as such ```Poles = array [0..NUM_POLES - 1] of PoleData;```. It's important to understand the logic in the square bracers ```[0..NUM_POLES - 1]```. Now, ```NUM_POLES``` is four, so ```NUM_POLES - 1``` is equal to three, so the logic equates to ```[0..3]```. Computers are zero based, meaning that our first set of poles is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
 
-#### Addition three (Note: ```UpdatePoles()``` has had **Code** added to it)
+#### Addition three (Note: ```UpdatePoles()``` has had code added to it)
 ```pascal    
-procedure UpdatePoles(poles: Poles);
+procedure UpdatePoles(var poles: Poles);
 var
   i: Integer;
 begin
@@ -479,9 +483,9 @@ begin
   end;
 end;
 ```
-- ```UpdatePoles()``` has only changed to work with our new **Array** of **Poles** instead of just working with a single set of **Poles**. Notice that the **Procedure** is using a ```for``` **Loop** to make sure every set of **Poles** in the **Array** is updated.
+- ```UpdatePoles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is updated.
 
-#### Addition four (Note: ```DrawPoles()``` has had **Code** added to it)
+#### Addition four (Note: ```DrawPoles()``` has had code added to it)
 ```pascal    
 procedure DrawPoles(poles: Poles);
 var
@@ -494,10 +498,10 @@ begin
   end;
 end;
 ```
--  ```DrawPoles()``` has only changed to work with our new **Array** of **Poles** instead of just working with a single set of **Poles**. Notice that the **Procedure** is using a ```for``` **Loop** to make sure every set of **Poles** in the **Array** is drawn.
+-  ```DrawPoles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is drawn.
 
 ### - Complete Code
-The complete **Code** for **Iteration Seven** can be found [here](../Pascal/CaveEscape/src/CaveEscape7.pas).
+The complete code for iteration seven can be found [here](../Pascal/CaveEscape/src/CaveEscape7.pas).
 
 ### - Any Changes to Main
 ```pascal
@@ -529,37 +533,33 @@ begin
     RefreshScreen();
   until WindowCloseRequested();
 end;
-
-begin
-  Main();
-end.
 ```
-Instead of the **Variable** ```gamePoles``` being a value of ```PoleData```, it is now a value of our **Array**, ```Poles```. We've also added a ```for``` **Loop** to ensure that we set up all of the **Poles**.
+Instead of the variable ```gamePoles``` being a value of ```PoleData```, it is now a value of our array, ```Poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Seven** on your own.
+Now it's time for you to have a go at implementing iteration seven on your own.
 
 ---
 # 8. Iteration Eight
 
-In **Iteration Eight** of **Cave Escape**, we're going to focus a fair bit on polishing the **Game** in terms of visual aesthetics and **Code** presentation. Visually, the **Game** is going to be practically complete after the eighth **Iteration**. We're going to include a scrolling **Background** for the **Game** to help set the scene. The **Code** tidy up involved in **Iteration Eight** is purely for convention and to conform to best practice of having well presented, readable **Code**. This **Iteration** sees the addition of nine new **Code** additions, so it is quite busy.
+In iteration eight of Cave Escape, we're going to focus a fair bit on polishing the game in terms of visual aesthetics and code presentation. Visually, the game is going to be practically complete after the eighth iteration. We're going to include a scrolling background for the game to help set the scene. The code tidy up involved in iteration eight is purely for convention and to conform to best practice of having well presented, readable code. This iteration sees the addition of nine new code additions, so it is quite busy.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Eight**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration eight, you should have something that looks just like this:
 
 
 ![Iteration Eight](Resources/Images/iteration_8.gif)
 
 
-That scrolling **Background** really complements the theme of the **Game**!
+That scrolling background really complements the theme of the game!
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Eight** is as follows:
+The new code in iteration eight is as follows:
 
-#### Addition one (Note: There is a new **Constant** value and the **Constant** ```POLE_SCROLL_SPEED``` has been changed to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```)
+#### Addition one (Note: There is a new constant value and the constant ```POLE_SCROLL_SPEED``` has been changed to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```)
 ```pascal
 const
   GRAVITY = 0.08;
@@ -569,7 +569,7 @@ const
   BACKGROUND_SCROLL_SPEED = -1;
   NUM_POLES = 4;
 ```
-- In order to cater for the **Game's** new visual **Background**, we've changed the **Constant** ```POLE_SCROLL_SPEED``` to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```, because the roof element of the **Background** is going to have the same scrolling speed as the **Poles**. We've also added another **Constant** ```BACKGROUND_SCROLL_SPEED``` to store the value at which we want the **Background** to scroll at. These values ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED``` and ```BACKGROUND_SCROLL_SPEED``` are different because we want to create parallax scrolling.
+- In order to cater for the game's new visual background, we've changed the constant ```POLE_SCROLL_SPEED``` to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```, because the roof element of the background is going to have the same scrolling speed as the poles. We've also added another constant ```BACKGROUND_SCROLL_SPEED``` to store the value at which we want the background to scroll at. These values ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED``` and ```BACKGROUND_SCROLL_SPEED``` are different because we want to create parallax scrolling.
 
 #### Addition two
 ```pascal    
@@ -579,7 +579,7 @@ BackgroundData = record
   Background: Sprite;
 end;
 ```
-- ```BackgroundData``` has been added to house all the information related to the **Game's** **Background**. Notice it consists of three separate **Sprites**, ```Foreroof```, ```Foreground``` and ```Background```.
+- ```BackgroundData``` has been added to house all the information related to the game's background. Notice it consists of three separate sprites, ```Foreroof```, ```Foreground``` and ```Background```.
 
 #### Addition three
 ```pascal    
@@ -589,7 +589,7 @@ GameData = record
   Poles: Poles;
 end;
 ```
--  The **Record** ```GameData``` has been added to house all the information that the **Game** relies upon, like the **Player**, **Background** and the **Poles**. We'll talk more about this a little later when we discuss how the ```Main``` **Procedure** has changed in this **Iteration**.
+-  The record ```GameData``` has been added to house all the information that the game relies upon, like the player, background and the poles. We'll talk more about this a little later when we discuss how the ```Main()``` procedure has changed in this iteration.
 
 #### Addition four
 ```pascal    
@@ -612,7 +612,7 @@ begin
   SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 ```
-- Now, we need some logic in order to be able to add the **Background** to the **Game** so that we can see it. Firstly, we've got a new **Function** called ```GetNewBackground()```, which is responsible for generating the **Data** associated with the **Background**. This **Function** behaves similarly to the **Functions** ```GetNewPlayer()``` and ```GetRandomPoles()```. ```GetNewBackground()``` **Returns** a value of ```BackgroundData```, and as you can see, it is responsible for setting all of the values within the ```BackgroundData``` **Record**. It sets the **Sprites** for the ```Foreroof```, ```ForeGround``` and ```Background```, as well as their locations and the animation for the ```ForeGround``` **Sprite**. Because the **Background** has a scrolling affect, the **Delta X**, or horizontal movement speed of the three **Sprites** have been set accordingly.
+- Now, we need some logic in order to be able to add the background to the game so that we can see it. Firstly, we've got a new function called ```GetNewBackground()```, which is responsible for generating the data associated with the background. This function behaves similarly to the functions ```GetNewPlayer()``` and ```GetRandomPoles()```. ```GetNewBackground()``` returns a value of ```BackgroundData```, and as you can see, it is responsible for setting all of the values within the ```BackgroundData``` record. It sets the sprites for the ```Foreroof```, ```ForeGround``` and ```Background```, as well as their locations and the animation for the ```ForeGround``` sprite. Because the background has a scrolling affect, the delta x, or horizontal movement speed of the three sprites have been set accordingly.
 
 #### Addition five
 ```pascal
@@ -632,7 +632,7 @@ begin
   end;
 end;
 ```
-- A new **Procedure** called ```UpdateBackground()``` has been added to ensure the **Background** wraps continuously around the screen, similar to the fashion in which the **Poles** do. The logic within the **Procedure** makes sure that the **Game** scene always renders the **Background** in a manner which makes the scrolling of the images seem infinite.
+- A new procedure called ```UpdateBackground()``` has been added to ensure the background wraps continuously around the screen, similar to the fashion in which the poles do. The logic within the procedure makes sure that the game scene always renders the background in a manner which makes the scrolling of the images seem infinite.
 
 #### Addition six
 ```pascal
@@ -642,7 +642,7 @@ begin
   UpdateSprite(player);
 end;
 ```
-- The **Procedure** ```UpdatePlayer()``` has been added so that the logic to update the **Player** can be moved out of the ```Main()``` **Procedure** into a separate **Procedure** which focusses exclusively on managing the **Player** element. We've done this to conform to good conventional practice and to apply what is called **Modular Decomposition**. Briefly, **Modular Decomposition** involves separating **Code** into logical blocks, which are focussed on a specific task, I.e. updating the **Player**.
+- The procedure ```UpdatePlayer()``` has been added so that the logic to update the player can be moved out of the ```Main()``` procedure into a separate procedure which focusses exclusively on managing the player element. We've done this to conform to good conventional practice and to apply what is called modular decomposition. Briefly, modular decomposition involves separating code into logical blocks, which are focussed on a specific task, I.e. updating the player.
 
 #### Addition seven
 ```pascal
@@ -654,7 +654,7 @@ begin
   UpdatePoles(game.Poles);
 end;
 ```
-- A **Procedure** called ```UpdateGame()``` has been added, for the same reasons as the **Procedure** ```UpdatePlayer()```. More application of good practice and a general **Code** tidy up.
+- A procedure called ```UpdateGame()``` has been added, for the same reasons as the procedure ```UpdatePlayer()```. More application of good practice and a general code tidy up.
 
 #### Addition eight
 ```pascal
@@ -667,7 +667,7 @@ begin
   DrawSprite(game.Player);
 end;
 ```
-- Yet another **Procedure** has been added to apply **Modular Decomposition** to our **Game**. ```DrawGame()``` has been created to house all the calls, which are responsible for drawing the **Game** elements to the screen.
+- Yet another procedure has been added to apply modular decomposition to our game. ```DrawGame()``` has been created to house all the calls, which are responsible for drawing the game elements to the screen.
 
 #### Addition nine
 ```pascal
@@ -684,10 +684,10 @@ begin
   game.Scene := GetNewBackground();
 end;
 ```
-- Finally, this big **Iteration** concludes with the addition of a new **Procedure** called ```SetUpGame()```. Out of good practice, we've move all the **Game** setup calls from the ```Main()``` **Procedure** into a single **Procedure** called ```SetUpGame()```. It is here where all the game elements are instantiated, such as the **Player**, **Background** and **Poles**.
+- Finally, this big iteration concludes with the addition of a new procedure called ```SetUpGame()```. Out of good practice, we've move all the game setup calls from the ```Main()``` procedure into a single procedure called ```SetUpGame()```. It is here where all the game elements are instantiated, such as the player, background and poles.
 
 ### - Complete Code
-The complete **Code** for **Iteration Eight** can be found [here](../Pascal/CaveEscape/src/CaveEscape8.pas).
+The complete code for iteration eight can be found [here](../Pascal/CaveEscape/src/CaveEscape8.pas).
 
 ### - A Little Change to Main
 ```pascal
@@ -708,32 +708,32 @@ begin
 end;
 ```
 
-Look how tidy the ```Main()``` **Procedure** looks now after our **Code** tidy up. We now only have a single **Variable** called ```game```, which is a value of ```GameData```. We call our new **Procedure** ```SetUpGame()``` before the **Game Loop** to set the **Game** up, then in our **Game Loop**, we have calls to ```UpdateGame()``` and ```DrawGame()```, which handle everything else that the **Game** depends on.
+Look how tidy the ```Main()``` procedure looks now after our code tidy up. We now only have a single variable called ```game```, which is a value of ```GameData```. We call our new procedure ```SetUpGame()``` before the game loop to set the game up, then in our game loop, we have calls to ```UpdateGame()``` and ```DrawGame()```, which handle everything else that the game depends on.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Eight** on your own.
+Now it's time for you to have a go at implementing iteration eight on your own.
 
 ---
 # 9. Iteration Nine
 
-**Iteration Nine** is going to be quite a big one too, where there are some big changes to improve gameplay in order to make our **Game**....well, more of a **Game**. In this **Iteration**, we're going to add some music to give the **Game** it's own little soundtrack, which will make the experience more immersive. The big changes, on top of the music, are the addition of collisions, so the **Player** can collide with the environment, a scoring system and the ability to have the **Game** reset if the **Player** does collide with the environment. **Iteration Nine** very nearly implements a completely functional **Game**, ready for shipping.
+Iteration nine is going to be quite a big one too, where there are some big changes to improve gameplay in order to make our game....well, more of a game. In this iteration, we're going to add some music to give the game it's own little soundtrack, which will make the experience more immersive. The big changes, on top of the music, are the addition of collisions, so the player can collide with the environment, a scoring system and the ability to have the game reset if the player does collide with the environment. Iteration nine very nearly implements a completely functional game, ready for shipping.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Nine**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration nine, you should have something that looks just like this:
 
 
 ![Iteration Nine](Resources/Images/iteration_9.gif)
 
 
-We're getting closer and closer to a complete **Game**!
+We're getting closer and closer to a complete game!
 
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Nine** is as follows:
+The new code in iteration nine is as follows:
 
-#### Addition one (Note: The **Record** ```PoleData``` has changed)
+#### Addition one (Note: The record ```PoleData``` has changed)
 ```pascal
 PoleData = record
   ScoreLimiter: Boolean;
@@ -741,19 +741,19 @@ PoleData = record
   DownPole: Sprite;
 end;
 ```
-- We've added a **Field** to our **Record** ```PoleData``` called ```ScoreLimiter```. We need this to be able to make the scoring system work. We'll talk more about that soon. Promise.
+- We've added a field to our record ```PoleData``` called ```ScoreLimiter```. We need this to be able to make the scoring system work. We'll talk more about that soon. Promise.
 
 #### Addition two
 ```pascal    
 Player = record
-  Playing: Sprite;
+  Sprite: Sprite;
   Score: Integer;
   IsDead: Boolean;
 end;
 ```
-- We've added a new **Record** called ```Player```. Our **Player** can no longer just be a **Sprite**. If you take a look at the **Record**, you'll notice it has three **Fields**. The first of which is our **Player** **Sprite**. The next being the ```Score``` and the third being a **Field** called ```IsDead```. We need this **Field** to tell the **Game** when the **Player** dies, from colliding with the environment.
+- We've added a new record called ```Player```. Our player can no longer just be a sprite. If you take a look at the record, you'll notice it has three fields. The first of which is our player sprite. The next being the ```Score``` and the third being a field called ```IsDead```. We need this field to tell the game when the player dies, from colliding with the environment.
 
-#### Addition three (Note: The **Record** ```GameData``` has changed)
+#### Addition three (Note: The record ```GameData``` has changed)
 ```pascal    
 GameData = record
   Player: Player;
@@ -761,23 +761,23 @@ GameData = record
   Poles: Poles;
 end;
 ```
-- The ```GameData``` **Record** has changed only slightly. Instead of the ```Player``` **Field** being just a **Sprite**, it is now a value of our new **Record** ```Player```.
+- The ```GameData``` record has changed only slightly. Instead of the ```Player``` field being just a sprite, it is now a value of our new record ```Player```.
 
-#### Addition four (Note: The **Function** ```GetNewPlayer()``` has changed)
+#### Addition four (Note: The function ```GetNewPlayer()``` has changed)
 ```pascal    
 function GetNewPlayer(): Player;
 begin
-  result.Playing := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
-  SpriteSetX(result.Playing, ScreenWidth() / 2 - SpriteWidth(result.Playing));
-  SpriteSetY(result.Playing, ScreenHeight() / 2);
-  SpriteStartAnimation(result.Playing, 'Fly');
+  result.Sprite := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result.Sprite, ScreenWidth() / 2 - SpriteWidth(result.Sprite));
+  SpriteSetY(result.Sprite, ScreenHeight() / 2);
+  SpriteStartAnimation(result.Sprite, 'Fly');
   result.Score := 0;
   result.IsDead := false;
 end;
 ```
-- Our **Function** ```GetNewPlayer()``` has had to change in order to support the new scoring system as well as our collision system. In the **Function** we now set the ```Score``` to zero and set the **Player** to be alive when the **Function** is called.
+- Our function ```GetNewPlayer()``` has had to change in order to support the new scoring system as well as our collision system. In the function we now set the ```Score``` to zero and set the player to be alive when the function is called.
 
-#### Addition five (Note: The **Function** ```GetRandomPoles()``` has changed)
+#### Addition five (Note: The function ```GetRandomPoles()``` has changed)
 ```pascal
 function GetRandomPoles(): PoleData;
 begin
@@ -786,15 +786,15 @@ begin
   SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
   SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
   SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
+  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));;
   SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
   SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
   result.ScoreLimiter := true;
 end;
 ```
-- The ```GetRandomPoles()``` **Function** has also changed. Only slightly, though. Notice that now the **Function** sets the ```PoleData``` value that it **Returns** to have a ```ScoreLimiter``` value of ```true``` and also, the positioning of the **Poles** in terms of their vertical position is random. Because we have the roof and the floor, we can position the **Poles** more dynamically. Now, we're going to use the ```ScoreLimiter``` to increment the ```Score``` of the **Player** every time they pass a set of **Poles**. Once they pass a set of **Poles**, the **Player's*** ```Score``` will be incremented and the ```ScoreLimiter``` for that set of **Poles** will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```UpdatePoles()```.
+- The ```GetRandomPoles()``` function has also changed. Only slightly, though. Notice that now the function sets the ```PoleData``` value that it returns to have a ```ScoreLimiter``` value of ```true``` and also, the positioning of the poles in terms of their vertical position is random. Because we have the roof and the floor, we can position the poles more dynamically. Now, we're going to use the ```ScoreLimiter``` to increment the ```Score``` of the player every time they pass a set of poles. Once they pass a set of poles, the player's* ```Score``` will be incremented and the ```ScoreLimiter``` for that set of poles will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```UpdatePoles()```.
 
-#### Addition six (Note: The **Procedure** ```UpdatePoles()``` has changed)
+#### Addition six (Note: The procedure ```UpdatePoles()``` has changed)
 ```pascal
 procedure UpdatePoles(var poles: Poles; var player: Player);
 var
@@ -805,7 +805,7 @@ begin
     UpdateSprite(poles[i].UpPole);
     UpdateSprite(poles[i].DownPole);
 
-    if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then
+    if SpriteX (poles[i].UpPole) < (SpriteX(player.Sprite)) then
     begin
       if (poles[i].ScoreLimiter = true) then
       begin
@@ -821,7 +821,7 @@ begin
   end;
 end;
 ```
-- Now we're going to take a look at the changes made to ```UpdatePoles()```. Take a close look at the conditional statements in this **Procedure**. In particular, let's focus on this conditional section of **Code** here ```if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then``` to understand why we need the ```ScoreLimiter```. Firstly, we're checking to see if the **Player** has passed any **Poles**. That's what the first ```if``` **Statement** is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```ScoreLimiter``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```Player's``` ```Score```. Now, it has to change to ```false``` because, if it never did, once the **Player** passes some **Poles**, the first ```if``` statement would be ```true``` and the ```Player's``` score would keep incrementing because the **Player** would be beyond the **Poles**. Phew. Tongue twisting. The best way to see the **Bug** that this would cause is to remove the nested ```if``` **Statement** and see what happens for yourself.
+- Now we're going to take a look at the changes made to ```UpdatePoles()```. Take a close look at the conditional statements in this procedure. In particular, let's focus on this conditional section of code here ```if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then``` to understand why we need the ```ScoreLimiter```. Firstly, we're checking to see if the player has passed any poles. That's what the first ```if``` statement is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```ScoreLimiter``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```Player's``` ```Score```. Now, it has to change to ```false``` because, if it never did, once the player passes some poles, the first ```if``` statement would be ```true``` and the ```Player's``` score would keep incrementing because the player would be beyond the poles. Phew. Tongue twisting. The best way to see the bug that this would cause is to remove the nested ```if``` statement and see what happens for yourself.
 
 #### Addition seven
 ```pascal
@@ -829,7 +829,7 @@ procedure CheckForCollisions(var game: GameData);
 var
   i: Integer;
 begin
-  if (SpriteCollision(game.Player.Playing, game.Scene.Foreground)) or (SpriteCollision(game.Player.Playing, game.Scene.Foreroof)) then
+  if (SpriteCollision(game.Player.Sprite, game.Scene.Foreground)) or (SpriteCollision(game.Player.Sprite, game.Scene.Foreroof)) then
   begin
     game.Player.IsDead := true;
     exit;
@@ -837,7 +837,7 @@ begin
 
   for i := Low(game.Poles) to High(game.Poles) do
   begin
-    if SpriteCollision(game.Player.Playing, game.Poles[i].UpPole) or SpriteCollision(game.Player.Playing, game.Poles[i].DownPole)then
+    if SpriteCollision(game.Player.Sprite, game.Poles[i].UpPole) or SpriteCollision(game.Player.Sprite, game.Poles[i].DownPole)then
     begin
       game.Player.IsDead := true;
       exit;
@@ -845,17 +845,17 @@ begin
   end;
 end;
 ```
-- We've got a new **Procedure** called ```CheckForCollisions()```. The role of this **Procedure** is to check to see if the **Player** has collided with any of the eligible **Game** elements (the **Poles**, the roof and the floor). ```If``` the **Player** does collide with anything that it shouldn't, we set the ```Player's``` ```IsDead``` to ```true```.
+- We've got a new procedure called ```CheckForCollisions()```. The role of this procedure is to check to see if the player has collided with any of the eligible game elements (the poles, the roof and the floor). ```If``` the player does collide with anything that it shouldn't, we set the ```Player's``` ```IsDead``` to ```true```.
 
 #### Addition eight
 ```pascal
 procedure ResetPlayer(var player: Player);
 begin
-  FreeSprite(player.Playing);
+  FreeSprite(player.Sprite);
   player := GetNewPlayer();
 end;
 ```
-- Another new **Procedure** called ```ResetPlayer()``` has been added to reset the ```Player``` to a default state. When we mention default state, we mean a new **Game** where the **Score** is zero and the **Player** has to start over. This **Procedure** is only used when the ```Player``` dies (collides with the environment).
+- Another new procedure called ```ResetPlayer()``` has been added to reset the ```Player``` to a default state. When we mention default state, we mean a new game where the score is zero and the player has to start over. This procedure is only used when the ```Player``` dies (collides with the environment).
 
 #### Addition nine
 ```pascal
@@ -870,9 +870,9 @@ begin
   end;
 end;
 ```
-- A **Procedure** called ```ResetGame()``` has been added to reset the **Game** to the default state. This **Procedure** is only used when the **Player** dies.
+- A procedure called ```ResetGame()``` has been added to reset the game to the default state. This procedure is only used when the player dies.
 
-#### Addition ten (Note: The **Procedure** ```UpdateGame()``` has changed)
+#### Addition ten (Note: The procedure ```UpdateGame()``` has changed)
 ```pascal
 procedure UpdateGame(var game: GameData);
 begin
@@ -890,9 +890,9 @@ begin
   end;
 end;
 ```
-- The **Procedure** ```UpdateGame()``` has changed in order to act upon the **Player** dying. So, as long as the **Player** is not dead, we want the **Game** to run normally, you know, with **Poles** scrolling across the screen that the **Player** has to avoid. If the **Player** has died, ```UpdateGame()``` knows when that happens and will reset the **Game**.
+- The procedure ```UpdateGame()``` has changed in order to act upon the player dying. So, as long as the player is not dead, we want the game to run normally, you know, with poles scrolling across the screen that the player has to avoid. If the player has died, ```UpdateGame()``` knows when that happens and will reset the game.
 
-#### Addition eleven (Note: The **Procedure** ```DrawGame()``` has changed)
+#### Addition eleven (Note: The procedure ```DrawGame()``` has changed)
 ```pascal
 procedure DrawGame(const game: GameData);
 begin
@@ -900,29 +900,29 @@ begin
   DrawPoles(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
-  DrawSprite(game.Player.Playing);
+  DrawSprite(game.Player.Sprite);
   DrawText(IntToStr(game.Player.Score), ColorWhite, 'GameFont', 10, 0);
 end;
 ```
-- Finally, ```DrawGame()``` has changed to simply draw the **Score** to the top left of the screen so that we can see how good....or bad we are at playing.
+- Finally, ```DrawGame()``` has changed to simply draw the score to the top left of the screen so that we can see how good....or bad we are at playing.
 
 ### - Complete Code
-The complete **Code** for **Iteration Nine** can be found [here](../Pascal/CaveEscape/src/CaveEscape9.pas).
+The complete code for iteration nine can be found [here](../Pascal/CaveEscape/src/CaveEscape9.pas).
 
 ### - You're the Same, Main
 Main has not changed.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Nine** on your own.
+Now it's time for you to have a go at implementing iteration nine on your own.
 
 ---
 # 10. Iteration Ten
 
-**Iteration Ten** is the final **Iteration** for the **Game** before we move onto **Extensions**. The **Extensions** are separate because they only add polish and no majorly new functionality that makes our **Game** more of a **Game**. In this final **Iteration** we will add a **Menu** to the **Game** so that it only starts when the **Player** is ready.
+Iteration ten is the final iteration for the game! In this final iteration we will add a menu to the game so that it only starts when the player is ready.
 
 ## What to Expect
 
-Once you're finished working through and implementing **Iteration Ten**, you should have something that looks just like this:
+Once you're finished working through and implementing iteration ten, you should have something that looks just like this:
 
 
 ![Iteration Ten](Resources/Images/iteration_10.gif)
@@ -933,47 +933,47 @@ We're done now!
 ## Code
 
 ### - New Code
-The new **Code** in **Iteration Ten** is as follows:
+The new code in iteration ten is as follows:
 
 #### Addition one
 ```pascal
 PlayerState = (Menu, Play);
 ```
-- We've added an **Enumeration** called ```PlayerState``` with two values, ```Menu``` and ```Play```. This **Enumeration** is going to be used to help the **Game** determine whether or not to show the **Menu** or to let the **Player** play.
+- We've added an enumeration called ```PlayerState``` with two values, ```Menu``` and ```Play```. This enumeration is going to be used to help the game determine whether or not to show the menu or to let the player play.
 
-#### Addition two (Note: The **Record** ```Player``` has changed)
+#### Addition two (Note: The record ```Player``` has changed)
 ```pascal    
 Player = record
-  Playing: Sprite;
+  Sprite: Sprite;
   Score: Integer;
   IsDead: Boolean;
   State: PlayerState;
 end;
 ```
--  Now because of the addition of the **Enumeration** ```PlayerState```, we've changed the ```Player``` **Record** to house the current **Game State**. The new **Field** is called ```State```.
+-  Now because of the addition of the enumeration ```PlayerState```, we've changed the ```Player``` record to house the current game state. The new field is called ```State```.
 
-#### Addition three (Note: The **Function** ```GetNewPlayer``` has changed)
+#### Addition three (Note: The function ```GetNewPlayer``` has changed)
 ```pascal    
 function GetNewPlayer(): Player;
 begin
-  result.Playing := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
-  SpriteSetX(result.Playing, ScreenWidth() / 2 - SpriteWidth(result.Playing));
-  SpriteSetY(result.Playing, ScreenHeight() / 2);
-  SpriteStartAnimation(result.Playing, 'Fly');
+  result.Sprite := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result.Sprite, ScreenWidth() / 2 - SpriteWidth(result.Sprite));
+  SpriteSetY(result.Sprite, ScreenHeight() / 2);
+  SpriteStartAnimation(result.Sprite, 'Fly');
   result.Score := 0;
   result.IsDead := false;
   result.State := Menu;
 end;
 ```
-- The **Function** ```GetNewPlayer()``` has changed to set the value of the ```Player's``` new field ```State``` to ```Menu```. This way, we can ensure that the **Game** starts in the **Menu State**.
+- The function ```GetNewPlayer()``` has changed to set the value of the ```Player's``` new field ```State``` to ```Menu```. This way, we can ensure that the game starts in the menu state.
 
-#### Addition four (Note: The **Procedure** ```HandleInput()``` has changed)
+#### Addition four (Note: The procedure ```HandleInput()``` has changed)
 ```pascal    
 procedure HandleInput(var player: Player);
 begin
   if KeyTyped(SpaceKey) and (player.State = Play) then
   begin
-    SpriteSetDy(player.Playing, SpriteDy(player.Playing) - JUMP_RECOVERY_BOOST);
+    SpriteSetDy(player.Sprite, SpriteDy(player.Sprite) - JUMP_RECOVERY_BOOST);
   end
   else if KeyTyped(SpaceKey) then
   begin
@@ -981,22 +981,22 @@ begin
   end;
 end;
 ```
-- The **Procedure** ```HandleInput()``` has changed to accommodate for the new **State System** being implemented. Basically, the change ensures that ```if``` the game hasn't started yet (the ```Player's``` ```State``` is ```Menu```) and the **Player** presses the **Space Bar**, we want to set the ```Player's``` ```State``` to ```Play```. If the **Player** is already playing, then just handle the input like we normally would by boosting the **Players** velocity.
+- The procedure ```HandleInput()``` has changed to accommodate for the new menu state being implemented. Basically, the change ensures that ```if``` the game hasn't started yet (the ```Player's``` ```State``` is ```Menu```) and the player presses the space bar, we want to set the ```Player's``` ```State``` to ```Play```. If the player is already playing, then just handle the input like we normally would by boosting the player's velocity.
 
-#### Addition five (Note: The **Procedure** ```UpdatePlayer()``` has changed)
+#### Addition five (Note: The procedure ```UpdatePlayer()``` has changed)
 ```pascal
 procedure UpdatePlayer(player: Player);
 begin
   if (player.State = Play) then
   begin
-    UpdateVelocity(player.Playing);
+    UpdateVelocity(player.Sprite);
   end;
-  UpdateSprite(player.Playing);
+  UpdateSprite(player.Sprite);
 end;
 ```
-- ```UpdatePlayer()``` has also changed to suit the new **State System**. The changes made ensure that we only update the **Player's** velocity ```if``` the current ```State``` is set to ```Play```. Otherwise, the **Player** will just hover in the middle of the screen. We're doing this so that the **Player** only starts moving when we are ready to play!
+- ```UpdatePlayer()``` has also changed to suit the new menu state. The changes made ensure that we only update the player's velocity ```if``` the current ```State``` is set to ```Play```. Otherwise, the player will just hover in the middle of the screen. We're doing this so that the player only starts moving when we are ready to play!
 
-#### Addition six (Note: The **Procedure** ```UpdateGame()``` has changed)
+#### Addition six (Note: The procedure ```UpdateGame()``` has changed)
 ```pascal
 procedure UpdateGame(var game: GameData);
 begin
@@ -1017,9 +1017,9 @@ begin
   end;
 end;
 ```
-- ```UpdateGame()``` also has a change to suit the **State System**. The changes ensure that the **Poles** only scroll across the screen if the **Player** has started playing the **Game**.
+- ```UpdateGame()``` also has a change to suit the menu state. The changes ensure that the poles only scroll across the screen if the player has started playing the game.
 
-#### Addition seven (Note: The **Procedure** ```DrawGame()``` has changed)
+#### Addition seven (Note: The procedure ```DrawGame()``` has changed)
 ```pascal
 procedure DrawGame(const game: GameData);
 begin
@@ -1027,7 +1027,7 @@ begin
   DrawPoles(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
-  DrawSprite(game.Player.Playing);
+  DrawSprite(game.Player.Sprite);
   if (game.Player.State = Play) then
   begin
     DrawText(IntToStr(game.Player.Score), ColorWhite, 'GameFont', 10, 0);
@@ -1039,17 +1039,17 @@ begin
     ColorWhite,
     'GameFont',
     ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
-    SpriteY(game.Player.Playing) + TextHeight(FontNamed('GameFont'), ' ') * 2);
+    SpriteY(game.Player.Sprite) + TextHeight(FontNamed('GameFont'), ' ') * 2);
   end;
 end;
 ```
-- Finally, ```DrawGame()``` also has some minor changes. This is where we're drawing our new **Menu**. So, ```if``` the **Player** is not playing the **Game** yet, we draw a **Menu** to the screen for them, giving them **Instructions** on how to start playing.
+- Finally, ```DrawGame()``` also has some minor changes. This is where we're drawing our new menu. So, ```if``` the player is not playing the game yet, we draw a menu to the screen for them, giving them instructions on how to start playing.
 
 ### - Complete Code
-The complete **Code** for **Iteration Ten** can be found [here](../Pascal/CaveEscape/src/CaveEscape10.pas).
+The complete code for iteration ten can be found [here](../Pascal/CaveEscape/src/CaveEscape10.pas).
 
 ### - Main Remains the Same
 It really does.
 
 ### Have a Crack
-Now it's time for you to have a go at implementing **Iteration Ten** on your own. You've done really well and you're pretty much done!
+Now it's time for you to have a go at implementing iteration ten on your own. You've done really well and you're pretty much done!

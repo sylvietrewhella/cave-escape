@@ -68,7 +68,7 @@ begin
   SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure HandleInput(player: Sprite);
+procedure HandleInput(var player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -76,14 +76,14 @@ begin
   end;
 end;
 
-procedure ResetPoleData(pole: PoleData);
+procedure ResetPoleData(var poles: PoleData);
 begin
-  FreeSprite(pole.UpPole);
-  FreeSprite(pole.DownPole);
-  pole := GetRandomPoles();
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
 end;
 
-procedure UpdateVelocity(player: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -97,7 +97,7 @@ begin
   end;
 end;
 
-procedure UpdatePoles(poles: Poles);
+procedure UpdatePoles(var poles: Poles);
 var
   i: Integer;
 begin

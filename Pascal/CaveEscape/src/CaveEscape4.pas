@@ -14,7 +14,7 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure HandleInput(player: Sprite);
+procedure HandleInput(var player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -22,7 +22,7 @@ begin
   end;
 end;
 
-procedure UpdateVelocity(player: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 

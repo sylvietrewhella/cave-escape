@@ -13,7 +13,7 @@ begin
   SpriteStartAnimation(result, 'Fly');
 end;
 
-procedure UpdateVelocity(player: Sprite);
+procedure UpdateVelocity(var player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
