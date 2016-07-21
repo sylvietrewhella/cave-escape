@@ -42,11 +42,9 @@ int main()
     {
       process_events();
       clear_screen(COLOR_WHITE);
-
       update_velocity(player);
       update_sprite(player);
       draw_sprite(player);
-
       refresh_screen();
 
     } while(!window_close_requested());

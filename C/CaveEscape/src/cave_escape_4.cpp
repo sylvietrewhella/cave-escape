@@ -51,13 +51,10 @@ int main()
     {
       process_events();
       clear_screen(ColorWhite);
-
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
-
       draw_sprite(player);
-
       refresh_screen();
 
     } while(!window_close_requested());

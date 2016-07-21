@@ -10,36 +10,22 @@
 
 typedef struct pole_data
 {
-  bool score_limiter;
   sprite up_pole, down_pole;
 } pole_data;
 
 typedef struct pole_data poles[NUM_POLES];
 
+typedef struct background_data
+{
+  sprite foreroof, foreground, background;
+} background_data;
+
 typedef struct game_data
 {
-  sprite player, foreroof, foreground, background;
-  bool is_dead;
-  int score;
+  sprite player;
+  background_data scene;
   poles poles;
-  int pole_release_distance;
 } game_data;
-
-pole_data get_random_poles()
-{
-  pole_data result;
-  result.up_pole = create_sprite(bitmap_named("UpPole"));
-  result.down_pole = create_sprite(bitmap_named("DownPole"));
-  sprite_set_x(result.up_pole, screen_width());
-  sprite_set_y(result.up_pole, screen_height() - sprite_height(result.up_pole));
-  sprite_set_x(result.down_pole, sprite_x(result.up_pole));
-  sprite_set_y(result.down_pole, 0);
-  sprite_set_dx(result.up_pole, 0);
-  sprite_set_dx(result.down_pole, 0);
-  result.score_limiter = true;
-
-  return result;
-}
 
 sprite get_new_player()
 {
@@ -52,40 +38,56 @@ sprite get_new_player()
   return result;
 }
 
-void setup_background(game_data* game)
+pole_data get_random_poles()
 {
-  game->background = create_sprite(bitmap_named("Background"));
-  sprite_set_x(game->background, 0);
-  sprite_set_y(game->background, 0);
-  sprite_set_dx(game->background, BACKGROUND_SCROLL_SPEED);
+  pole_data result;
+  result.up_pole = create_sprite(bitmap_named("UpPole"));
+  result.down_pole = create_sprite(bitmap_named("DownPole"));
+  sprite_set_x(result.up_pole, screen_width() + rnd(1200));
+  sprite_set_y(result.up_pole, screen_height() - sprite_height(result.up_pole));
+  sprite_set_x(result.down_pole, sprite_x(result.up_pole));
+  sprite_set_y(result.down_pole, 0);
+  sprite_set_dx(result.up_pole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  sprite_set_dx(result.down_pole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 
-  game->foreground = create_sprite(bitmap_named("Foreground"), animation_script_named("ForegroundAminations"));
-  sprite_set_x(game->foreground, 0);
-  sprite_set_y(game->foreground, screen_height() - sprite_height(game->foreground));
-  sprite_set_dx(game->foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-
-  game->foreroof = create_sprite(bitmap_named("Foreroof"));
-  sprite_set_x(game->foreroof, 0);
-  sprite_set_y(game->foreroof, 0);
-  sprite_set_dx(game->foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  return result;
 }
 
-void set_up_game(game_data* game)
+background_data get_new_background()
 {
-  int i;
+  background_data result;
+  result.background = create_sprite(bitmap_named("Background"));
+  sprite_set_x(result.background, 0);
+  sprite_set_y(result.background, 0);
+  sprite_set_dx(result.background, BACKGROUND_SCROLL_SPEED);
 
-  load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
-  for (i = 0; i < NUM_POLES; i++)
+  result.foreground = create_sprite(bitmap_named("Foreground"), animation_script_named("ForegroundAminations"));
+  sprite_set_x(result.foreground, 0);
+  sprite_set_y(result.foreground, screen_height() - sprite_height(result.foreground));
+  sprite_set_dx(result.foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  sprite_start_animation(result.foreground, "Fire");
+
+  result.foreroof = create_sprite(bitmap_named("Foreroof"));
+  sprite_set_x(result.foreroof, 0);
+  sprite_set_y(result.foreroof, 0);
+  sprite_set_dx(result.foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+
+  return result;
+}
+
+void handle_input(sprite player)
+{
+  if (key_typed(SPACE_KEY))
   {
-    game->poles[i] = get_random_poles();
+    sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
   }
-  game->player = get_new_player();
-  game->score = 0;
-  game->is_dead = false;
-  game->pole_release_distance = 0;
-  setup_background(game);
+}
 
-  sprite_start_animation(game->foreground, "Fire");
+void reset_pole_data(pole_data poles)
+{
+  free_sprite(poles.up_pole);
+  free_sprite(poles.down_pole);
+  poles = get_random_poles();
 }
 
 void update_velocity(sprite player)
@@ -102,40 +104,36 @@ void update_velocity(sprite player)
   }
 }
 
-void update_background(game_data* game)
-{
-  update_sprite(game->foreground);
-  update_sprite(game->foreroof);
-  update_sprite(game->background);
-
-  if (sprite_x(game->foreground) <= -(sprite_width(game->foreground) / 2))
-  {
-    sprite_set_x(game->foreground, 0);
-    sprite_set_x(game->foreroof, 0);
-  }
-  if (sprite_x(game->background) <= -(sprite_width(game->background) / 2))
-  {
-    sprite_set_x(game->background, 0);
-  }
-}
-
-void check_for_collisions(game_data* game)
+void update_poles(poles poles)
 {
   int i;
 
-  if (sprite_collision(game->player, game->foreground) || sprite_collision(game->player, game->foreroof))
-  {
-    game->is_dead = true;
-    return;
-  }
-
   for (i = 0; i < NUM_POLES; i++)
   {
-    if (sprite_collision(game->player, game->poles[i].up_pole) || sprite_collision(game->player, game->poles[i].down_pole))
+    update_sprite(poles[i].up_pole);
+    update_sprite(poles[i].down_pole);
+
+    if ((sprite_x(poles[i].up_pole) + sprite_width(poles[i].up_pole) < 0) && (sprite_x(poles[i].down_pole) + sprite_width(poles[i].down_pole) < 0))
     {
-      game->is_dead = true;
-      return;
+      reset_pole_data(poles[i]);
     }
+  }
+}
+
+void update_background(background_data *scene)
+{
+  update_sprite(scene->foreground);
+  update_sprite(scene->foreroof);
+  update_sprite(scene->background);
+
+  if (sprite_x(scene->foreground) <= -(sprite_width(scene->foreground) / 2))
+  {
+    sprite_set_x(scene->foreground, 0);
+    sprite_set_x(scene->foreroof, 0);
+  }
+  if (sprite_x(scene->background) <= -(sprite_width(scene->background) / 2))
+  {
+    sprite_set_x(scene->background, 0);
   }
 }
 
@@ -145,93 +143,12 @@ void update_player(sprite player)
   update_sprite(player);
 }
 
-void handle_input(sprite player)
-{
-  if (key_typed(SPACE_KEY))
-  {
-    sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
-  }
-}
-
-void reset_pole_data(pole_data* pole)
-{
-  pole_data temp = get_random_poles();
-  free_sprite(pole->up_pole);
-  free_sprite(pole->down_pole);
-
-  *pole = temp;
-}
-
-void mark_pole_for_movement(game_data* game)
-{
-  int i;
-
-  game->pole_release_distance += FOREGROUND_FOREROOF_POLE_SCROLL_SPEED;
-  if (game->pole_release_distance <= 0)
-  {
-    for (i = 0; i < NUM_POLES; i++)
-    {
-      if (sprite_dx(game->poles[i].up_pole) == 0)
-      {
-        sprite_set_dx(game->poles[i].up_pole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        sprite_set_dx(game->poles[i].down_pole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
-        game->pole_release_distance = bitmap_width(bitmap_named("UpPole")) + rnd(bitmap_width(bitmap_named("UpPole")));
-        break;
-      }
-    }
-  }
-}
-
-void update_poles(game_data* game)
-{
-  int i;
-
-  mark_pole_for_movement(game);
-  for (i = 0; i < NUM_POLES; i++)
-  {
-    update_sprite(game->poles[i].up_pole);
-    update_sprite(game->poles[i].down_pole);
-
-    if ((sprite_x(game->poles[i].up_pole) < sprite_x(game->player)) && (game->poles[i].score_limiter == true))
-    {
-      game->poles[i].score_limiter = false;
-      game->score++;
-    }
-
-    if (sprite_offscreen(game->poles[i].up_pole) && sprite_offscreen(game->poles[i].down_pole) && (game->poles[i].score_limiter == false))
-    {
-      reset_pole_data(&game->poles[i]);
-    }
-  }
-}
-
-void reset_game(game_data* game)
-{
-  int i;
-
-  game->player = get_new_player();
-  for (i = 0; i < NUM_POLES; i++)
-  {
-    reset_pole_data(&game->poles[i]);
-  }
-  game->is_dead = false;
-  game->score = 0;
-}
-
 void update_game(game_data* game)
 {
-  if (!game->is_dead)
-  {
-    check_for_collisions(game);
-    handle_input(game->player);
-    update_background(game);
-    update_player(game->player);
-    update_poles(game);
-  }
-  else
-  {
-    reset_game(game);
-  }
+  handle_input(game->player);
+  update_background(&game->scene);
+  update_player(game->player);
+  update_poles(game->poles);
 }
 
 void draw_poles(poles poles)
@@ -247,15 +164,24 @@ void draw_poles(poles poles)
 
 void draw_game(game_data* game)
 {
-  char str[15];
-  sprintf(str, "%d", game->score);
-
-  draw_sprite(game->background);
+  draw_sprite(game->scene.background);
   draw_poles(game->poles);
-  draw_sprite(game->foreroof);
-  draw_sprite(game->foreground);
+  draw_sprite(game->scene.foreroof);
+  draw_sprite(game->scene.foreground);
   draw_sprite(game->player);
-  draw_text(str, COLOR_WHITE, "GameFont", 10, 0);
+}
+
+void set_up_game(game_data* game)
+{
+  int i;
+
+  load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
+  for (i = 0; i < NUM_POLES; i++)
+  {
+    game->poles[i] = get_random_poles();
+  }
+  game->player = get_new_player();
+  game->scene = get_new_background();
 }
 
 int main()
@@ -264,8 +190,6 @@ int main()
 
     open_graphics_window("Cave Escape", 432, 768);
     set_up_game(&game);
-
-    fade_music_in("GameMusic", -1, 15000);
 
     do
     {

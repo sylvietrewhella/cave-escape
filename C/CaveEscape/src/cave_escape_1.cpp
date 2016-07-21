@@ -8,10 +8,8 @@ int main()
     do // The game loop...
     {
       process_events();
-
       clear_screen(COLOR_WHITE);
       refresh_screen();
-
     } while(!window_close_requested());
 
     return 0;

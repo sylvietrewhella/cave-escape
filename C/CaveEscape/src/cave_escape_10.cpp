@@ -16,6 +16,8 @@ typedef struct pole_data
 
 typedef struct pole_data poles[NUM_POLES];
 
+enum game_state{MENU, PLAY};
+
 typedef struct background_data
 {
   sprite foreroof, foreground, background;
@@ -26,6 +28,7 @@ typedef struct player
   sprite sprite;
   int score;
   bool is_dead;
+  game_state state;
 } player;
 
 typedef struct game_data
@@ -44,6 +47,7 @@ player get_new_player()
   sprite_start_animation(result.sprite, "Fly");
   result.score = 0;
   result.is_dead = false;
+  result.state = MENU;
 
   return result;
 }
@@ -86,11 +90,15 @@ background_data get_new_background()
   return result;
 }
 
-void handle_input(sprite player)
+void handle_input(sprite player, game_state* state)
 {
-  if (key_typed(SPACE_KEY))
+  if (key_typed(SPACE_KEY) && (*state = PLAY))
   {
     sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
+  }
+  else if (key_typed(SPACE_KEY))
+  {
+    *state = PLAY;
   }
 }
 
@@ -191,9 +199,12 @@ void update_background(background_data scene)
   }
 }
 
-void update_player(sprite player)
+void update_player(sprite player, game_state state)
 {
-  update_velocity(player);
+  if (state == PLAY)
+  {
+    update_velocity(player);
+  }
   update_sprite(player);
 }
 
@@ -202,10 +213,13 @@ void update_game(game_data *game)
   if (!game->player.is_dead)
   {
     check_for_collisions(game);
-    handle_input(game->player.sprite);
+    handle_input(game->player.sprite, &game->player.state);
     update_background(game->scene);
-    update_player(game->player.sprite);
-    update_poles(game);
+    update_player(game->player.sprite, game->player.state);
+    if (game->player.state == PLAY)
+    {
+      update_poles(game);
+    }
   }
   else
   {
@@ -234,7 +248,19 @@ void draw_game(game_data* game)
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
-  draw_text(str, COLOR_WHITE, "GameFont", 10, 0);
+  if (game->player.state == PLAY)
+  {
+    draw_text(str, COLOR_WHITE, "GameFont", 10, 0);
+  }
+  else if (game->player.state == MENU)
+  {
+    draw_bitmap(bitmap_named("Logo"), 0, 40);
+    draw_text("PRESS SPACE!",
+    COLOR_WHITE,
+    "GameFont",
+    screen_width() / 2 - text_width(font_named("GameFont"), "PRESS SOACE!") / 2,
+    sprite_y(game->player.sprite) + text_height(font_named("GameFont"), " ") * 2);
+  }
 }
 
 void set_up_game(game_data* game)
