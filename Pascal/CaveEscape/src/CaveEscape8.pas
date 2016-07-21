@@ -68,7 +68,7 @@ begin
   SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure HandleInput(var player: Sprite);
+procedure HandleInput(player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -76,7 +76,7 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var poles: PoleData);
+procedure ResetPoleData(poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
@@ -97,19 +97,24 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: Poles);
+procedure UpdatePoles(poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(polesArray: Poles);
 var
   i: Integer;
 begin
-  for i:= Low(poles) to High(poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    UpdateSprite(poles[i].UpPole);
-    UpdateSprite(poles[i].DownPole);
-
-    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) then
-    begin
-      ResetPoleData(poles[i]);
-    end;
+    UpdatePoles(polesArray[i]);
   end;
 end;
 
@@ -140,24 +145,19 @@ begin
   HandleInput(game.Player);
   UpdateBackground(game.Scene);
   UpdatePlayer(game.Player);
-  UpdatePoles(game.Poles);
-end;
-
-procedure DrawPoles(poles: Poles);
-var
-  i: Integer;
-begin
-  for i:= Low(poles) to High(poles) do
-  begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
-  end;
+  UpdatePolesArray(game.Poles);
 end;
 
 procedure DrawGame(const game: GameData);
+var
+  i: Integer;
 begin
   DrawSprite(game.Scene.Background);
-  DrawPoles(game.Poles);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    DrawSprite(game.Poles[i].UpPole);
+    DrawSprite(game.Poles[i].DownPole);
+  end;
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
   DrawSprite(game.Player);

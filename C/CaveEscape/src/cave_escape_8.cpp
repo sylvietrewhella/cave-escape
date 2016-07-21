@@ -30,6 +30,7 @@ typedef struct game_data
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);
@@ -41,6 +42,7 @@ sprite get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -56,6 +58,7 @@ pole_data get_random_poles()
 background_data get_new_background()
 {
   background_data result;
+
   result.background = create_sprite(bitmap_named("Background"));
   sprite_set_x(result.background, 0);
   sprite_set_y(result.background, 0);
@@ -104,19 +107,24 @@ void update_velocity(sprite player)
   }
 }
 
-void update_poles(poles poles)
+void update_poles(pole_data poles)
+{
+  update_sprite(poles.up_pole);
+  update_sprite(poles.down_pole);
+
+  if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
+  {
+    reset_pole_data(poles);
+  }
+}
+
+void update_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    update_sprite(poles[i].up_pole);
-    update_sprite(poles[i].down_pole);
-
-    if ((sprite_x(poles[i].up_pole) + sprite_width(poles[i].up_pole) < 0) && (sprite_x(poles[i].down_pole) + sprite_width(poles[i].down_pole) < 0))
-    {
-      reset_pole_data(poles[i]);
-    }
+    update_poles(poles_array[i]);
   }
 }
 
@@ -148,24 +156,19 @@ void update_game(game_data* game)
   handle_input(game->player);
   update_background(&game->scene);
   update_player(game->player);
-  update_poles(game->poles);
-}
-
-void draw_poles(poles poles)
-{
-  int i;
-
-  for (i = 0; i < NUM_POLES; i++)
-  {
-    draw_sprite(poles[i].up_pole);
-    draw_sprite(poles[i].down_pole);
-  }
+  update_poles_array(game->poles);
 }
 
 void draw_game(game_data* game)
 {
+  int i;
+
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  for (i = 0; i < NUM_POLES; i++)
+  {
+    draw_sprite(game->poles[i].up_pole);
+    draw_sprite(game->poles[i].down_pole);
+  }
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player);

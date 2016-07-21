@@ -207,21 +207,26 @@ begin
   end;
 end;
 
-procedure DrawPoles(poles: Poles);
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
 var
   i: Integer;
 begin
-  for i:= Low(poles) to High(poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
+    DrawPoles(polesArray[i]);
   end;
 end;
 
 procedure DrawGame(const game: GameData);
 begin
   DrawSprite(game.Scene.Background);
-  DrawPoles(game.Poles);
+  DrawPolesArray(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
   DrawSprite(game.Player.Sprite);

@@ -65,30 +65,24 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: Poles);
-var
-  i: Integer;
+procedure UpdatePoles(poles: PoleData);
 begin
-  for i:= Low(poles) to High(poles) do
-  begin
-    UpdateSprite(poles[i].UpPole);
-    UpdateSprite(poles[i].DownPole);
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
 
-    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) then
-    begin
-      ResetPoleData(poles[i]);
-    end;
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
   end;
 end;
 
-procedure DrawPoles(poles: Poles);
+procedure UpdatePolesArray(polesArray: Poles);
 var
   i: Integer;
 begin
-  for i:= Low(poles) to High(poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
+    UpdatePoles(polesArray[i]);
   end;
 end;
 
@@ -115,8 +109,12 @@ begin
     HandleInput(player);
     UpdateSprite(player);
     DrawSprite(player);
-    UpdatePoles(gamePoles);
-    DrawPoles(gamePoles);
+    UpdatePolesArray(gamePoles);
+    for i:= Low(gamePoles) to High(gamePoles) do
+    begin
+      DrawSprite(gamePoles[i].UpPole);
+      DrawSprite(gamePoles[i].DownPole);
+    end;
     RefreshScreen();
   until WindowCloseRequested();
 end;

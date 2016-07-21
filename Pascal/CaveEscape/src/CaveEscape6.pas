@@ -33,7 +33,7 @@ begin
   SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
 end;
 
-procedure HandleInput(var player: Sprite);
+procedure HandleInput(player: Sprite);
 begin
   if KeyTyped(SpaceKey) then
   begin
@@ -41,14 +41,14 @@ begin
   end;
 end;
 
-procedure ResetPoleData(var poles: PoleData);
+procedure ResetPoleData(poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
   poles := GetRandomPoles();
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -62,7 +62,7 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: PoleData);
+procedure UpdatePoles(poles: PoleData);
 begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
@@ -71,12 +71,6 @@ begin
   begin
     ResetPoleData(poles);
   end;
-end;
-
-procedure DrawPoles(poles: PoleData);
-begin
-  DrawSprite(poles.UpPole);
-  DrawSprite(poles.DownPole);
 end;
 
 procedure Main();
@@ -99,7 +93,8 @@ begin
     UpdateSprite(player);
     DrawSprite(player);
     UpdatePoles(gamePoles);
-    DrawPoles(gamePoles);
+    DrawSprite(gamePoles.UpPole);
+    DrawSprite(gamePoles.DownPole);
     RefreshScreen();
   until WindowCloseRequested();
 end;
