@@ -16,7 +16,7 @@ typedef struct pole_data
 
 typedef struct pole_data poles[NUM_POLES];
 
-enum game_state{MENU, PLAY};
+enum player_state{MENU, PLAY};
 
 typedef struct background_data
 {
@@ -28,7 +28,7 @@ typedef struct player
   sprite sprite;
   int score;
   bool is_dead;
-  game_state state;
+  player_state state;
 } player;
 
 typedef struct game_data
@@ -90,7 +90,7 @@ background_data get_new_background()
   return result;
 }
 
-void handle_input(sprite player, game_state* state)
+void handle_input(sprite player, player_state* state)
 {
   if (key_typed(SPACE_KEY) && (*state = PLAY))
   {
@@ -199,7 +199,7 @@ void update_background(background_data scene)
   }
 }
 
-void update_player(sprite player, game_state state)
+void update_player(sprite player, player_state state)
 {
   if (state == PLAY)
   {
