@@ -47,11 +47,11 @@ void handle_input(sprite player)
   }
 }
 
-void reset_pole_data(pole_data poles)
+void reset_pole_data(pole_data *poles)
 {
-  free_sprite(poles.up_pole);
-  free_sprite(poles.down_pole);
-  poles = get_random_poles();
+  free_sprite(poles->up_pole);
+  free_sprite(poles->down_pole);
+  *poles = get_random_poles();
 }
 
 void update_velocity(sprite player)
@@ -75,8 +75,14 @@ void update_poles(pole_data poles)
 
   if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
   {
-    reset_pole_data(poles);
+    reset_pole_data(&poles);
   }
+}
+
+void draw_poles(pole_data poles)
+{
+  draw_sprite(poles.up_pole);
+  draw_sprite(poles.down_pole);
 }
 
 int main()
@@ -94,14 +100,13 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
       draw_sprite(player);
       update_poles(game_poles);
-      draw_sprite(game_poles.up_pole);
-      draw_sprite(game_poles.down_pole);
+      draw_poles(game_poles);
       refresh_screen();
 
     } while(!window_close_requested());

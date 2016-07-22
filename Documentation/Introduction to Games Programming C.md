@@ -76,6 +76,7 @@ The new code in iteration two is as follows:
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);
@@ -254,7 +255,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
@@ -316,6 +317,7 @@ typedef struct pole_data
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -370,7 +372,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
@@ -411,11 +413,11 @@ The new code in iteration six is as follows:
 
 #### Addition one
 ```c
-void reset_pole_data(pole_data poles)
+void reset_pole_data(pole_data *poles)
 {
-  free_sprite(poles.up_pole);
-  free_sprite(poles.down_pole);
-  poles = get_random_poles();
+  free_sprite(poles->up_pole);
+  free_sprite(poles->down_pole);
+  *poles = get_random_poles();
 }
 ```
 - We've added a new procedure called ```reset_pole_data()``` that is going to reset the poles once they move off the left of screen. Notice that it calls the function ```get_random_poles()``` that we implemented before. It makes sense to reuse code where you can, and the poles that the function ```get_random_poles()``` returns are exactly what we need when we have to reset them.
@@ -429,7 +431,7 @@ void update_poles(pole_data poles)
 
   if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
   {
-    reset_pole_data(poles);
+    reset_pole_data(&poles);
   }
 }
 ```
@@ -478,42 +480,35 @@ The new code in iteration seven is as follows:
 ```c    
 typedef struct pole_data poles[NUM_POLES];
 ```
-- The second addition is an array of ```pole_data``` called ```Poles```. This array is where our four sets of poles will be stored. You can see the array is declared as such ```typedef struct pole_data poles[NUM_POLES];```. It's important to understand the logic in the square bracers ```[NUM_POLES]```. Now, ```NUM_POLES``` is four and computers are zero based, meaning that our first set of poles is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
+- The second addition is an array of ```pole_data``` called ```poles```. This array is where our four sets of poles will be stored. You can see the array is declared as such ```typedef struct pole_data poles[NUM_POLES];```. It's important to understand the logic in the square bracers ```[NUM_POLES]```. Now, ```NUM_POLES``` is four and computers are zero based, meaning that our first set of poles is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
 
-#### Addition three (Note: ```update_poles()``` has had code added to it)
+#### Addition three
 ```c    
-void update_poles(poles poles)
+void update_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    update_sprite(poles[i].up_pole);
-    update_sprite(poles[i].down_pole);
-
-    if ((sprite_x(poles[i].up_pole) + sprite_width(poles[i].up_pole) < 0) && (sprite_x(poles[i].down_pole) + sprite_width(poles[i].down_pole) < 0))
-    {
-      reset_pole_data(poles[i]);
-    }
+    update_poles(poles_array[i]);
   }
 }
 ```
-- ```update_poles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is updated.
+- We've added a procedure called ```update_poles_array()``` in order to update every single set of poles in the array. Notice how the procedure simply uses a ```for``` loop in order to call the procedure ```update_poles()``` on each set of poles in the array. We added this procedure because we know that the procedure ```update_poles()``` works with a single set of poles, so why not just call it for each set of poles in the array!
 
-#### Addition four (Note: ```draw_poles()``` has had code added to it)
+#### Addition four
 ```c    
-void draw_poles(poles poles)
+void draw_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    draw_sprite(poles[i].up_pole);
-    draw_sprite(poles[i].down_pole);
+    draw_poles(poles_array[i]);
   }
 }
 ```
--  ```draw_poles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is drawn.
+-  We've added a procedure called ```draw_poles_array()``` in order to draw every single set of poles in the array. Exactly like the procedure ```update_poles_array()```, notice how the procedure simply uses a ```for``` loop in order to call the procedure ```draw_poles()``` on each set of poles in the array. We added this procedure because we know that the procedure ```draw_poles()``` works with a single set of poles, so why not just call it for each set of poles in the array!
 
 ### - Complete Code
 The complete code for iteration seven can be found [here](../C/CaveEscape/src/cave_escape_7.cpp).
@@ -539,13 +534,13 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
       draw_sprite(player);
-      update_poles(game_poles);
-      draw_poles(game_poles);
+      update_poles_array(game_poles);
+      draw_poles_array(game_poles);
       refresh_screen();
 
     } while(!window_close_requested());
@@ -553,7 +548,7 @@ int main()
     return 0;
 }
 ```
-Instead of the variable ```game_poles``` being a value of ```pole_data```, it is now a value of our array, ```poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game.
+Instead of the variable ```game_poles``` being a value of ```pole_data```, it is now a value of our array, ```poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game. Our two new procedures to update and draw the array of poles, ```update_poles_array()``` and ```draw_poles_array()``` are also being called!
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration seven on your own.
@@ -614,6 +609,7 @@ typedef struct game_data
 background_data get_new_background()
 {
   background_data result;
+
   result.background = create_sprite(bitmap_named("Background"));
   sprite_set_x(result.background, 0);
   sprite_set_y(result.background, 0);
@@ -670,22 +666,22 @@ void update_player(sprite player)
 
 #### Addition seven
 ```c
-void update_game(game_data* game)
+void update_game(game_data *game)
 {
   handle_input(game->player);
   update_background(&game->scene);
   update_player(game->player);
-  update_poles(game->poles);
+  update_poles_array(game->poles);
 }
 ```
 - A procedure called ```update_game()``` has been added, for the same reasons as the procedure ```update_player()```. More application of good practice and a general code tidy up.
 
 #### Addition eight
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player);
@@ -695,7 +691,7 @@ void draw_game(game_data* game)
 
 #### Addition nine
 ```c
-void set_up_game(game_data* game)
+void set_up_game(game_data *game)
 {
   int i;
 
@@ -725,7 +721,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_game(&game);
       draw_game(&game);
       refresh_screen();
@@ -734,7 +730,6 @@ int main()
 
     return 0;
 }
-
 ```
 
 Look how tidy the ```main()``` procedure looks now after our code tidy up. We now only have a single variable called ```game```, which is a value of ```game_data```. We call our new procedure ```set_up_game()``` before the game loop to set the game up, then in our game loop, we have calls to ```update_game()``` and ```draw_game()```, which handle everything else that the game depends on.
@@ -799,6 +794,7 @@ typedef struct game_data
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -816,6 +812,7 @@ player get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -829,33 +826,28 @@ pole_data get_random_poles()
   return result;
 }
 ```
-- The ```get_random_poles()``` function has also changed. Only slightly, though. Notice that now the function sets the ```pole_data``` value that it returns to have a ```score_limiter()``` value of ```true``` and also, the positioning of the poles in terms of their vertical position is random. Because we have the roof and the floor, we can position the poles more dynamically. Now, we're going to use the ```score_limiter()``` to increment the ```score``` of the player every time they pass a set of poles. Once they pass a set of poles, the player's* ```score``` will be incremented and the ```score_limiter()``` for that set of poles will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```update_poles()```.
+- The ```get_random_poles()``` function has also changed. Only slightly, though. Notice that now the function sets the ```pole_data``` value that it returns to have a ```score_limiter()``` value of ```true``` and also, the positioning of the poles in terms of their vertical position is random. Because we have the roof and the floor, we can position the poles more dynamically. Now, we're going to use the ```score_limiter()``` to increment the ```score``` of the player every time they pass a set of poles. Once they pass a set of poles, the player's ```score``` will be incremented and the ```score_limiter()``` for that set of poles will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```update_poles()```.
 
 #### Addition six (Note: The procedure ```update_poles()``` has changed)
 ```c
-void update_poles(game_data *game)
+void update_poles(pole_data *poles, player *player)
 {
-  int i;
+  update_sprite(poles->up_pole);
+  update_sprite(poles->down_pole);
 
-  for (i = 0; i < NUM_POLES; i++)
+  if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))
   {
-    update_sprite(game->poles[i].up_pole);
-    update_sprite(game->poles[i].down_pole);
+    poles->score_limiter = false;
+    player->score++;
+  }
 
-    if ((sprite_x(game->poles[i].up_pole) < sprite_x(game->player.sprite)) && (game->poles[i].score_limiter == true))
-    {
-      game->poles[i].score_limiter = false;
-      game->player.score++;
-    }
-
-    if (sprite_offscreen(game->poles[i].up_pole) && sprite_offscreen(game->poles[i].down_pole) && (game->poles[i].score_limiter == false))
-    {
-      reset_pole_data(&game->poles[i]);
-    }
+  if ((sprite_x(poles->up_pole) + sprite_width(poles->up_pole) < 0) && (sprite_x(poles->down_pole) + sprite_width(poles->down_pole) < 0))
+  {
+    reset_pole_data(poles);
   }
 }
 ```
-- Now we're going to take a look at the changes made to ```update_poles()```. Take a close look at the conditional statements in this procedure. In particular, let's focus on this conditional section of code here ```if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then``` to understand why we need the ```score_limiter()```. Firstly, we're checking to see if the player has passed any poles. That's what the first ```if``` statement is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```score_limiter()``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```Player's``` ```score```. Now, it has to change to ```false``` because, if it never did, once the player passes some poles, the first ```if``` statement would be ```true``` and the ```Player's``` score would keep incrementing because the player would be beyond the poles. Phew. Tongue twisting. The best way to see the bug that this would cause is to remove the nested ```if``` statement and see what happens for yourself.
+- Now we're going to take a look at the changes made to ```update_poles()```. Take a close look at the conditional statements in this procedure. In particular, let's focus on this conditional section of code here ```if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))``` to understand why we need the ```score_limiter()```. Firstly, we're checking to see if the player has passed any poles. That's what the first ```if``` statement is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```score_limiter()``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```player's``` ```score```. Now, it has to change to ```false``` because, if it never did, once the player passes some poles, the first ```if``` statement would be ```true``` and the ```player's``` score would keep incrementing because the player would be beyond the poles. Phew. Tongue twisting. The best way to see the bug that this would cause is to remove the nested ```if``` statement and see what happens for yourself.
 
 #### Addition seven
 ```c
@@ -879,7 +871,7 @@ void check_for_collisions(game_data *game)
   }
 }
 ```
-- We've got a new procedure called ```check_for_collisions()```. The role of this procedure is to check to see if the player has collided with any of the eligible game elements (the poles, the roof and the floor). ```If``` the player does collide with anything that it shouldn't, we set the ```Player's``` ```is_dead``` to ```true```.
+- We've got a new procedure called ```check_for_collisions()```. The role of this procedure is to check to see if the player has collided with any of the eligible game elements (the poles, the roof and the floor). ```If``` the player does collide with anything that it shouldn't, we set the ```player's``` ```is_dead``` to ```true```.
 
 #### Addition eight
 ```c
@@ -916,7 +908,7 @@ void update_game(game_data *game)
     handle_input(game->player.sprite);
     update_background(game->scene);
     update_player(game->player.sprite);
-    update_poles(game);
+    update_poles_array(game->poles, &game->player);
   }
   else
   {
@@ -928,13 +920,14 @@ void update_game(game_data *game)
 
 #### Addition eleven (Note: The procedure ```draw_game()``` has changed)
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
@@ -988,13 +981,14 @@ typedef struct player
   player_state state;
 } player;
 ```
--  Now because of the addition of the enumeration ```player_state```, we've changed the ```player``` record to house the current game state. The new field is called ```State```.
+-  Now because of the addition of the enumeration ```player_state```, we've changed the ```player``` record to house the current game state. The new field is called ```state```.
 
 #### Addition three (Note: The function ```get_new_player()``` has changed)
 ```c    
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -1010,15 +1004,15 @@ player get_new_player()
 
 #### Addition four (Note: The procedure ```handle_input()``` has changed)
 ```c    
-void handle_input(sprite player, player_state* state)
+void handle_input(player *player)
 {
-  if (key_typed(SPACE_KEY) && (*state = PLAY))
+  if (key_typed(SPACE_KEY) && (player->state = PLAY))
   {
-    sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
+    sprite_set_dy(player->sprite, sprite_dy(player->sprite) - JUMP_RECOVERY_BOOST);
   }
   else if (key_typed(SPACE_KEY))
   {
-    *state = PLAY;
+    player->state = PLAY;
   }
 }
 ```
@@ -1026,13 +1020,13 @@ void handle_input(sprite player, player_state* state)
 
 #### Addition five (Note: The procedure ```update_player()``` has changed)
 ```c
-void update_player(sprite player, player_state state)
+void update_player(player player)
 {
-  if (state == PLAY)
+  if (player.state == PLAY)
   {
-    update_velocity(player);
+    update_velocity(player.sprite);
   }
-  update_sprite(player);
+  update_sprite(player.sprite);
 }
 ```
 - ```update_player()``` has also changed to suit the new menu state. The changes made ensure that we only update the player's velocity ```if``` the current ```state``` is set to ```PLAY```. Otherwise, the player will just hover in the middle of the screen. We're doing this so that the player only starts moving when we are ready to play!
@@ -1044,12 +1038,12 @@ void update_game(game_data *game)
   if (!game->player.is_dead)
   {
     check_for_collisions(game);
-    handle_input(game->player.sprite, &game->player.state);
+    handle_input(&game->player);
     update_background(game->scene);
-    update_player(game->player.sprite, game->player.state);
+    update_player(game->player);
     if (game->player.state == PLAY)
     {
-      update_poles(game);
+      update_poles_array(game->poles, &game->player);
     }
   }
   else
@@ -1062,13 +1056,14 @@ void update_game(game_data *game)
 
 #### Addition seven (Note: The procedure ```draw_game()``` has changed)
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
@@ -1086,7 +1081,6 @@ void draw_game(game_data* game)
     sprite_y(game->player.sprite) + text_height(font_named("GameFont"), " ") * 2);
   }
 }
-
 ```
 - Finally, ```draw_game()``` also has some minor changes. This is where we're drawing our new menu. So, ```if``` the player is not playing the game yet, we draw a menu to the screen for them, giving them instructions on how to start playing.
 

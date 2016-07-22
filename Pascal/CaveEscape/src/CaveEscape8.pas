@@ -76,14 +76,14 @@ begin
   end;
 end;
 
-procedure ResetPoleData(poles: PoleData);
+procedure ResetPoleData(var poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
   poles := GetRandomPoles();
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -148,16 +148,26 @@ begin
   UpdatePolesArray(game.Poles);
 end;
 
-procedure DrawGame(const game: GameData);
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
 var
   i: Integer;
 begin
-  DrawSprite(game.Scene.Background);
-  for i:= Low(game.Poles) to High(game.Poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    DrawSprite(game.Poles[i].UpPole);
-    DrawSprite(game.Poles[i].DownPole);
+    DrawPoles(polesArray[i]);
   end;
+end;
+
+procedure DrawGame(const game: GameData);
+begin
+  DrawSprite(game.Scene.Background);
+  DrawPolesArray(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
   DrawSprite(game.Player);

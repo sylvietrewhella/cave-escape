@@ -86,11 +86,11 @@ void handle_input(sprite player)
   }
 }
 
-void reset_pole_data(pole_data poles)
+void reset_pole_data(pole_data *poles)
 {
-  free_sprite(poles.up_pole);
-  free_sprite(poles.down_pole);
-  poles = get_random_poles();
+  free_sprite(poles->up_pole);
+  free_sprite(poles->down_pole);
+  *poles = get_random_poles();
 }
 
 void update_velocity(sprite player)
@@ -114,7 +114,7 @@ void update_poles(pole_data poles)
 
   if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
   {
-    reset_pole_data(poles);
+    reset_pole_data(&poles);
   }
 }
 
@@ -151,7 +151,7 @@ void update_player(sprite player)
   update_sprite(player);
 }
 
-void update_game(game_data* game)
+void update_game(game_data *game)
 {
   handle_input(game->player);
   update_background(&game->scene);
@@ -159,22 +159,32 @@ void update_game(game_data* game)
   update_poles_array(game->poles);
 }
 
-void draw_game(game_data* game)
+void draw_poles(pole_data poles)
+{
+  draw_sprite(poles.up_pole);
+  draw_sprite(poles.down_pole);
+}
+
+void draw_poles_array(poles poles_array)
 {
   int i;
 
-  draw_sprite(game->scene.background);
   for (i = 0; i < NUM_POLES; i++)
   {
-    draw_sprite(game->poles[i].up_pole);
-    draw_sprite(game->poles[i].down_pole);
+    draw_poles(poles_array[i]);
   }
+}
+
+void draw_game(game_data *game)
+{
+  draw_sprite(game->scene.background);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player);
 }
 
-void set_up_game(game_data* game)
+void set_up_game(game_data *game)
 {
   int i;
 
@@ -197,7 +207,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_game(&game);
       draw_game(&game);
       refresh_screen();

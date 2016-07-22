@@ -41,7 +41,7 @@ begin
   end;
 end;
 
-procedure ResetPoleData(poles: PoleData);
+procedure ResetPoleData(var poles: PoleData);
 begin
   FreeSprite(poles.UpPole);
   FreeSprite(poles.DownPole);
@@ -73,6 +73,12 @@ begin
   end;
 end;
 
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
 procedure Main();
 var
   player: Sprite;
@@ -93,8 +99,7 @@ begin
     UpdateSprite(player);
     DrawSprite(player);
     UpdatePoles(gamePoles);
-    DrawSprite(gamePoles.UpPole);
-    DrawSprite(gamePoles.DownPole);
+    DrawPoles(gamePoles);
     RefreshScreen();
   until WindowCloseRequested();
 end;
