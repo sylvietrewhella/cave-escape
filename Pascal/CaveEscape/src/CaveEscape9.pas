@@ -149,13 +149,10 @@ begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
 
-  if SpriteX (poles.UpPole) < (SpriteX(player.Sprite)) then
+  if (SpriteX(poles.UpPole) < SpriteX(player.Sprite)) and (poles.ScoreLimiter = true) then
   begin
-    if (poles.ScoreLimiter = true) then
-    begin
-      poles.ScoreLimiter := false;
-      player.Score += 1;
-    end;
+    poles.ScoreLimiter := false;
+    player.Score += 1;
   end;
 
   if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then

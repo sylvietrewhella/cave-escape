@@ -157,9 +157,9 @@ begin
   UpdateSprite(poles.UpPole);
   UpdateSprite(poles.DownPole);
 
-  if SpriteX (poles.UpPole) < (SpriteX(player.Sprite)) then
+  if (SpriteX(poles.UpPole) < SpriteX(player.Sprite)) and (poles.ScoreLimiter = true) then
   begin
-    if (poles.ScoreLimiter = true) then
+    if  then
     begin
       poles.ScoreLimiter := false;
       player.Score += 1;
