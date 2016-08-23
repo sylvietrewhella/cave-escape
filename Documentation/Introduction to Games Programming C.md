@@ -2,16 +2,6 @@
 
 In the first iteration of **Cave Escape**, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a graphics window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
 
-## What to Expect
-
-Once you're finished working through and implementing iteration one, you should have something that looks just like this:
-
-
-![Iteration One](Resources/Images/iteration_1.png)
-
-
-That's it! Just a blank graphics window, but we'll work on that blank canvas in future iterations.
-
 ## Code
 
 ### - Complete Code
@@ -55,16 +45,6 @@ Now it's time for you to have a go at implementing iteration one on your own. Yo
 # 2. Iteration Two
 
 In the second iteration of **Cave Escape**, you will implement the functionality to have your game produce a graphical representation of the player. The player will be drawn to the centre of the graphics window and come complete with an animation!
-
-## What to Expect
-
-Once you're finished working through and implementing iteration two, you should have something that looks just like this:
-
-
-![Iteration Two](Resources/Images/iteration_2.gif)
-
-
-What's different from iteration one? We've got a graphical representation of the game's player! Now let's take a look at how this is implemented.
 
 ## Code
 
@@ -123,16 +103,6 @@ The complete code for iteration two can be found [here](../C/CaveEscape/src/cave
 # 3. Iteration Three
 
 In the third iteration of **Cave Escape**, you will implement the functionality to give your player the ability to fly! Well, almost. You're going to add some velocity to the player so that it's not just stuck in the middle of the screen, instead, when you're finished, the player will fall right off the bottom of the screen!
-
-## What to Expect
-
-Once you're finished working through and implementing iteration three, you should have something that looks just like this:
-
-
-![Iteration Three](Resources/Images/iteration_3.gif)
-
-
-So with some velocity, the game is a little more dynamic than it previously was in iteration two.
 
 ## Code
 
@@ -203,16 +173,6 @@ The complete code for iteration three can be found [here](../C/CaveEscape/src/ca
 
 In the fourth iteration of **Cave Escape**, we will actually implement the ability to have you control the way the player flies. Instead of the player just falling into the abyss, as it was in iteration three, iteration four sees the inclusion of the logic required to keep the player on the screen by using keyboard input. In particular, we're going to make it so that every time the space bar is pressed, the player is going to fly a little higher, and further away from the bottom of the screen.
 
-## What to Expect
-
-Once you're finished working through and implementing iteration four, you should have something that looks just like this:
-
-
-![Iteration Four](Resources/Images/iteration_4.gif)
-
-
-Look at that! Control over the player's velocity!
-
 ## Code
 
 ### - New Code
@@ -278,16 +238,6 @@ The complete code for iteration four can be found [here](../C/CaveEscape/src/cav
 # 5. Iteration Five
 
 In the fifth iteration of **Cave Escape**, we add quite a bit of functionality, more so than in the previous iterations. We're up for a big step with this one. We're going to add an obstacle, and we'll refer to the obstacle as a set of poles. It's the aim of the game to avoid the poles, but we'll worry about that later. For now, let's just worry about getting the poles onto the screen. So, this iteration concerns the generation of a single set of poles as well as the way the poles behave.
-
-## What to Expect
-
-Once you're finished working through and implementing iteration five, you should have something that looks just like this:
-
-
-![Iteration Five](Resources/Images/iteration_5.gif)
-
-
-While iteration five is quite a bit involved, in terms of new code required, it adds loads of functionality to our game and now, more than ever, it's looking more and more like a game.
 
 ## Code
 
@@ -396,16 +346,6 @@ The complete code for iteration five can be found [here](../C/CaveEscape/src/cav
 
 In the sixth iteration of **Cave Escape**, we're going to make a few additions to ensure that once the poles move off the far left of the screen, they get moved back to their default position. This will ensure that the poles can be reused as obstacles.
 
-## What to Expect
-
-Once you're finished working through and implementing iteration six, you should have something that looks just like this:
-
-
-![Iteration Six](Resources/Images/iteration_6.gif)
-
-
-The poles are much better when they wrap around the game screen!
-
 ## Code
 
 ### - New Code
@@ -450,16 +390,6 @@ The complete code for iteration six can be found [here](../C/CaveEscape/src/cave
 # 7. Iteration Seven
 
 In iteration seven of **Cave Escape**, we're going to implement the logic to have more than one set of poles. One set of poles is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
-
-## What to Expect
-
-Once you're finished working through and implementing iteration seven, you should have something that looks just like this:
-
-
-![Iteration Seven](Resources/Images/iteration_7.gif)
-
-
-Now we have lots of poles!
 
 ## Code
 
@@ -557,16 +487,6 @@ The complete code for iteration seven can be found [here](../C/CaveEscape/src/ca
 # 8. Iteration Eight
 
 In iteration eight of **Cave Escape**, we're going to focus a fair bit on polishing the game in terms of visual aesthetics and code presentation. Visually, the game is going to be practically complete after the eighth iteration. We're going to include a scrolling background for the game to help set the scene. The code tidy up involved in iteration eight is purely for convention and to conform to best practice of having well presented, readable code. This iteration sees the addition of nine new code additions, so it is quite busy.
-
-## What to Expect
-
-Once you're finished working through and implementing iteration eight, you should have something that looks just like this:
-
-
-![Iteration Eight](Resources/Images/iteration_8.gif)
-
-
-That scrolling background really complements the theme of the game!
 
 ## Code
 
@@ -741,16 +661,6 @@ The complete code for iteration eight can be found [here](../C/CaveEscape/src/ca
 # 9. Iteration Nine
 
 Iteration nine is going to be quite a big one too, where there are some big changes to improve gameplay in order to make our game....well, more of a game. In this iteration, we're going to add some music to give the game it's own little soundtrack, which will make the experience more immersive. The big changes, on top of the music, are the addition of collisions, so the player can collide with the environment, a scoring system and the ability to have the game reset if the player does collide with the environment. Iteration nine very nearly implements a completely functional game, ready for shipping.
-
-## What to Expect
-
-Once you're finished working through and implementing iteration nine, you should have something that looks just like this:
-
-
-![Iteration Nine](Resources/Images/iteration_9.gif)
-
-
-We're getting closer and closer to a complete game!
 
 ## Code
 
@@ -949,16 +859,6 @@ The complete code for iteration nine can be found [here](../C/CaveEscape/src/cav
 # 10. Iteration Ten
 
 Iteration ten is the final iteration for the game! In this final iteration we will add a menu to the game so that it only starts when the player is ready.
-
-## What to Expect
-
-Once you're finished working through and implementing iteration ten, you should have something that looks just like this:
-
-
-![Iteration Ten](Resources/Images/iteration_10.gif)
-
-
-We're done now!
 
 ## Code
 

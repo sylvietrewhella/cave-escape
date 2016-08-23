@@ -87,11 +87,45 @@ end;
 
 Take a close look at the ```Main()``` procedure. A few things have changed in order to cater for our new ```GetNewPlayer()``` function as well as drawing our player to the screen. The sprite that the function ```GetNewPlayer()``` returns is assigned to a variable called ```player``` and then within the game loop, the ```player``` sprite variable is updated and drawn.
 
+### - Complete Code
+The complete code for iteration two is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure Main();
+var
+  player: Sprite;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateSprite(player);
+    DrawSprite(player);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration two on your own. As before, you'll have to type the instructions above into your text editor. Continue to try and resist the urge to copy and paste code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to build and run your code to see if it is all working. If you encounter any build errors, you'll have to resolve those and build and run again.
-
-### - Complete Code
-The complete code for iteration two can be found [here](../Pascal/CaveEscape/src/CaveEscape2.pas).
 
 ---
 # 3. Iteration Three
@@ -153,11 +187,64 @@ end;
 
 The ```Main()``` procedure has now changed. Notice that in the game loop, there's now a call to the new procedure ```UpdateVelocity()```. This ensures that for each time the game loop executes, we're ensuring that we're updating the player's velocity accordingly.
 
+### - Complete Code
+The complete code for iteration three is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration three on your own. Give it a crack and see how you go.
-
-### - Complete Code
-The complete code for iteration three can be found [here](../Pascal/CaveEscape/src/CaveEscape3.pas).
 
 ---
 # 4. Iteration Four
@@ -215,12 +302,74 @@ end;
 
 The ```Main()``` procedure has now changed. Notice that in the game loop, there's now a call to the new procedure ```HandleInput()```. This ensures that for each time the game loop executes, we're ensuring that we're listening for any user input, specifically, if the space bar has been pressed. Now we have a more functional game where the user finally has some control over the way the game behaves.
 
+### - Complete Code
+The complete code for iteration four is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration four on your own.
-
-### - Complete Code
-The complete code for iteration four can be found [here](../Pascal/CaveEscape/src/CaveEscape4.pas).
 
 ---
 # 5. Iteration Five
@@ -317,11 +466,110 @@ end;
 ```
 The ```Main()``` procedure has now changed. Notice that we're now using our new function ```GetRandomPoles()``` and assigning the value it returns to a variable called ```game_poles```. In order to move the poles across the screen and draw them, we've added the calls to the procedures ```UpdatePoles()``` and ```DrawPoles()``` within the game loop.
 
+### - Complete Code
+The complete code for iteration five is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+
+type
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: PoleData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  gamePoles := GetRandomPoles();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration five on your own.
-
-### - Complete Code
-The complete code for iteration five can be found [here](../Pascal/CaveEscape/src/CaveEscape5.pas).
 
 ---
 # 6. Iteration Six
@@ -362,11 +610,122 @@ end;
 ### - Any Changes to Main
 Not in this iteration. Hurray!
 
+### - Complete Code
+The complete code for iteration six is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+
+type
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: PoleData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  gamePoles := GetRandomPoles();
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePoles(gamePoles);
+    DrawPoles(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration six on your own.
-
-### - Complete Code
-The complete code for iteration six can be found [here](../Pascal/CaveEscape/src/CaveEscape6.pas).
 
 ---
 # 7. Iteration Seven
@@ -456,11 +815,149 @@ end;
 ```
 Instead of the variable ```gamePoles``` being a value of ```PoleData```, it is now a value of our array, ```Poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game. Our two new procedures to update and draw the array of poles, ```UpdatePolesArray()``` and ```DrawPolesArray()``` are also being called!
 
+### - Complete Code
+The complete code for iteration seven is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  POLE_SCROLL_SPEED = -2;
+  NUM_POLES = 4;
+
+type
+  PoleData = record
+    UpPole: Sprite;
+    DownPole: Sprite;
+  end;
+
+  Poles = array [0..NUM_POLES - 1] of PoleData;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    UpdatePoles(polesArray[i]);
+  end;
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    DrawPoles(polesArray[i]);
+  end;
+end;
+
+procedure Main();
+var
+  player: Sprite;
+  gamePoles: Poles;
+  i: Integer;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+
+  player := GetNewPlayer();
+
+  for i:= Low(gamePoles) to High(gamePoles) do
+  begin
+    gamePoles[i] := GetRandomPoles();
+  end;
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateVelocity(player);
+    HandleInput(player);
+    UpdateSprite(player);
+    DrawSprite(player);
+    UpdatePolesArray(gamePoles);
+    DrawPolesArray(gamePoles);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration seven on your own.
-
-### - Complete Code
-The complete code for iteration seven can be found [here](../Pascal/CaveEscape/src/CaveEscape7.pas).
 
 ---
 # 8. Iteration Eight
@@ -622,11 +1119,220 @@ end;
 
 Look how tidy the ```Main()``` procedure looks now after our code tidy up. We now only have a single variable called ```game```, which is a value of ```GameData```. We call our new procedure ```SetUpGame()``` before the game loop to set the game up, then in our game loop, we have calls to ```UpdateGame()``` and ```DrawGame()```, which handle everything else that the game depends on.
 
+### - Complete Code
+The complete code for iteration eight is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+  BACKGROUND_SCROLL_SPEED = -1;
+  NUM_POLES = 4;
+
+type
+    PoleData = record
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+    Poles = array [0..NUM_POLES - 1] of PoleData;
+
+    BackgroundData = record
+      Foreroof: Sprite;
+      Foreground: Sprite;
+      Background: Sprite;
+    end;
+
+    GameData = record
+      Player: Sprite;
+      Scene: BackgroundData;
+      Poles: Poles;
+    end;
+
+function GetNewPlayer(): Sprite;
+begin
+  result := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result, ScreenWidth() / 2 - SpriteWidth(result));
+  SpriteSetY(result, ScreenHeight() / 2);
+  SpriteStartAnimation(result, 'Fly');
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, 0);
+  SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+end;
+
+function GetNewBackground(): BackgroundData;
+begin
+  result.Background := CreateSprite(BitmapNamed('Background'));
+  SpriteSetX(result.Background, 0);
+  SpriteSetY(result.Background, 0);
+  SpriteSetDx(result.Background, BACKGROUND_SCROLL_SPEED);
+
+  result.Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+  SpriteSetX(result.Foreground, 0);
+  SpriteSetY(result.Foreground, ScreenHeight() - SpriteHeight(result.Foreground));
+  SpriteSetDx(result.Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteStartAnimation(result.Foreground, 'Fire');
+
+  result.Foreroof := CreateSprite(BitmapNamed('Foreroof'));
+  SpriteSetX(result.Foreroof, 0);
+  SpriteSetY(result.Foreroof, 0);
+  SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(poles: PoleData);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    UpdatePoles(polesArray[i]);
+  end;
+end;
+
+procedure UpdateBackground(scene: BackgroundData);
+begin
+  UpdateSprite(scene.ForeGround);
+  UpdateSprite(scene.Foreroof);
+  updateSprite(scene.Background);
+  if (SpriteX(scene.Foreground) <= -(SpriteWidth(scene.ForeGround) / 2)) then
+  begin
+    SpriteSetX(scene.Foreground, 0);
+    SpriteSetX(scene.Foreroof, 0);
+  end;
+  if (SpriteX(scene.Background) <= -(SpriteWidth(scene.Background) / 2)) then
+  begin
+    SpriteSetX(scene.Background, 0);
+  end;
+end;
+
+procedure UpdatePlayer(player: Sprite);
+begin
+  UpdateVelocity(player);
+  UpdateSprite(player);
+end;
+
+procedure UpdateGame(var game: GameData);
+begin
+  HandleInput(game.Player);
+  UpdateBackground(game.Scene);
+  UpdatePlayer(game.Player);
+  UpdatePolesArray(game.Poles);
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    DrawPoles(polesArray[i]);
+  end;
+end;
+
+procedure DrawGame(const game: GameData);
+begin
+  DrawSprite(game.Scene.Background);
+  DrawPolesArray(game.Poles);
+  DrawSprite(game.Scene.Foreroof);
+  DrawSprite(game.Scene.ForeGround);
+  DrawSprite(game.Player);
+end;
+
+procedure SetUpGame(var game: GameData);
+var
+  i: Integer;
+begin
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    game.Poles[i] := GetRandomPoles();
+  end;
+  game.Player := GetNewPlayer();
+  game.Scene := GetNewBackground();
+end;
+
+procedure Main();
+var
+  game: GameData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  SetUpGame(game);
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateGame(game);
+    DrawGame(game);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration eight on your own.
-
-### - Complete Code
-The complete code for iteration eight can be found [here](../Pascal/CaveEscape/src/CaveEscape8.pas).
 
 ---
 # 9. Iteration Nine
@@ -806,11 +1512,283 @@ end;
 ### - You're the Same, Main
 Main has not changed.
 
+### - Complete Code
+The complete code for iteration nine is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+  BACKGROUND_SCROLL_SPEED = -1;
+  NUM_POLES = 4;
+
+type
+    PoleData = record
+      ScoreLimiter: Boolean;
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+    Poles = array [0..NUM_POLES - 1] of PoleData;
+
+    BackgroundData = record
+      Foreroof: Sprite;
+      Foreground: Sprite;
+      Background: Sprite;
+    end;
+
+    Player = record
+      Sprite: Sprite;
+      Score: Integer;
+      IsDead: Boolean;
+    end;
+
+    GameData = record
+      Player: Player;
+      Scene: BackgroundData;
+      Poles: Poles;
+    end;
+
+function GetNewPlayer(): Player;
+begin
+  result.Sprite := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result.Sprite, ScreenWidth() / 2 - SpriteWidth(result.Sprite));
+  SpriteSetY(result.Sprite, ScreenHeight() / 2);
+  SpriteStartAnimation(result.Sprite, 'Fly');
+  result.Score := 0;
+  result.IsDead := false;
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));;
+  SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  result.ScoreLimiter := true;
+end;
+
+function GetNewBackground(): BackgroundData;
+begin
+  result.Background := CreateSprite(BitmapNamed('Background'));
+  SpriteSetX(result.Background, 0);
+  SpriteSetY(result.Background, 0);
+  SpriteSetDx(result.Background, BACKGROUND_SCROLL_SPEED);
+
+  result.Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+  SpriteSetX(result.Foreground, 0);
+  SpriteSetY(result.Foreground, ScreenHeight() - SpriteHeight(result.Foreground));
+  SpriteSetDx(result.Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteStartAnimation(result.Foreground, 'Fire');
+
+  result.Foreroof := CreateSprite(BitmapNamed('Foreroof'));
+  SpriteSetX(result.Foreroof, 0);
+  SpriteSetY(result.Foreroof, 0);
+  SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Sprite);
+begin
+  if KeyTyped(SpaceKey) then
+  begin
+    SpriteSetDy(player, SpriteDy(player) - JUMP_RECOVERY_BOOST);
+  end;
+end;
+
+procedure CheckForCollisions(var game: GameData);
+var
+  i: Integer;
+begin
+  if (SpriteCollision(game.Player.Sprite, game.Scene.Foreground)) or (SpriteCollision(game.Player.Sprite, game.Scene.Foreroof)) then
+  begin
+    game.Player.IsDead := true;
+    exit;
+  end;
+
+  for i := Low(game.Poles) to High(game.Poles) do
+  begin
+    if SpriteCollision(game.Player.Sprite, game.Poles[i].UpPole) or SpriteCollision(game.Player.Sprite, game.Poles[i].DownPole)then
+    begin
+      game.Player.IsDead := true;
+      exit;
+    end;
+  end;
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure ResetPlayer(var player: Player);
+begin
+  FreeSprite(player.Sprite);
+  player := GetNewPlayer();
+end;
+
+procedure ResetGame(var game: GameData);
+var
+  i: Integer;
+begin
+  ResetPlayer(game.Player);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    ResetPoleData(game.Poles[i]);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(var poles: PoleData; var player: Player);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if (SpriteX(poles.UpPole) < SpriteX(player.Sprite)) and (poles.ScoreLimiter = true) then
+  begin
+    poles.ScoreLimiter := false;
+    player.Score += 1;
+  end;
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(var polesArray: Poles; var player: Player);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    UpdatePoles(polesArray[i], player);
+  end;
+end;
+
+procedure UpdateBackground(scene: BackgroundData);
+begin
+  UpdateSprite(scene.ForeGround);
+  UpdateSprite(scene.Foreroof);
+  updateSprite(scene.Background);
+  if (SpriteX(scene.Foreground) <= -(SpriteWidth(scene.ForeGround) / 2)) then
+  begin
+    SpriteSetX(scene.Foreground, 0);
+    SpriteSetX(scene.Foreroof, 0);
+  end;
+  if (SpriteX(scene.Background) <= -(SpriteWidth(scene.Background) / 2)) then
+  begin
+    SpriteSetX(scene.Background, 0);
+  end;
+end;
+
+procedure UpdatePlayer(player: Sprite);
+begin
+  UpdateVelocity(player);
+  UpdateSprite(player);
+end;
+
+procedure UpdateGame(var game: GameData);
+begin
+  if not (game.Player.IsDead) then
+  begin
+    CheckForCollisions(game);
+    HandleInput(game.Player.Sprite);
+    UpdateBackground(game.Scene);
+    UpdatePlayer(game.Player.Sprite);
+    UpdatePolesArray(game.Poles, game.Player);
+  end
+  else //The player has died :(
+  begin
+    ResetGame(game);
+  end;
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    DrawPoles(polesArray[i]);
+  end;
+end;
+
+procedure DrawGame(const game: GameData);
+begin
+  DrawSprite(game.Scene.Background);
+  DrawPolesArray(game.Poles);
+  DrawSprite(game.Scene.Foreroof);
+  DrawSprite(game.Scene.ForeGround);
+  DrawSprite(game.Player.Sprite);
+  DrawText(IntToStr(game.Player.Score), ColorWhite, 'GameFont', 10, 0);
+end;
+
+procedure SetUpGame(var game: GameData);
+var
+  i: Integer;
+begin
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    game.Poles[i] := GetRandomPoles();
+  end;
+  game.Player := GetNewPlayer();
+  game.Scene := GetNewBackground();
+  FadeMusicIn('GameMusic', -1, 15000);
+end;
+
+procedure Main();
+var
+  game: GameData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  SetUpGame(game);
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateGame(game);
+    DrawGame(game);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration nine on your own.
-
-### - Complete Code
-The complete code for iteration nine can be found [here](../Pascal/CaveEscape/src/CaveEscape9.pas).
 
 ---
 # 10. Iteration Ten
@@ -935,8 +1913,309 @@ end;
 ### - Main Remains the Same
 It really does.
 
+### - Complete Code
+The complete code for iteration ten is as follows:
+```pascal
+program GameMain;
+uses SwinGame, sgTypes, sgTimers, sgSprites, sysUtils;
+
+const
+  GRAVITY = 0.08;
+  MAX_SPEED = 5;
+  JUMP_RECOVERY_BOOST = 2;
+  FOREGROUND_FOREROOF_POLE_SCROLL_SPEED = -2;
+  BACKGROUND_SCROLL_SPEED = -1;
+  NUM_POLES = 4;
+
+type
+    PoleData = record
+      ScoreLimiter: Boolean;
+      UpPole: Sprite;
+      DownPole: Sprite;
+    end;
+
+    Poles = array [0..NUM_POLES - 1] of PoleData;
+
+    BackgroundData = record
+      Foreroof: Sprite;
+      Foreground: Sprite;
+      Background: Sprite;
+    end;
+
+    PlayerState = (Menu, Play);
+
+    Player = record
+      Sprite: Sprite;
+      Score: Integer;
+      IsDead: Boolean;
+      State: PlayerState;
+    end;
+
+    GameData = record
+      Player: Player;
+      Scene: BackgroundData;
+      Poles: Poles;
+    end;
+
+function GetNewPlayer(): Player;
+begin
+  result.Sprite := CreateSprite(BitmapNamed('Player'), AnimationScriptNamed('PlayerAnimations'));
+  SpriteSetX(result.Sprite, ScreenWidth() / 2 - SpriteWidth(result.Sprite));
+  SpriteSetY(result.Sprite, ScreenHeight() / 2);
+  SpriteStartAnimation(result.Sprite, 'Fly');
+  result.Score := 0;
+  result.IsDead := false;
+  result.State := Menu;
+end;
+
+function GetRandomPoles(): PoleData;
+begin
+  result.UpPole := CreateSprite(BitmapNamed('UpPole'));
+  result.DownPole := CreateSprite(BitmapNamed('DownPole'));
+  SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
+  SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
+  SpriteSetX(result.DownPole, SpriteX(result.UpPole));
+  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));;
+  SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  result.ScoreLimiter := true;
+end;
+
+function GetNewBackground(): BackgroundData;
+begin
+  result.Background := CreateSprite(BitmapNamed('Background'));
+  SpriteSetX(result.Background, 0);
+  SpriteSetY(result.Background, 0);
+  SpriteSetDx(result.Background, BACKGROUND_SCROLL_SPEED);
+
+  result.Foreground := CreateSprite(BitmapNamed('Foreground'), AnimationScriptNamed('ForegroundAminations'));
+  SpriteSetX(result.Foreground, 0);
+  SpriteSetY(result.Foreground, ScreenHeight() - SpriteHeight(result.Foreground));
+  SpriteSetDx(result.Foreground, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+  SpriteStartAnimation(result.Foreground, 'Fire');
+
+  result.Foreroof := CreateSprite(BitmapNamed('Foreroof'));
+  SpriteSetX(result.Foreroof, 0);
+  SpriteSetY(result.Foreroof, 0);
+  SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
+end;
+
+procedure HandleInput(player: Player);
+begin
+  if KeyTyped(SpaceKey) and (player.State = Play) then
+  begin
+    SpriteSetDy(player.Sprite, SpriteDy(player.Sprite) - JUMP_RECOVERY_BOOST);
+  end
+  else if KeyTyped(SpaceKey) then
+  begin
+    player.State := Play;
+  end;
+end;
+
+procedure CheckForCollisions(var game: GameData);
+var
+  i: Integer;
+begin
+  if (SpriteCollision(game.Player.Sprite, game.Scene.Foreground)) or (SpriteCollision(game.Player.Sprite, game.Scene.Foreroof)) then
+  begin
+    game.Player.IsDead := true;
+    exit;
+  end;
+
+  for i := Low(game.Poles) to High(game.Poles) do
+  begin
+    if SpriteCollision(game.Player.Sprite, game.Poles[i].UpPole) or SpriteCollision(game.Player.Sprite, game.Poles[i].DownPole)then
+    begin
+      game.Player.IsDead := true;
+      exit;
+    end;
+  end;
+end;
+
+procedure ResetPoleData(var poles: PoleData);
+begin
+  FreeSprite(poles.UpPole);
+  FreeSprite(poles.DownPole);
+  poles := GetRandomPoles();
+end;
+
+procedure ResetPlayer(var player: Player);
+begin
+  FreeSprite(player.Sprite);
+  player := GetNewPlayer();
+end;
+
+procedure ResetGame(var game: GameData);
+var
+  i: Integer;
+begin
+  ResetPlayer(game.Player);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    ResetPoleData(game.Poles[i]);
+  end;
+end;
+
+procedure UpdateVelocity(player: Sprite);
+begin
+  SpriteSetDy(player, SpriteDy(player) + GRAVITY);
+
+  if SpriteDy(player) > MAX_SPEED then
+  begin
+    SpriteSetDy(player, MAX_SPEED);
+  end
+  else if SpriteDy(player) < -(MAX_SPEED) then
+  begin
+    SpriteSetDy(player, -(MAX_SPEED));
+  end;
+end;
+
+procedure UpdatePoles(var poles: PoleData; var player: Player);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if (SpriteX(poles.UpPole) < SpriteX(player.Sprite)) and (poles.ScoreLimiter = true) then
+  begin
+    if  then
+    begin
+      poles.ScoreLimiter := false;
+      player.Score += 1;
+    end;
+  end;
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(var polesArray: Poles; var player: Player);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    UpdatePoles(polesArray[i], player);
+  end;
+end;
+
+procedure UpdateBackground(scene: BackgroundData);
+begin
+  UpdateSprite(scene.ForeGround);
+  UpdateSprite(scene.Foreroof);
+  updateSprite(scene.Background);
+  if (SpriteX(scene.Foreground) <= -(SpriteWidth(scene.ForeGround) / 2)) then
+  begin
+    SpriteSetX(scene.Foreground, 0);
+    SpriteSetX(scene.Foreroof, 0);
+  end;
+  if (SpriteX(scene.Background) <= -(SpriteWidth(scene.Background) / 2)) then
+  begin
+    SpriteSetX(scene.Background, 0);
+  end;
+end;
+
+procedure UpdatePlayer(player: Player);
+begin
+  if (player.State = Play) then
+  begin
+    UpdateVelocity(player.Sprite);
+  end;
+  UpdateSprite(player.Sprite);
+end;
+
+procedure UpdateGame(var game: GameData);
+begin
+  if not (game.Player.IsDead) then
+  begin
+    CheckForCollisions(game);
+    HandleInput(game.Player);
+    UpdateBackground(game.Scene);
+    UpdatePlayer(game.Player);
+    if (game.Player.State = Play) then
+    begin
+      UpdatePolesArray(game.Poles, game.Player);
+    end;
+  end
+  else //The player has died :(
+  begin
+    ResetGame(game);
+  end;
+end;
+
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
+var
+  i: Integer;
+begin
+  for i:= Low(polesArray) to High(polesArray) do
+  begin
+    DrawPoles(polesArray[i]);
+  end;
+end;
+
+procedure DrawGame(const game: GameData);
+begin
+  DrawSprite(game.Scene.Background);
+  DrawPolesArray(game.Poles);
+  DrawSprite(game.Scene.Foreroof);
+  DrawSprite(game.Scene.ForeGround);
+  DrawSprite(game.Player.Sprite);
+  if (game.Player.State = Play) then
+  begin
+    DrawText(IntToStr(game.Player.Score), ColorWhite, 'GameFont', 10, 0);
+  end
+  else if (game.Player.State = Menu) then
+  begin
+    DrawBitmap(BitmapNamed('Logo'), 0, 40);
+    DrawText('PRESS SPACE!',
+    ColorWhite,
+    'GameFont',
+    ScreenWidth() / 2 - TextWidth(FontNamed('GameFont'), 'PRESS SPACE!') / 2,
+    SpriteY(game.Player.Sprite) + TextHeight(FontNamed('GameFont'), ' ') * 2);
+  end;
+end;
+
+procedure SetUpGame(var game: GameData);
+var
+  i: Integer;
+begin
+  LoadResourceBundleNamed('CaveEscape', 'CaveEscape.txt', false);
+  for i:= Low(game.Poles) to High(game.Poles) do
+  begin
+    game.Poles[i] := GetRandomPoles();
+  end;
+  game.Player := GetNewPlayer();
+  game.Scene := GetNewBackground();
+  FadeMusicIn('GameMusic', -1, 15000);
+end;
+
+procedure Main();
+var
+  game: GameData;
+begin
+  OpenGraphicsWindow('Cave Escape', 432, 768);
+  SetUpGame(game);
+
+  repeat // The game loop...
+    ProcessEvents();
+    ClearScreen(ColorWhite);
+    UpdateGame(game);
+    DrawGame(game);
+    RefreshScreen();
+  until WindowCloseRequested();
+end;
+
+begin
+  Main();
+end.
+```
+
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration ten on your own. You've done really well and you're pretty much done!
-
-### - Complete Code
-The complete code for iteration ten can be found [here](../Pascal/CaveEscape/src/CaveEcape10.pas).
