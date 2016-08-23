@@ -1039,4 +1039,4 @@ It really does.
 Now it's time for you to have a go at implementing iteration ten on your own. You've done really well and you're pretty much done!
 
 ### - Complete Code
-The complete code for iteration ten can be found [here](../Pascal/CaveEscape/src/CaveEcape10.cpp).
+The complete code for iteration ten can be found [here](../Pascal/CaveEscape/src/CaveEcape10.pas).
