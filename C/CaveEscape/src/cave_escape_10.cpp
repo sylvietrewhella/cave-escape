@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "SwinGame.h"
 
 #define GRAVITY 0.08
@@ -16,12 +17,12 @@ typedef struct pole_data
 
 typedef struct pole_data poles[NUM_POLES];
 
-enum player_state{MENU, PLAY};
-
 typedef struct background_data
 {
   sprite foreroof, foreground, background;
 } background_data;
+
+enum player_state{MENU, PLAY};
 
 typedef struct player
 {
@@ -41,6 +42,7 @@ typedef struct game_data
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -55,6 +57,7 @@ player get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -71,6 +74,7 @@ pole_data get_random_poles()
 background_data get_new_background()
 {
   background_data result;
+
   result.background = create_sprite(bitmap_named("Background"));
   sprite_set_x(result.background, 0);
   sprite_set_y(result.background, 0);
@@ -90,15 +94,15 @@ background_data get_new_background()
   return result;
 }
 
-void handle_input(sprite player, player_state* state)
+void handle_input(player *player)
 {
-  if (key_typed(SPACE_KEY) && (*state = PLAY))
+  if (key_typed(SPACE_KEY) && (player->state = PLAY))
   {
-    sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
+    sprite_set_dy(player->sprite, sprite_dy(player->sprite) - JUMP_RECOVERY_BOOST);
   }
   else if (key_typed(SPACE_KEY))
   {
-    *state = PLAY;
+    player->state = PLAY;
   }
 }
 
@@ -160,25 +164,30 @@ void update_velocity(sprite player)
   }
 }
 
-void update_poles(game_data *game)
+void update_poles(pole_data *poles, player *player)
+{
+  update_sprite(poles->up_pole);
+  update_sprite(poles->down_pole);
+
+  if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))
+  {
+    poles->score_limiter = false;
+    player->score++;
+  }
+
+  if ((sprite_x(poles->up_pole) + sprite_width(poles->up_pole) < 0) && (sprite_x(poles->down_pole) + sprite_width(poles->down_pole) < 0))
+  {
+    reset_pole_data(poles);
+  }
+}
+
+void update_poles_array(poles poles_array, player *player)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    update_sprite(game->poles[i].up_pole);
-    update_sprite(game->poles[i].down_pole);
-
-    if ((sprite_x(game->poles[i].up_pole) < sprite_x(game->player.sprite)) && (game->poles[i].score_limiter == true))
-    {
-      game->poles[i].score_limiter = false;
-      game->player.score++;
-    }
-
-    if (sprite_offscreen(game->poles[i].up_pole) && sprite_offscreen(game->poles[i].down_pole) && (game->poles[i].score_limiter == false))
-    {
-      reset_pole_data(&game->poles[i]);
-    }
+    update_poles(&poles_array[i], player);
   }
 }
 
@@ -199,13 +208,13 @@ void update_background(background_data scene)
   }
 }
 
-void update_player(sprite player, player_state state)
+void update_player(player player)
 {
-  if (state == PLAY)
+  if (player.state == PLAY)
   {
-    update_velocity(player);
+    update_velocity(player.sprite);
   }
-  update_sprite(player);
+  update_sprite(player.sprite);
 }
 
 void update_game(game_data *game)
@@ -213,12 +222,12 @@ void update_game(game_data *game)
   if (!game->player.is_dead)
   {
     check_for_collisions(game);
-    handle_input(game->player.sprite, &game->player.state);
+    handle_input(&game->player);
     update_background(game->scene);
-    update_player(game->player.sprite, game->player.state);
+    update_player(game->player);
     if (game->player.state == PLAY)
     {
-      update_poles(game);
+      update_poles_array(game->poles, &game->player);
     }
   }
   else
@@ -227,24 +236,30 @@ void update_game(game_data *game)
   }
 }
 
-void draw_poles(poles poles)
+void draw_poles(pole_data poles)
+{
+  draw_sprite(poles.up_pole);
+  draw_sprite(poles.down_pole);
+}
+
+void draw_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    draw_sprite(poles[i].up_pole);
-    draw_sprite(poles[i].down_pole);
+    draw_poles(poles_array[i]);
   }
 }
 
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
@@ -263,7 +278,7 @@ void draw_game(game_data* game)
   }
 }
 
-void set_up_game(game_data* game)
+void set_up_game(game_data *game)
 {
   int i;
 

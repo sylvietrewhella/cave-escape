@@ -18,13 +18,13 @@ type
 
     Poles = array [0..NUM_POLES - 1] of PoleData;
 
-    PlayerState = (Menu, Play);
-
     BackgroundData = record
       Foreroof: Sprite;
       Foreground: Sprite;
       Background: Sprite;
     end;
+
+    PlayerState = (Menu, Play);
 
     Player = record
       Sprite: Sprite;
@@ -57,7 +57,7 @@ begin
   SpriteSetX(result.UpPole, ScreenWidth() + RND(1200));
   SpriteSetY(result.UpPole, ScreenHeight() - SpriteHeight(result.UpPole) - RND(BitmapHeight(BitmapNamed('Foreground'))));
   SpriteSetX(result.DownPole, SpriteX(result.UpPole));
-  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));
+  SpriteSetY(result.DownPole, RND(BitmapHeight(BitmapNamed('Foreroof'))));;
   SpriteSetDx(result.UpPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
   SpriteSetDx(result.DownPole, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
   result.ScoreLimiter := true;
@@ -82,7 +82,7 @@ begin
   SpriteSetDx(result.Foreroof, FOREGROUND_FOREROOF_POLE_SCROLL_SPEED);
 end;
 
-procedure HandleInput(var player: Player);
+procedure HandleInput(player: Player);
 begin
   if KeyTyped(SpaceKey) and (player.State = Play) then
   begin
@@ -138,7 +138,7 @@ begin
   end;
 end;
 
-procedure UpdateVelocity(var player: Sprite);
+procedure UpdateVelocity(player: Sprite);
 begin
   SpriteSetDy(player, SpriteDy(player) + GRAVITY);
 
@@ -152,28 +152,33 @@ begin
   end;
 end;
 
-procedure UpdatePoles(var poles: Poles; var player: Player);
+procedure UpdatePoles(var poles: PoleData; var player: Player);
+begin
+  UpdateSprite(poles.UpPole);
+  UpdateSprite(poles.DownPole);
+
+  if (SpriteX(poles.UpPole) < SpriteX(player.Sprite)) and (poles.ScoreLimiter = true) then
+  begin
+    if  then
+    begin
+      poles.ScoreLimiter := false;
+      player.Score += 1;
+    end;
+  end;
+
+  if ((SpriteX(poles.UpPole) + SpriteWidth(poles.UpPole)) < 0) and ((SpriteX(poles.DownPole) + SpriteWidth(poles.DownPole)) < 0) then
+  begin
+    ResetPoleData(poles);
+  end;
+end;
+
+procedure UpdatePolesArray(var polesArray: Poles; var player: Player);
 var
   i: Integer;
 begin
-  for i:= Low(poles) to High(poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    UpdateSprite(poles[i].UpPole);
-    UpdateSprite(poles[i].DownPole);
-
-    if SpriteX (poles[i].UpPole) < (SpriteX(player.Sprite)) then
-    begin
-      if (poles[i].ScoreLimiter = true) then
-      begin
-        poles[i].ScoreLimiter := false;
-        player.Score += 1;
-      end;
-    end;
-
-    if ((SpriteX(poles[i].UpPole) + SpriteWidth(poles[i].UpPole)) < 0) and ((SpriteX(poles[i].DownPole) + SpriteWidth(poles[i].DownPole)) < 0) and (poles[i].ScoreLimiter = false) then
-    begin
-      ResetPoleData(poles[i]);
-    end;
+    UpdatePoles(polesArray[i], player);
   end;
 end;
 
@@ -212,7 +217,7 @@ begin
     UpdatePlayer(game.Player);
     if (game.Player.State = Play) then
     begin
-      UpdatePoles(game.Poles, game.Player);
+      UpdatePolesArray(game.Poles, game.Player);
     end;
   end
   else //The player has died :(
@@ -221,21 +226,26 @@ begin
   end;
 end;
 
-procedure DrawPoles(poles: Poles);
+procedure DrawPoles(poles: PoleData);
+begin
+  DrawSprite(poles.UpPole);
+  DrawSprite(poles.DownPole);
+end;
+
+procedure DrawPolesArray(polesArray: Poles);
 var
   i: Integer;
 begin
-  for i:= Low(poles) to High(poles) do
+  for i:= Low(polesArray) to High(polesArray) do
   begin
-    DrawSprite(poles[i].UpPole);
-    DrawSprite(poles[i].DownPole);
+    DrawPoles(polesArray[i]);
   end;
 end;
 
 procedure DrawGame(const game: GameData);
 begin
   DrawSprite(game.Scene.Background);
-  DrawPoles(game.Poles);
+  DrawPolesArray(game.Poles);
   DrawSprite(game.Scene.Foreroof);
   DrawSprite(game.Scene.ForeGround);
   DrawSprite(game.Player.Sprite);
@@ -263,7 +273,6 @@ begin
   begin
     game.Poles[i] := GetRandomPoles();
   end;
-  game.Player.State := Menu;
   game.Player := GetNewPlayer();
   game.Scene := GetNewBackground();
   FadeMusicIn('GameMusic', -1, 15000);

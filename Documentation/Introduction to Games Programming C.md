@@ -1,6 +1,6 @@
 # 1. Iteration One
 
-In the first iteration of Cave Escape, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a graphics window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
+In the first iteration of **Cave Escape**, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a graphics window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
 
 ## What to Expect
 
@@ -23,7 +23,7 @@ The complete code for iteration one is as follows:
 
 int main()
 {
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
 
     do // The game loop...
     {
@@ -41,10 +41,10 @@ The ```main()``` procedure, as demonstrated in the code above, is responsible fo
 
 So, that being said, let's take a moment to analyse the ```main()``` procedure and the instructions it is executing. The sequence is as follows:
 
-  1. Firstly, a call to ```open_graphics_window()``` is made, where we can see the title of the window being opened is Cave Escape and the width and height of the window is 432 by 768 pixels.
+  1. Firstly, a call to ```open_graphics_window()``` is made, where we can see the title of the window being opened is **Cave Escape** and the width and height of the window is 432 by 768 pixels.
   2. The game loop is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instructions will be continually executed for as long as the loop is running. Note that the condition of the loop is ```window_close_requested()```.
      * The following instructions are executed within the game loop:
-      1. ```process_events()``` is called. ```process_events()``` is used to listen for any user input made while the program is running.
+      1. ```process_events()``` is called. ```process_events()``` is used to listen for any user input made while the game is running.
       2. We then clear the screen with ```clear_screen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
       3. We then refresh the screen with ```refresh_screen()``` so that we can see what we've drawn.
 
@@ -54,7 +54,7 @@ Now it's time for you to have a go at implementing iteration one on your own. Yo
 ---
 # 2. Iteration Two
 
-In the second iteration of Cave Escape, you will implement the functionality to have your game produce a graphical representation of the player. The player will be drawn to the centre of the graphics window and come complete with an animation!
+In the second iteration of **Cave Escape**, you will implement the functionality to have your game produce a graphical representation of the player. The player will be drawn to the centre of the graphics window and come complete with an animation!
 
 ## What to Expect
 
@@ -76,6 +76,7 @@ The new code in iteration two is as follows:
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);
@@ -86,16 +87,13 @@ sprite get_new_player()
 ```
 - The ```get_new_player()``` function, as demonstrated in the code above, is used to generate the data associated with the player entity that we'll be using in our game. It's important to note that functions use a special variable called ```result``` to store the value in that they calculate. So, in short, the function is creating a sprite for the player, setting the sprite's location to the centre of the screen and setting an animation for the sprite. Once the function finishes, it returns the sprite it creates (the ```result``` variable).
 
-### - Complete Code
-The complete code for iteration two can be found [here](../C/CaveEscape/src/cave_escape_2.cpp).
-
 ### - You've Changed, Main
 ```c
 int main()
 {
     sprite player;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
@@ -113,15 +111,18 @@ int main()
 }
 ```
 
-Take a close look at the ```main()``` procedure. A few things have changed in order to cater for our new ```get_new_player()``` function as well as drawing our player to the screen. The sprite that the function ```get_new_player()``` returns is assigned to a variable called ```player``` and then within the game loop, the player sprite is updated and drawn.
+Take a close look at the ```main()``` procedure. A few things have changed in order to cater for our new ```get_new_player()``` function as well as drawing our player to the screen. The sprite that the function ```get_new_player()``` returns is assigned to a variable called ```player``` and then within the game loop, the ```player``` sprite variable is updated and drawn.
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration two on your own. As before, you'll have to type the instructions above into your text editor. Continue to try and resist the urge to copy and paste code if it arrises, as typing it out helps build your understanding in regards to what the code is doing. When you're done, you'll need to build and run your code to see if it is all working. If you encounter any build errors, you'll have to resolve those and build and run again.
 
+### - Complete Code
+The complete code for iteration two can be found [here](../C/CaveEscape/src/cave_escape_2.cpp).
+
 ---
 # 3. Iteration Three
 
-In the third iteration of Cave Escape, you will implement the functionality to give your player the ability to fly! Well, almost. You're going to add some velocity to the player so that it's not just stuck in the middle of the screen, instead, when you're finished, the player will fall right off the bottom of the screen!
+In the third iteration of **Cave Escape**, you will implement the functionality to give your player the ability to fly! Well, almost. You're going to add some velocity to the player so that it's not just stuck in the middle of the screen, instead, when you're finished, the player will fall right off the bottom of the screen!
 
 ## What to Expect
 
@@ -163,16 +164,13 @@ void update_velocity(sprite player)
 ```
 - The ```update_velocity()``` procedure, as demonstrated in the code above, uses these two new constant values to determine what the player's speed will be by using conditional statements. The conditional statements ensure that ```if``` the player is not already falling at the ```MAX_SPEED```, increase it's velocity, ```else if``` the player is already falling at the ```MAX_SPEED```, ensure that it stays falling at the ```MAX_SPEED``` rather than going any faster.
 
-### - Complete Code
-The complete code for iteration three can be found [here](../C/CaveEscape/src/cave_escape_3.cpp).
-
 ### - Take a Look at Main
 ```c
 int main()
 {
     sprite player;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
@@ -197,10 +195,13 @@ The ```main()``` procedure has now changed. Notice that in the game loop, there'
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration three on your own. Give it a crack and see how you go.
 
+### - Complete Code
+The complete code for iteration three can be found [here](../C/CaveEscape/src/cave_escape_3.cpp).
+
 ---
 # 4. Iteration Four
 
-In the fourth iteration of Cave Escape, we will actually implement the ability to have you control the way the player flies. Instead of the player just falling into the abyss, as it was in iteration three, iteration four sees the inclusion of the logic required to keep the player on the screen by using keyboard input. In particular, we're going to make it so that every time the space bar is pressed, the player is going to fly a little higher, and further away from the bottom of the screen.
+In the fourth iteration of **Cave Escape**, we will actually implement the ability to have you control the way the player flies. Instead of the player just falling into the abyss, as it was in iteration three, iteration four sees the inclusion of the logic required to keep the player on the screen by using keyboard input. In particular, we're going to make it so that every time the space bar is pressed, the player is going to fly a little higher, and further away from the bottom of the screen.
 
 ## What to Expect
 
@@ -237,16 +238,13 @@ void handle_input(sprite player)
 ```
 - The new procedure ```handle_input()``` is implemented to listen for user input while the game is running. Specifically, the input it's listening for is when the space bar is pressed. Every time the space bar is pressed, the ```handle_input()``` procedure will decrement the value of the constant ```JUMP_RECOVERY_BOOST``` from the player's current velocity, meaning, that each time the space bar is pressed, the player will fall a little slower, but only briefly. The aim is to have the user continually press the space bar to keep the player on the screen and give it the affect of flying!
 
-### - Complete Code
-The complete code for iteration four can be found [here](../C/CaveEscape/src/cave_escape_4.cpp).
-
 ### - Main has Changed, Again
 ```c
 int main()
 {
     sprite player;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
@@ -254,7 +252,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
@@ -273,10 +271,13 @@ The ```main()``` procedure has now changed. Notice that in the game loop, there'
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration four on your own.
 
+### - Complete Code
+The complete code for iteration four can be found [here](../C/CaveEscape/src/cave_escape_4.cpp).
+
 ---
 # 5. Iteration Five
 
-In the fifth iteration of Cave Escape, we add quite a bit of functionality, more so than in the previous iterations. We're up for a big step with this one. We're going to add an obstacle. We'll refer to the obstacle as a set of poles. It's the aim of the game to avoid the poles, but we'll worry about that later. For now, let's just worry about getting the poles onto the screen. So, this iteration concerns the generation of a single set of poles as well as the way the poles behave.
+In the fifth iteration of **Cave Escape**, we add quite a bit of functionality, more so than in the previous iterations. We're up for a big step with this one. We're going to add an obstacle, and we'll refer to the obstacle as a set of poles. It's the aim of the game to avoid the poles, but we'll worry about that later. For now, let's just worry about getting the poles onto the screen. So, this iteration concerns the generation of a single set of poles as well as the way the poles behave.
 
 ## What to Expect
 
@@ -309,13 +310,14 @@ typedef struct pole_data
   sprite up_pole, down_pole;
 } pole_data;
 ```
-- In order to be able to keep track of the data required to add the poles to the game, we've added a record called ```pole_data```. If you take a look at the ```pole_data``` record, you'll notice that it has two fields as sprites. ```pole_data``` needs two sprites because one pole will come down from the top of the screen and the other will come up from the bottom.
+- In order to be able to keep track of the data required to add the poles to the game, we've added a record called ```pole_data```. If you take a look at the ```pole_data``` record, you'll notice that it has two fields as sprites, ```up_pole``` and ```down_pole```. The ```pole_data``` record needs two sprites because one pole will come up from the bottom of the screen and the other will come down from the top.
 
 #### Addition three
 ```c    
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -328,7 +330,7 @@ pole_data get_random_poles()
   return result;
 }
 ```
-- Now, we need some logic in order to be able to add the poles to the game so that we can see them. Firstly, we've got a new function called ```get_random_poles()```, which is responsible for generating the data associated with the poles. This function behaves similarly to the function ```get_new_player()```, as discussed in iteration two. ```get_random_poles()``` assigns the top and bottom poles their own sprites, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the poles scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the function assigns their delta x, or horizontal movement speed to that of the value of the constant ```POLE_SCROLL_SPEED```.
+- Now, we need some logic in order to be able to add the poles to the game so that we can see them. So to start that off, we've got a new function called ```get_random_poles()```, which is responsible for generating the data associated with the poles. This function behaves similarly to the function ```get_new_player()```, as discussed in iteration two. ```get_random_poles()``` assigns the top and bottom poles their own sprites, sets their x location to a random location off the far right of the screen (this is intentional because we want to see the poles scroll onto the screen from the right) and sets their y locations so that they appear to be coming down from the top and up from the bottom of the screen. Finally, the function assigns their delta x, or horizontal movement speed to that of the value of the constant ```POLE_SCROLL_SPEED```.
 
 #### Addition four
 ```c    
@@ -350,9 +352,6 @@ void draw_poles(pole_data poles)
 ```
 - A procedure called ```draw_poles()``` has been added to draw the poles to the screen.
 
-### - Complete Code
-The complete code for iteration five can be found [here](../C/CaveEscape/src/cave_escape_5.cpp).
-
 ### - More Changes to Main
 ```c
 int main()
@@ -360,7 +359,7 @@ int main()
     sprite player;
     pole_data game_poles;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
@@ -370,7 +369,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
@@ -389,10 +388,13 @@ The ```main()``` procedure has now changed. Notice that we're now using our new 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration five on your own.
 
+### - Complete Code
+The complete code for iteration five can be found [here](../C/CaveEscape/src/cave_escape_5.cpp).
+
 ---
 # 6. Iteration Six
 
-In the sixth iteration of Cave Escape, we're going to make a few additions to ensure that once the poles move off the far left of the screen, they get moved back default position. This will ensure that the poles can be reused as obstacles.
+In the sixth iteration of **Cave Escape**, we're going to make a few additions to ensure that once the poles move off the far left of the screen, they get moved back to their default position. This will ensure that the poles can be reused as obstacles.
 
 ## What to Expect
 
@@ -411,14 +413,14 @@ The new code in iteration six is as follows:
 
 #### Addition one
 ```c
-void reset_pole_data(pole_data poles)
+void reset_pole_data(pole_data *poles)
 {
-  free_sprite(poles.up_pole);
-  free_sprite(poles.down_pole);
-  poles = get_random_poles();
+  free_sprite(poles->up_pole);
+  free_sprite(poles->down_pole);
+  *poles = get_random_poles();
 }
 ```
-- We've added a new procedure called ```reset_pole_data()``` that is going to reset the poles once they move off the left of screen. Notice that it calls the function ```get_random_poles()``` that we implemented before. It makes sense to reuse code where you can, and the poles that the function ```get_random_poles()``` returns are exactly what we need when we have to reset them.
+- We've added a new procedure called ```reset_pole_data()``` that is going to reset the poles once they move off the left of screen. Notice that it calls the function ```get_random_poles()``` that we implemented in iteration five. It makes sense to reuse code where you can, and the poles that the function ```get_random_poles()``` returns are exactly what we need when we have to reset them.
 
 #### Addition two (Note: ```update_poles()``` has had code added to it)
 ```c    
@@ -429,14 +431,11 @@ void update_poles(pole_data poles)
 
   if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
   {
-    reset_pole_data(poles);
+    reset_pole_data(&poles);
   }
 }
 ```
-- We've modified ```update_poles()``` to check to see if the poles have moved off the left of the screen and ```if``` they have, we simply reset them.
-
-### - Complete Code
-The complete code for iteration six can be found [here](../C/CaveEscape/src/cave_escape_6.cpp).
+- We've modified ```update_poles()``` to check to see if the poles have moved off the left of the screen and if they have, we simply reset them.
 
 ### - Any Changes to Main
 Not in this iteration. Hurray!
@@ -444,10 +443,13 @@ Not in this iteration. Hurray!
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration six on your own.
 
+### - Complete Code
+The complete code for iteration six can be found [here](../C/CaveEscape/src/cave_escape_6.cpp).
+
 ---
 # 7. Iteration Seven
 
-In iteration seven of Cave Escape, we're going to implement the logic to have more than one set of poles. One set of poles is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
+In iteration seven of **Cave Escape**, we're going to implement the logic to have more than one set of poles. One set of poles is simply not challenging enough, and the overall change in logic to suit such functionality is quite minor.
 
 ## What to Expect
 
@@ -478,45 +480,35 @@ The new code in iteration seven is as follows:
 ```c    
 typedef struct pole_data poles[NUM_POLES];
 ```
-- The second addition is an array of ```pole_data``` called ```Poles```. This array is where our four sets of poles will be stored. You can see the array is declared as such ```typedef struct pole_data poles[NUM_POLES];```. It's important to understand the logic in the square bracers ```[NUM_POLES]```. Now, ```NUM_POLES``` is four and computers are zero based, meaning that our first set of poles is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three! Moving on.
+- The second addition is an array of ```pole_data``` called ```poles```. This array is where our four sets of poles will be stored. You can see the array is declared as such ```typedef struct pole_data poles[NUM_POLES];```. It's important to understand the logic in the square bracers ```[NUM_POLES]```. Now, ```NUM_POLES``` is four and computers are zero based, meaning that our first set of poles is actually denoted the numerical value of zero, the second set is denoted one, the third set two and the fourth set three!
 
-#### Addition three (Note: ```update_poles()``` has had code added to it)
+#### Addition three
 ```c    
-void update_poles(poles poles)
+void update_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    update_sprite(poles[i].up_pole);
-    update_sprite(poles[i].down_pole);
-
-    if ((sprite_x(poles[i].up_pole) + sprite_width(poles[i].up_pole) < 0) && (sprite_x(poles[i].down_pole) + sprite_width(poles[i].down_pole) < 0))
-    {
-      reset_pole_data(poles[i]);
-    }
+    update_poles(poles_array[i]);
   }
 }
 ```
-- ```update_poles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is updated.
+- We've added a procedure called ```update_poles_array()``` in order to update every single set of poles in the array. Notice how the procedure simply uses a ```for``` loop in order to call the procedure ```update_poles()``` on each set of poles in the array. We added this procedure because we know that the procedure ```update_poles()``` works with a single set of poles, so why not just call it for each set of poles in the array!
 
-#### Addition four (Note: ```draw_poles()``` has had code added to it)
+#### Addition four
 ```c    
-void draw_poles(poles poles)
+void draw_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    draw_sprite(poles[i].up_pole);
-    draw_sprite(poles[i].down_pole);
+    draw_poles(poles_array[i]);
   }
 }
 ```
--  ```draw_poles()``` has only changed to work with our new array of poles instead of just working with a single set of poles. Notice that the procedure is using a ```for``` loop to make sure every set of poles in the array is drawn.
-
-### - Complete Code
-The complete code for iteration seven can be found [here](../C/CaveEscape/src/cave_escape_7.cpp).
+-  We've added a procedure called ```draw_poles_array()``` in order to draw every single set of poles in the array. Exactly like the procedure ```update_poles_array()```, notice how the procedure simply uses a ```for``` loop, within which a call to the procedure ```draw_poles()``` is made for each set of poles in the array. We added this procedure because we know that the procedure ```draw_poles()``` works with a single set of poles, so why not just call it for each set of poles in the array!
 
 ### - Any Changes to Main
 ```c
@@ -526,7 +518,7 @@ int main()
     poles game_poles;
     int i;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
 
     player = get_new_player();
@@ -539,13 +531,13 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);
       draw_sprite(player);
-      update_poles(game_poles);
-      draw_poles(game_poles);
+      update_poles_array(game_poles);
+      draw_poles_array(game_poles);
       refresh_screen();
 
     } while(!window_close_requested());
@@ -553,15 +545,18 @@ int main()
     return 0;
 }
 ```
-Instead of the variable ```game_poles``` being a value of ```pole_data```, it is now a value of our array, ```poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game.
+Instead of the variable ```game_poles``` being a value of ```pole_data```, it is now a value of our array, ```poles```. We've also added a ```for``` loop to ensure that we set up all of the poles for the game. Our two new procedures to update and draw the array of poles, ```update_poles_array()``` and ```draw_poles_array()``` are also being called!
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration seven on your own.
 
+### - Complete Code
+The complete code for iteration seven can be found [here](../C/CaveEscape/src/cave_escape_7.cpp).
+
 ---
 # 8. Iteration Eight
 
-In iteration eight of Cave Escape, we're going to focus a fair bit on polishing the game in terms of visual aesthetics and code presentation. Visually, the game is going to be practically complete after the eighth iteration. We're going to include a scrolling background for the game to help set the scene. The code tidy up involved in iteration eight is purely for convention and to conform to best practice of having well presented, readable code. This iteration sees the addition of nine new code additions, so it is quite busy.
+In iteration eight of **Cave Escape**, we're going to focus a fair bit on polishing the game in terms of visual aesthetics and code presentation. Visually, the game is going to be practically complete after the eighth iteration. We're going to include a scrolling background for the game to help set the scene. The code tidy up involved in iteration eight is purely for convention and to conform to best practice of having well presented, readable code. This iteration sees the addition of nine new code additions, so it is quite busy.
 
 ## What to Expect
 
@@ -587,7 +582,7 @@ The new code in iteration eight is as follows:
 #define BACKGROUND_SCROLL_SPEED -1
 #define NUM_POLES 4
 ```
-- In order to cater for the game's new visual background, we've changed the constant ```POLE_SCROLL_SPEED``` to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```, because the roof element of the background is going to have the same scrolling speed as the poles. We've also added another constant ```BACKGROUND_SCROLL_SPEED``` to store the value at which we want the background to scroll at. These values ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED``` and ```BACKGROUND_SCROLL_SPEED``` are different because we want to create parallax scrolling.
+- In order to cater for the game's new visual background, we've changed the constant ```POLE_SCROLL_SPEED``` to ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED```, because the roof and floor elements of the background are going to have the same scrolling speed as the poles. We've also added another constant ```BACKGROUND_SCROLL_SPEED``` to store the value at which we want the background to scroll at. These values ```FOREGROUND_FOREROOF_POLE_SCROLL_SPEED``` and ```BACKGROUND_SCROLL_SPEED``` are different because we want to create parallax scrolling.
 
 #### Addition two
 ```c    
@@ -596,7 +591,7 @@ typedef struct background_data
   sprite foreroof, foreground, background;
 } background_data;
 ```
-- ```background_data()``` has been added to house all the information related to the game's background. Notice it consists of three separate sprites, ```foreroof```, ```foreground``` and ```background```.
+- The record ```background_data``` has been added to house all the information related to the game's background. Notice it consists of three separate sprites, ```foreroof```, ```foreground``` and ```background```.
 
 #### Addition three
 ```c    
@@ -614,6 +609,7 @@ typedef struct game_data
 background_data get_new_background()
 {
   background_data result;
+
   result.background = create_sprite(bitmap_named("Background"));
   sprite_set_x(result.background, 0);
   sprite_set_y(result.background, 0);
@@ -633,7 +629,7 @@ background_data get_new_background()
   return result;
 }
 ```
-- Now, we need some logic in order to be able to add the background to the game so that we can see it. Firstly, we've got a new function called ```get_new_background()```, which is responsible for generating the data associated with the background. This function behaves similarly to the functions ```get_new_player()``` and ```get_random_poles()```. ```get_new_background()``` returns a value of ```background_data()```, and as you can see, it is responsible for setting all of the values within the ```background_data()``` record. It sets the sprites for the ```foreroof```, ```foreGround``` and ```background```, as well as their locations and the animation for the ```foreGround``` sprite. Because the background has a scrolling affect, the delta x, or horizontal movement speed of the three sprites have been set accordingly.
+- Now, we need some logic in order to be able to add the background to the game so that we can see it. To do that, we've added a new function called ```get_new_background()```, which is responsible for generating the data associated with the background. This function behaves similarly to the functions ```get_new_player()``` and ```get_random_poles()```. The function ```get_new_background()``` returns a value of ```background_data```, and as you can see, it is responsible for setting all of the values within the ```background_data``` record. It sets the sprites for the ```foreroof```, ```foreGround``` and ```background```, as well as their locations and the animation for the ```foreGround``` sprite. Because the background has a scrolling affect, the delta x, or horizontal movement speed of the three sprites have been set accordingly.
 
 #### Addition five
 
@@ -656,7 +652,7 @@ void update_background(background_data *scene)
 }
 ```
 
-- A new procedure called ```update_background()``` has been added to ensure the background wraps continuously around the screen, similar to the fashion in which the poles do. The logic within the procedure makes sure that the game scene always renders the background in a manner which makes the scrolling of the images seem infinite.
+- A new procedure called ```update_background()``` has been added to ensure the background wraps continuously around the screen, similar to the fashion in which the poles do. The logic within the procedure makes sure that the game scene always renders the background in a manner which makes the scrolling of it seem infinite.
 
 #### Addition six
 ```c
@@ -670,32 +666,32 @@ void update_player(sprite player)
 
 #### Addition seven
 ```c
-void update_game(game_data* game)
+void update_game(game_data *game)
 {
   handle_input(game->player);
   update_background(&game->scene);
   update_player(game->player);
-  update_poles(game->poles);
+  update_poles_array(game->poles);
 }
 ```
 - A procedure called ```update_game()``` has been added, for the same reasons as the procedure ```update_player()```. More application of good practice and a general code tidy up.
 
 #### Addition eight
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player);
 }
 ```
-- Yet another procedure has been added to apply modular decomposition to our game. ```draw_game()``` has been created to house all the calls, which are responsible for drawing the game elements to the screen.
+- Yet another procedure has been added to apply modular decomposition to our game. The procedure ```draw_game()``` has been created to house all the calls, which are responsible for drawing the game elements to the screen.
 
 #### Addition nine
 ```c
-void set_up_game(game_data* game)
+void set_up_game(game_data *game)
 {
   int i;
 
@@ -708,10 +704,7 @@ void set_up_game(game_data* game)
   game->scene = get_new_background();
 }
 ```
-- Finally, this big iteration concludes with the addition of a new procedure called ```set_up_game()```. Out of good practice, we've move all the game setup calls from the ```main()``` procedure into a single procedure called ```set_up_game()```. It is here where all the game elements are instantiated, such as the player, background and poles.
-
-### - Complete Code
-The complete code for iteration eight can be found [here](../C/CaveEscape/src/cave_escape_8.cpp).
+- Finally, this big iteration concludes with the addition of a new procedure called ```set_up_game()```. Out of good practice, we've moved all the game setup calls from the ```main()``` procedure into a single procedure called ```set_up_game()```. It is here where all the game elements are instantiated, such as the player, background and poles.
 
 ### - A Little Change to Main
 ```c
@@ -719,13 +712,13 @@ int main()
 {
     game_data game;
 
-    open_graphics_window("Cave Escape", 432, 768);
+    open_graphics_window("**Cave Escape**", 432, 768);
     set_up_game(&game);
 
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_game(&game);
       draw_game(&game);
       refresh_screen();
@@ -734,13 +727,15 @@ int main()
 
     return 0;
 }
-
 ```
 
 Look how tidy the ```main()``` procedure looks now after our code tidy up. We now only have a single variable called ```game```, which is a value of ```game_data```. We call our new procedure ```set_up_game()``` before the game loop to set the game up, then in our game loop, we have calls to ```update_game()``` and ```draw_game()```, which handle everything else that the game depends on.
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration eight on your own.
+
+### - Complete Code
+The complete code for iteration eight can be found [here](../C/CaveEscape/src/cave_escape_8.cpp).
 
 ---
 # 9. Iteration Nine
@@ -770,7 +765,7 @@ typedef struct pole_data
   sprite up_pole, down_pole;
 } pole_data;
 ```
-- We've added a field to our record ```pole_data``` called ```score_limiter()```. We need this to be able to make the scoring system work. We'll talk more about that soon. Promise.
+- We've added a field to our record ```pole_data``` called ```score_limiter```. We need this to be able to make the scoring system work. We'll talk more about that soon. Promise.
 
 #### Addition two
 ```c    
@@ -792,13 +787,14 @@ typedef struct game_data
   poles poles;
 } game_data;
 ```
-- The ```game_data``` record has changed only slightly. Instead of the ```player``` field being just a sprite, it is now a value of our new record ```player```.
+- The ```game_data``` record has changed only slightly. Instead of the ```player``` field being a sprite, it is now a value of our new record ```player```.
 
 #### Addition four (Note: The function ```get_new_player()``` has changed)
 ```c    
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -809,13 +805,14 @@ player get_new_player()
   return result;
 }
 ```
-- Our function ```get_new_player()``` has had to change in order to support the new scoring system as well as our collision system. In the function we now set the ```score``` to zero and set the player to be alive when the function is called.
+- Our function ```get_new_player()``` has had to change in order to support the new scoring system as well as our collision system. In the function, we now set the ```score``` to zero and set the player to be alive when the function is called (```result.is_dead = false```).
 
 #### Addition five (Note: The function ```get_random_poles()``` has changed)
 ```c
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -829,33 +826,28 @@ pole_data get_random_poles()
   return result;
 }
 ```
-- The ```get_random_poles()``` function has also changed. Only slightly, though. Notice that now the function sets the ```pole_data``` value that it returns to have a ```score_limiter()``` value of ```true``` and also, the positioning of the poles in terms of their vertical position is random. Because we have the roof and the floor, we can position the poles more dynamically. Now, we're going to use the ```score_limiter()``` to increment the ```score``` of the player every time they pass a set of poles. Once they pass a set of poles, the player's* ```score``` will be incremented and the ```score_limiter()``` for that set of poles will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```update_poles()```.
+- The ```get_random_poles()``` function has also changed. Only slightly, though. Notice that now the function sets the ```pole_data``` value that it returns to have a ```score_limiter``` value of ```true``` and also, the positioning of the poles in terms of their vertical position is random. Because we have the roof and the floor, we can position the poles more dynamically. Now, we're going to use the ```score_limiter``` to increment the score of the player every time they pass a set of poles. Once they pass a set of poles, the player's score will be incremented and the ```score_limiter``` for that set of poles will be set to ```false```. The reasoning behind this will become more clear when we talk about the changes made to ```update_poles()```.
 
 #### Addition six (Note: The procedure ```update_poles()``` has changed)
 ```c
-void update_poles(game_data *game)
+void update_poles(pole_data *poles, player *player)
 {
-  int i;
+  update_sprite(poles->up_pole);
+  update_sprite(poles->down_pole);
 
-  for (i = 0; i < NUM_POLES; i++)
+  if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))
   {
-    update_sprite(game->poles[i].up_pole);
-    update_sprite(game->poles[i].down_pole);
+    poles->score_limiter = false;
+    player->score++;
+  }
 
-    if ((sprite_x(game->poles[i].up_pole) < sprite_x(game->player.sprite)) && (game->poles[i].score_limiter == true))
-    {
-      game->poles[i].score_limiter = false;
-      game->player.score++;
-    }
-
-    if (sprite_offscreen(game->poles[i].up_pole) && sprite_offscreen(game->poles[i].down_pole) && (game->poles[i].score_limiter == false))
-    {
-      reset_pole_data(&game->poles[i]);
-    }
+  if ((sprite_x(poles->up_pole) + sprite_width(poles->up_pole) < 0) && (sprite_x(poles->down_pole) + sprite_width(poles->down_pole) < 0))
+  {
+    reset_pole_data(poles);
   }
 }
 ```
-- Now we're going to take a look at the changes made to ```update_poles()```. Take a close look at the conditional statements in this procedure. In particular, let's focus on this conditional section of code here ```if SpriteX (poles[i].UpPole) < (SpriteX(player.Playing)) then``` to understand why we need the ```score_limiter()```. Firstly, we're checking to see if the player has passed any poles. That's what the first ```if``` statement is checking for. Now, the ```if``` statement inside the first one (we call this nested) is checking to see if the ```score_limiter()``` is ```true```, and ```if``` it is, we then set it to ```false``` and increment the ```Player's``` ```score```. Now, it has to change to ```false``` because, if it never did, once the player passes some poles, the first ```if``` statement would be ```true``` and the ```Player's``` score would keep incrementing because the player would be beyond the poles. Phew. Tongue twisting. The best way to see the bug that this would cause is to remove the nested ```if``` statement and see what happens for yourself.
+- Now we're going to take a look at the changes made to ```update_poles()```. Take a close look at the conditional statements in this procedure. In particular, let's focus on this conditional section of code here ```if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))``` to understand why we need the ```score_limiter```. We're checking to see ```if``` the player has passed any poles and ```if``` the ```score_limiter``` is ```true```. If those conditions are ```true```, we then set the ```score_limiter``` field  to ```false``` and increment the player's ```score```. Now, ``score_limiter``` has to change to ```false``` because, if it never did, once the player passes some poles, the ```if``` statement would evaluate to ```true``` and the player's score would keep incrementing because the player would be beyond the poles. Phew. Tongue twisting. The best way to see the bug that this would cause is to remove this condition ```(poles->score_limiter == true)``` from the ```if``` statement.
 
 #### Addition seven
 ```c
@@ -879,7 +871,7 @@ void check_for_collisions(game_data *game)
   }
 }
 ```
-- We've got a new procedure called ```check_for_collisions()```. The role of this procedure is to check to see if the player has collided with any of the eligible game elements (the poles, the roof and the floor). ```If``` the player does collide with anything that it shouldn't, we set the ```Player's``` ```is_dead``` to ```true```.
+- We've got a new procedure called ```check_for_collisions()```. The role of this procedure is to check to see if the player has collided with any of the eligible game elements (the poles, the roof and the floor). If the player does collide with anything that it shouldn't, we set the player's ```is_dead``` field to ```true```.
 
 #### Addition eight
 ```c
@@ -889,7 +881,7 @@ void reset_player(player *player)
   *player = get_new_player();
 }
 ```
-- Another new procedure called ```reset_player()``` has been added to reset the ```player``` to a default state. When we mention default state, we mean a new game where the score is zero and the player has to start over. This procedure is only used when the ```player``` dies (collides with the environment).
+- Another new procedure called ```reset_player()``` has been added to reset the player to a default state. When we mention default state, we mean a new game where the score is zero and the player has to start over. This procedure is only used when the player dies (collides with the environment).
 
 #### Addition nine
 ```c
@@ -916,7 +908,7 @@ void update_game(game_data *game)
     handle_input(game->player.sprite);
     update_background(game->scene);
     update_player(game->player.sprite);
-    update_poles(game);
+    update_poles_array(game->poles, &game->player);
   }
   else
   {
@@ -928,13 +920,14 @@ void update_game(game_data *game)
 
 #### Addition eleven (Note: The procedure ```draw_game()``` has changed)
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
@@ -943,14 +936,14 @@ void draw_game(game_data* game)
 ```
 - Finally, ```draw_game()``` has changed to simply draw the score to the top left of the screen so that we can see how good....or bad we are at playing.
 
-### - Complete Code
-The complete code for iteration nine can be found [here](../C/CaveEscape/src/cave_escape_9.cpp).
-
 ### - You're the Same, Main
 Main has not changed.
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration nine on your own.
+
+### - Complete Code
+The complete code for iteration nine can be found [here](../C/CaveEscape/src/cave_escape_9.cpp).
 
 ---
 # 10. Iteration Ten
@@ -988,13 +981,14 @@ typedef struct player
   player_state state;
 } player;
 ```
--  Now because of the addition of the enumeration ```player_state```, we've changed the ```player``` record to house the current game state. The new field is called ```State```.
+-  Now because of the addition of the enumeration ```player_state```, we've changed the ```player``` record to house the current game state. The new field is called ```state```.
 
 #### Addition three (Note: The function ```get_new_player()``` has changed)
 ```c    
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -1006,33 +1000,33 @@ player get_new_player()
   return result;
 }
 ```
-- The function ```get_new_player()``` has changed to set the value of the ```players's``` new field ```state``` to ```MENU```. This way, we can ensure that the game starts in the menu state.
+- The function ```get_new_player()``` has changed to set the value of the players's new field ```state``` to ```MENU```. This way, we can ensure that the game starts in the menu state.
 
 #### Addition four (Note: The procedure ```handle_input()``` has changed)
 ```c    
-void handle_input(sprite player, player_state* state)
+void handle_input(player *player)
 {
-  if (key_typed(SPACE_KEY) && (*state = PLAY))
+  if (key_typed(SPACE_KEY) && (player->state = PLAY))
   {
-    sprite_set_dy(player, sprite_dy(player) - JUMP_RECOVERY_BOOST);
+    sprite_set_dy(player->sprite, sprite_dy(player->sprite) - JUMP_RECOVERY_BOOST);
   }
   else if (key_typed(SPACE_KEY))
   {
-    *state = PLAY;
+    player->state = PLAY;
   }
 }
 ```
-- The procedure ```handle_input()``` has changed to accommodate for the new menu state being implemented. Basically, the change ensures that ```if``` the game hasn't started yet (the ```player's``` ```state``` is ```MENU```) and the player presses the space bar, we want to set the ```players's``` ```state``` to ```PLAY```. If the player is already playing, then just handle the input like we normally would by boosting the player's velocity.
+- The procedure ```handle_input()``` has changed to accommodate for the new menu state being implemented. Basically, the change ensures that ```if``` the game hasn't started yet (the player's ```state``` is ```MENU```) and the player presses the space bar, we want to set the players's ```state``` to ```PLAY```. If the player is already playing, then just handle the input like we normally would by boosting the player's velocity.
 
 #### Addition five (Note: The procedure ```update_player()``` has changed)
 ```c
-void update_player(sprite player, player_state state)
+void update_player(player player)
 {
-  if (state == PLAY)
+  if (player.state == PLAY)
   {
-    update_velocity(player);
+    update_velocity(player.sprite);
   }
-  update_sprite(player);
+  update_sprite(player.sprite);
 }
 ```
 - ```update_player()``` has also changed to suit the new menu state. The changes made ensure that we only update the player's velocity ```if``` the current ```state``` is set to ```PLAY```. Otherwise, the player will just hover in the middle of the screen. We're doing this so that the player only starts moving when we are ready to play!
@@ -1044,12 +1038,12 @@ void update_game(game_data *game)
   if (!game->player.is_dead)
   {
     check_for_collisions(game);
-    handle_input(game->player.sprite, &game->player.state);
+    handle_input(&game->player);
     update_background(game->scene);
-    update_player(game->player.sprite, game->player.state);
+    update_player(game->player);
     if (game->player.state == PLAY)
     {
-      update_poles(game);
+      update_poles_array(game->poles, &game->player);
     }
   }
   else
@@ -1058,17 +1052,18 @@ void update_game(game_data *game)
   }
 }
 ```
-- ```update_game()``` also has a change to suit the menu state. The changes ensure that the poles only scroll across the screen if the player has started playing the game.
+- The procedure ```update_game()``` also has a change to suit the menu state. The changes ensure that the poles only scroll across the screen if the player has started playing the game.
 
 #### Addition seven (Note: The procedure ```draw_game()``` has changed)
 ```c
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
@@ -1086,15 +1081,14 @@ void draw_game(game_data* game)
     sprite_y(game->player.sprite) + text_height(font_named("GameFont"), " ") * 2);
   }
 }
-
 ```
 - Finally, ```draw_game()``` also has some minor changes. This is where we're drawing our new menu. So, ```if``` the player is not playing the game yet, we draw a menu to the screen for them, giving them instructions on how to start playing.
-
-### - Complete Code
-The complete code for iteration ten can be found [here](../C/CaveEscape/src/cave_escape_10.cpp).
 
 ### - Main Remains the Same
 It really does.
 
 ### Have a Crack
 Now it's time for you to have a go at implementing iteration ten on your own. You've done really well and you're pretty much done!
+
+### - Complete Code
+The complete code for iteration ten can be found [here](../C/CaveEscape/src/cave_escape_10.cpp).

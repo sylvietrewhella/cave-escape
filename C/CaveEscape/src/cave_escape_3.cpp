@@ -7,6 +7,7 @@
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);

@@ -14,6 +14,7 @@ typedef struct pole_data
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);
@@ -25,6 +26,7 @@ sprite get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -86,7 +88,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);

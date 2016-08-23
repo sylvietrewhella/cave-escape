@@ -14,6 +14,7 @@ typedef struct pole_data
 sprite get_new_player()
 {
   sprite result;
+
   result = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result, screen_width() / 2 - sprite_width(result));
   sprite_set_y(result, screen_height() / 2);
@@ -25,6 +26,7 @@ sprite get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -45,11 +47,11 @@ void handle_input(sprite player)
   }
 }
 
-void reset_pole_data(pole_data poles)
+void reset_pole_data(pole_data *poles)
 {
-  free_sprite(poles.up_pole);
-  free_sprite(poles.down_pole);
-  poles = get_random_poles();
+  free_sprite(poles->up_pole);
+  free_sprite(poles->down_pole);
+  *poles = get_random_poles();
 }
 
 void update_velocity(sprite player)
@@ -73,7 +75,7 @@ void update_poles(pole_data poles)
 
   if ((sprite_x(poles.up_pole) + sprite_width(poles.up_pole) < 0) && (sprite_x(poles.down_pole) + sprite_width(poles.down_pole) < 0))
   {
-    reset_pole_data(poles);
+    reset_pole_data(&poles);
   }
 }
 
@@ -98,7 +100,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_velocity(player);
       handle_input(player);
       update_sprite(player);

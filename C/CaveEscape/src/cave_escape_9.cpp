@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "SwinGame.h"
 
 #define GRAVITY 0.08
@@ -38,6 +39,7 @@ typedef struct game_data
 player get_new_player()
 {
   player result;
+
   result.sprite = create_sprite(bitmap_named("Player"), animation_script_named("PlayerAnimations"));
   sprite_set_x(result.sprite, screen_width() / 2 - sprite_width(result.sprite));
   sprite_set_y(result.sprite, screen_height() / 2);
@@ -51,6 +53,7 @@ player get_new_player()
 pole_data get_random_poles()
 {
   pole_data result;
+
   result.up_pole = create_sprite(bitmap_named("UpPole"));
   result.down_pole = create_sprite(bitmap_named("DownPole"));
   sprite_set_x(result.up_pole, screen_width() + rnd(1200));
@@ -67,6 +70,7 @@ pole_data get_random_poles()
 background_data get_new_background()
 {
   background_data result;
+
   result.background = create_sprite(bitmap_named("Background"));
   sprite_set_x(result.background, 0);
   sprite_set_y(result.background, 0);
@@ -152,25 +156,30 @@ void update_velocity(sprite player)
   }
 }
 
-void update_poles(game_data *game)
+void update_poles(pole_data *poles, player *player)
+{
+  update_sprite(poles->up_pole);
+  update_sprite(poles->down_pole);
+
+  if ((sprite_x(poles->up_pole) < sprite_x(player->sprite)) && (poles->score_limiter == true))
+  {
+    poles->score_limiter = false;
+    player->score++;
+  }
+
+  if ((sprite_x(poles->up_pole) + sprite_width(poles->up_pole) < 0) && (sprite_x(poles->down_pole) + sprite_width(poles->down_pole) < 0))
+  {
+    reset_pole_data(poles);
+  }
+}
+
+void update_poles_array(poles poles_array, player *player)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    update_sprite(game->poles[i].up_pole);
-    update_sprite(game->poles[i].down_pole);
-
-    if ((sprite_x(game->poles[i].up_pole) < sprite_x(game->player.sprite)) && (game->poles[i].score_limiter == true))
-    {
-      game->poles[i].score_limiter = false;
-      game->player.score++;
-    }
-
-    if (sprite_offscreen(game->poles[i].up_pole) && sprite_offscreen(game->poles[i].down_pole) && (game->poles[i].score_limiter == false))
-    {
-      reset_pole_data(&game->poles[i]);
-    }
+    update_poles(&poles_array[i], player);
   }
 }
 
@@ -205,7 +214,7 @@ void update_game(game_data *game)
     handle_input(game->player.sprite);
     update_background(game->scene);
     update_player(game->player.sprite);
-    update_poles(game);
+    update_poles_array(game->poles, &game->player);
   }
   else
   {
@@ -213,31 +222,37 @@ void update_game(game_data *game)
   }
 }
 
-void draw_poles(poles poles)
+void draw_poles(pole_data poles)
+{
+  draw_sprite(poles.up_pole);
+  draw_sprite(poles.down_pole);
+}
+
+void draw_poles_array(poles poles_array)
 {
   int i;
 
   for (i = 0; i < NUM_POLES; i++)
   {
-    draw_sprite(poles[i].up_pole);
-    draw_sprite(poles[i].down_pole);
+    draw_poles(poles_array[i]);
   }
 }
 
-void draw_game(game_data* game)
+void draw_game(game_data *game)
 {
   char str[15];
+
   sprintf(str, "%d", game->player.score);
 
   draw_sprite(game->scene.background);
-  draw_poles(game->poles);
+  draw_poles_array(game->poles);
   draw_sprite(game->scene.foreroof);
   draw_sprite(game->scene.foreground);
   draw_sprite(game->player.sprite);
   draw_text(str, COLOR_WHITE, "GameFont", 10, 0);
 }
 
-void set_up_game(game_data* game)
+void set_up_game(game_data *game)
 {
   int i;
 
@@ -261,7 +276,7 @@ int main()
     do
     {
       process_events();
-      clear_screen(ColorWhite);
+      clear_screen(COLOR_WHITE);
       update_game(&game);
       draw_game(&game);
       refresh_screen();
