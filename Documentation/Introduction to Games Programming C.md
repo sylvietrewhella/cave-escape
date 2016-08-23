@@ -591,7 +591,7 @@ typedef struct background_data
   sprite foreroof, foreground, background;
 } background_data;
 ```
-- The record ```background_data()``` has been added to house all the information related to the game's background. Notice it consists of three separate sprites, ```foreroof```, ```foreground``` and ```background```.
+- The record ```background_data``` has been added to house all the information related to the game's background. Notice it consists of three separate sprites, ```foreroof```, ```foreground``` and ```background```.
 
 #### Addition three
 ```c    
@@ -687,7 +687,7 @@ void draw_game(game_data *game)
   draw_sprite(game->player);
 }
 ```
-- Yet another procedure has been added to apply modular decomposition to our game. The procedure```draw_game()``` has been created to house all the calls, which are responsible for drawing the game elements to the screen.
+- Yet another procedure has been added to apply modular decomposition to our game. The procedure ```draw_game()``` has been created to house all the calls, which are responsible for drawing the game elements to the screen.
 
 #### Addition nine
 ```c
