@@ -1,6 +1,6 @@
 # 1. Iteration One
 
-In the first iteration of **Cave Escape**, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a graphics window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
+In the first iteration of **Cave Escape**, you will implement the boiler plate code for a simple game. The boiler plater code includes the instructions to open a window and the execution of a basic game loop, where all of the instructions that you implement will be called from.
 
 ## Code
 
@@ -13,14 +13,14 @@ The complete code for iteration one is as follows:
 
 int main()
 {
-    open_window("**Cave Escape**", 432, 768);
+    open_window("Cave Escape", 432, 768);
 
     do // The game loop...
     {
       process_events();
       clear_screen(COLOR_WHITE);
       refresh_screen();
-    } while(!window_close_requested());
+    } while(!window_close_requested("Cave Escape"));
 
     return 0;
 }
@@ -32,7 +32,7 @@ The ```main()``` procedure, as demonstrated in the code above, is responsible fo
 So, that being said, let's take a moment to analyse the ```main()``` procedure and the instructions it is executing. The sequence is as follows:
 
   1. Firstly, a call to ```open_window()``` is made, where we can see the title of the window being opened is **Cave Escape** and the width and height of the window is 432 by 768 pixels.
-  2. The game loop is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instructions will be continually executed for as long as the loop is running. Note that the condition of the loop is ```window_close_requested()```.
+  2. The game loop is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instructions will be continually executed for as long as the loop is running. Note that the condition of the loop is ```window_close_requested("Cave Escape")```.
      * The following instructions are executed within the game loop:
       1. ```process_events()``` is called. ```process_events()``` is used to listen for any user input made while the game is running.
       2. We then clear the screen with ```clear_screen()``` before we draw anything to it (we're not drawing anything in this iteration, but that will come soon!).
@@ -73,8 +73,8 @@ int main()
 {
     sprite player;
 
-    open_graphics_window("**Cave Escape**", 432, 768);
-    load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
+    open_window("Cave Escape", 432, 768);
+    load_resource_bundle("CaveEscape", "CaveEscape.txt");
 
     player = get_new_player();
 
@@ -85,7 +85,7 @@ int main()
       update_sprite(player);
       draw_sprite(player);
       refresh_screen();
-    } while(!window_close_requested());
+    } while(!window_close_requested("Cave Escape"));
 
     return 0;
 }
