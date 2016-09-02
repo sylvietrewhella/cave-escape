@@ -13,7 +13,7 @@ The complete code for iteration one is as follows:
 
 int main()
 {
-    open_graphics_window("**Cave Escape**", 432, 768);
+    open_window("**Cave Escape**", 432, 768);
 
     do // The game loop...
     {
@@ -31,7 +31,7 @@ The ```main()``` procedure, as demonstrated in the code above, is responsible fo
 
 So, that being said, let's take a moment to analyse the ```main()``` procedure and the instructions it is executing. The sequence is as follows:
 
-  1. Firstly, a call to ```open_graphics_window()``` is made, where we can see the title of the window being opened is **Cave Escape** and the width and height of the window is 432 by 768 pixels.
+  1. Firstly, a call to ```open_window()``` is made, where we can see the title of the window being opened is **Cave Escape** and the width and height of the window is 432 by 768 pixels.
   2. The game loop is opened. The game loop will loop over and over, until the user closes the window, meaning all of the instructions will be continually executed for as long as the loop is running. Note that the condition of the loop is ```window_close_requested()```.
      * The following instructions are executed within the game loop:
       1. ```process_events()``` is called. ```process_events()``` is used to listen for any user input made while the game is running.
