@@ -140,8 +140,8 @@ int main()
 {
     sprite player;
 
-    open_graphics_window("**Cave Escape**", 432, 768);
-    load_resource_bundle_named("CaveEscape", "CaveEscape.txt", false);
+    open_window("Cave Escape", 432, 768);
+    load_resource_bundle("CaveEscape", "CaveEscape.txt");
 
     player = get_new_player();
 
@@ -154,7 +154,7 @@ int main()
       draw_sprite(player);
       refresh_screen();
 
-    } while(!window_close_requested());
+    } while(!window_close_requested("Cave Escape"));
 
     return 0;
 }
